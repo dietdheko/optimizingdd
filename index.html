@@ -505,9 +505,7 @@
         nextLoadIndex: 1,
         isVisible: true,
         isPageVisible: true,
-        rafId: null,
-        lastTime: 0,
-        elapsed: 0,
+        timer: null,
 
         init() {
           if (!this.layers[0] || !this.layers[1]) return;
@@ -541,46 +539,37 @@
           }
         },
 
-        step(timestamp) {
-          if (!this.lastTime) this.lastTime = timestamp;
-          const delta = timestamp - this.lastTime;
-          this.lastTime = timestamp;
-          this.elapsed += delta;
-
-          if (this.elapsed >= this.duration) {
-            this.elapsed = 0;
-            const nextIndex = (this.currentIndex + 1) % this.total;
-            const activeLayer = this.layers[this.currentIndex % 2];
-            const nextLayer = this.layers[nextIndex % 2];
+        step() {
+          const nextIndex = (this.currentIndex + 1) % this.total;
+          const activeLayer = this.layers[this.currentIndex % 2];
+          const nextLayer = this.layers[nextIndex % 2];
+          
+          this.loadImage(nextIndex, (img) => {
+            if (!this.isVisible || !this.isPageVisible) return;
+            nextLayer.src = img.src;
+            nextLayer.style.zIndex = 2;
+            activeLayer.style.zIndex = 1;
+            gsap.to(nextLayer, { opacity: 1, duration: 1.5, ease: 'power2.inOut' });
+            gsap.to(activeLayer, { opacity: 0, duration: 1.5, ease: 'power2.inOut' });
+            this.currentIndex = nextIndex;
             
-            this.loadImage(nextIndex, (img) => {
-              nextLayer.src = img.src;
-              nextLayer.style.zIndex = 2;
-              activeLayer.style.zIndex = 1;
-              gsap.to(nextLayer, { opacity: 1, duration: 1.5, ease: 'power2.inOut' });
-              gsap.to(activeLayer, { opacity: 0, duration: 1.5, ease: 'power2.inOut' });
-              this.currentIndex = nextIndex;
-              
-              // Preload the *next* next slide
-              const futureIndex = (this.currentIndex + 1) % this.total;
-              this.loadImage(futureIndex);
-            });
-          }
-          if (this.isVisible && this.isPageVisible) {
-            this.rafId = requestAnimationFrame(this.step.bind(this));
-          }
+            const futureIndex = (this.currentIndex + 1) % this.total;
+            this.loadImage(futureIndex);
+          });
         },
 
         start() {
-          if (this.rafId || !this.isVisible || !this.isPageVisible) return;
-          this.lastTime = 0;
-          this.rafId = requestAnimationFrame(this.step.bind(this));
+          if (this.timer || !this.isVisible || !this.isPageVisible) return;
+          this.timer = setTimeout(() => {
+            this.step();
+            this.start();
+          }, this.duration);
         },
 
         stop() {
-          if (this.rafId) {
-            cancelAnimationFrame(this.rafId);
-            this.rafId = null;
+          if (this.timer) {
+            clearTimeout(this.timer);
+            this.timer = null;
           }
         },
 
@@ -600,34 +589,46 @@
       slideshow.init();
 
       // 3. DEFERRED INITIALIZATION FOR EVERYTHING BELOW THE FOLD
-      const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 200));
+      const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 300));
       idle(() => {
-        // --- TESTIMONIALS / REVIEWS SYSTEM (CRITICAL: RETAINED INTACT) ---
-        const track = document.getElementById('testimonial-track');
-        AdminAPI.getReviews().then(reviews => {
-          const visibleReviews = reviews.filter(r => r.visible);
-          if (visibleReviews.length > 0) {
-            track.innerHTML = visibleReviews.map(r => {
+        const sectionsToObserve = ['#testimonials', '#trust', '#cta', '#capsule-section'];
+        sectionsToObserve.forEach(selector => {
+          const section = document.querySelector(selector);
+          if (section) {
+            new IntersectionObserver(([entry], observer) => {
+              if (entry.isIntersecting) {
+                initializeSection(selector);
+                observer.unobserve(section);
+              }
+            }, { rootMargin: '200px' }).observe(section);
+          }
+        });
+      });
+
+      function initializeSection(selector) {
+        if (selector === '#testimonials') {
+          const track = document.getElementById('testimonial-track');
+          AdminAPI.getReviews().then(reviews => {
+            const visibleReviews = reviews.filter(r => r.visible);
+            track.innerHTML = visibleReviews.length ? visibleReviews.map(r => {
               let starsHtml = Array.from({ length: 5 }, (_, i) => i < r.rating ? '<i class="fa-solid fa-star"></i>' : '<i class="fa-regular fa-star"></i>').join('');
               return `<div class="testimonial-card snap-center shrink-0 w-[85vw] md:w-[380px] vision-glass p-8 md:p-10 rounded-[32px] relative group hardware-layer flex flex-col justify-center min-h-[220px] md:min-h-[250px] overflow-hidden"><div class="glass-glare"></div><div class="quote-icon absolute top-6 right-6 text-6xl text-wellness-sage/5 font-montserrat font-black leading-none select-none">"</div><div class="flex gap-1 text-yellow-400 mb-6 text-sm relative z-10">${starsHtml}</div><p class="font-jakarta text-base md:text-lg text-wellness-dark/90 leading-relaxed font-medium relative z-10">"${r.text}"</p><p class="font-jakarta text-xs text-wellness-dark/50 mt-4 font-bold relative z-10">- ${r.name}</p></div>`;
-            }).join('');
-          } else { track.innerHTML = `<div class="w-full text-center py-10 text-wellness-dark/50 font-jakarta">No reviews yet. Be the first!</div>`; }
-        }).catch(e => console.error("Failed to load reviews", e));
-
+            }).join('') : `<div class="w-full text-center py-10 text-wellness-dark/50 font-jakarta">No reviews yet. Be the first!</div>`;
+          }).catch(e => console.error("Failed to load reviews", e));
+        }
+        
         if (!isMobileDevice) {
-          gsap.utils.toArray('.global-item').forEach(item => {
+          gsap.utils.toArray(`${selector} .global-item`).forEach(item => {
             const speed = parseFloat(item.getAttribute('data-speed')) || 0;
             const rotation = parseFloat(item.getAttribute('data-rotation')) || 0;
             gsap.to(item, { yPercent: 200 * speed, rotation: rotation, ease: "none", scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: true } });
           });
         }
 
-        gsap.utils.toArray('.reveal-text').forEach(text => {
+        gsap.utils.toArray(`${selector} .reveal-text`).forEach(text => {
           gsap.from(text, { opacity: 0, y: 20, duration: 0.8, ease: "power1.out", scrollTrigger: { trigger: text, start: "top 90%", toggleActions: "play none none none" } });
         });
-        
-        initializeWhatsAppWidget();
-      });
+      }
 
       // 4. EVENT LISTENERS & UI LOGIC (RETAINED)
       let lastScrollY = 0;

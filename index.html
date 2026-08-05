@@ -118,10 +118,9 @@
     .carousel-arrow:hover { transform: translateY(-50%) scale(1.1) rotate(5deg); box-shadow: 0 15px 30px rgba(54,92,61,0.1); background: #F8F5EF; color: #C86A22; }
     .premium-nav-arrow { transition: all 300ms cubic-bezier(0.22, 0.61, 0.36, 1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background: rgba(248, 245, 239, 0.85); border: 1px solid rgba(54, 92, 61, 0.15); box-shadow: 0 10px 25px rgba(54, 92, 61, 0.05); }
     .premium-nav-arrow:hover { transform: translateY(-50%) scale(1.08); background: #F8F5EF; border-color: rgba(200, 106, 34, 0.35); color: #C86A22; box-shadow: 0 15px 35px rgba(200, 106, 34, 0.12); }
-    .hero-bg-slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
     
-    /* OPTIMIZED: Shifted object-position to 80% to properly frame the meal tray on mobile */
-    .mobile-slide-mode { object-position: 80% center !important; }
+    /* OPTIMIZED: object-position center ensures perfect framing without skewed cropping */
+    .hero-bg-slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
     
     .modal-overlay { opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); }
     .modal-overlay.active { opacity: 1; visibility: visible; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
@@ -150,7 +149,6 @@
     .luxury-cta-btn:hover { transform: translateY(-2px); background: linear-gradient(180deg, #F19A38 0%, #D47415 100%); box-shadow: 0 12px 28px rgba(214, 122, 29, 0.38); }
     .luxury-cta-btn:active { transform: translateY(0); box-shadow: 0 4px 12px rgba(214, 122, 29, 0.20); }
     
-    /* OPTIMIZED: Added will-change to mobile menu for hardware acceleration */
     .mobile-menu { background: linear-gradient(180deg, #F9F5EF 0%, #F5EFE6 100%); border: 1px solid rgba(193, 170, 140, 0.35); box-shadow: 0 16px 35px rgba(0, 0, 0, 0.12); border-radius: 32px; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; transform: translateY(-10px) scale(0.98); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); transform-origin: top center; will-change: transform, opacity; }
     .mobile-menu.active { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; transform: translateY(0) scale(1); }
     .mobile-link { position: relative; display: block; padding: 0.5rem 0; }
@@ -171,7 +169,6 @@
 <body class="antialiased selection:bg-wellness-sage selection:text-wellness-cream paper-texture flex flex-col min-h-screen">
 
   <!-- LAYER 1: GLOBAL ATMOSPHERIC BACKDROP & SUBTLE PARTICLE GRAIN -->
-  <!-- OPTIMIZED: Added contain: strict to isolate expensive blur rendering -->
   <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden" style="contain: strict;">
     <div class="absolute top-[-10%] left-[-10%] w-[55vw] h-[55vw] bg-[#C86A22]/4 rounded-full blur-[140px] animate-blob mix-blend-multiply"></div>
     <div class="absolute top-[35%] right-[-10%] w-[45vw] h-[45vw] bg-[#365C3D]/4 rounded-full blur-[130px] animate-blob mix-blend-multiply hardware-layer" style="animation-delay: -3s;"></div>
@@ -213,9 +210,9 @@
   <main class="relative z-10 w-full overflow-hidden flex-grow">
 
     <!-- PAGE 1: LUXURY CINEMATIC HERO SHOWROOM SECTION -->
-    <section id="hero" class="relative h-screen min-h-[600px] max-h-[1080px] flex flex-col md:flex-row items-center justify-between p-4 sm:p-8 md:px-16 overflow-hidden bg-[#120E0C]">
+    <!-- OPTIMIZED: Changed h-screen to h-[100svh] to prevent mobile address bar resize zooming -->
+    <section id="hero" class="relative h-[100svh] min-h-[600px] max-h-[1080px] flex flex-col md:flex-row items-center justify-between p-4 sm:p-8 md:px-16 overflow-hidden bg-[#120E0C]">
       <div id="hero-slideshow" class="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-100">
-        <!-- OPTIMIZED: Use srcset for responsive images and add fetchpriority to the first slide -->
         <img id="slide-layer-a" class="hero-bg-slide hardware-layer" alt="Background Slide A" style="opacity: 0;"
              srcset="images/mobile/mobile-1.jpg 767w, images/desktop/pc-1.jpg 1920w"
              sizes="(max-width: 767px) 100vw, 100vw"
@@ -526,8 +523,10 @@
 
       function playKenBurns(layer) {
           if (slideshowState.kenBurnsTimeline) slideshowState.kenBurnsTimeline.kill();
+          // Disable zoom on mobile to keep it perfectly fitted
+          const targetScale = window.innerWidth < 768 ? 1.0 : 1.04;
           slideshowState.kenBurnsTimeline = gsap.timeline()
-              .fromTo(layer, { scale: 1.0 }, { scale: 1.04, duration: 8, ease: 'none' });
+              .fromTo(layer, { scale: 1.0 }, { scale: targetScale, duration: 8, ease: 'none' });
       }
 
       async function stepSlideshow() {
@@ -587,10 +586,6 @@
       }
 
       if (layerA && layerB) {
-          if (isMobileDevice) {
-              layerA.classList.add('mobile-slide-mode');
-              layerB.classList.add('mobile-slide-mode');
-          }
           layerA.onload = () => {
               gsap.set(layerA, { opacity: 1, zIndex: 1 });
               playKenBurns(layerA);
@@ -937,3 +932,4 @@
   </script>
 </body>
 </html>
+--- END OF FILE ---

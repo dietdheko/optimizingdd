@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Diet Dheko — Premium Nutrition Showroom</title>
 
-  <!-- INSTANT 0ms FIRST-IMAGE PRELOAD HINTS -->
-  <link rel="preload" as="image" href="images/desktop/pc-1.jpg" media="(min-width: 768px)">
-  <link rel="preload" as="image" href="images/mobile/mobile-1.jpg" media="(max-width: 767px)">
-  <link rel="preload" as="image" href="logo.png">
+  <!-- INSTANT 0ms FIRST-IMAGE PRELOAD HINTS WITH COMPOSITING PRIORITY -->
+  <link rel="preload" as="image" href="images/desktop/pc-1.jpg" media="(min-width: 768px)" fetchpriority="high">
+  <link rel="preload" as="image" href="images/mobile/mobile-1.jpg" media="(max-width: 767px)" fetchpriority="high">
+  <link rel="preload" as="image" href="logo.png" fetchpriority="high">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -147,12 +147,14 @@
     .luxury-cta-btn { background: linear-gradient(180deg, #E58A2A 0%, #C96A12 100%); color: #FFFFFF !important; border: 1px solid rgba(255, 255, 255, 0.22); box-shadow: 0 8px 24px rgba(214, 122, 29, 0.28); transition: transform 300ms cubic-bezier(0.25, 1, 0.5, 1), box-shadow 300ms cubic-bezier(0.25, 1, 0.5, 1), background 300ms ease; }
     .luxury-cta-btn:hover { transform: translateY(-2px); background: linear-gradient(180deg, #F19A38 0%, #D47415 100%); box-shadow: 0 12px 28px rgba(214, 122, 29, 0.38); }
     .luxury-cta-btn:active { transform: translateY(0); box-shadow: 0 4px 12px rgba(214, 122, 29, 0.20); }
-    .mobile-menu { background: linear-gradient(180deg, #F9F5EF 0%, #F5EFE6 100%); border: 1px solid rgba(193, 170, 140, 0.35); box-shadow: 0 16px 35px rgba(0, 0, 0, 0.12); border-radius: 32px; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; transform: translateY(-10px) scale(0.98); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); transform-origin: top center; }
+    .mobile-menu { background: linear-gradient(180deg, #F9F5EF 0%, #F5EFE6 100%); border: 1px solid rgba(193, 170, 140, 0.35); box-shadow: 0 16px 35px rgba(0, 0, 0, 0.12); border-radius: 32px; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; transform: translateY(-10px) scale(0.98); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); transform-origin: top center; will-change: transform, opacity; }
     .mobile-menu.active { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; transform: translateY(0) scale(1); }
     .mobile-link { position: relative; display: block; padding: 0.5rem 0; }
     .mobile-link::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background: #D67A1D; transition: width 0.3s ease; }
     .mobile-link:hover::after { width: 20px; }
-    #trust, #testimonials, #cta { content-visibility: auto; contain-intrinsic-size: auto 600px; }
+    #trust { content-visibility: auto; contain-intrinsic-size: auto 650px; }
+    #testimonials { content-visibility: auto; contain-intrinsic-size: auto 550px; }
+    #cta { content-visibility: auto; contain-intrinsic-size: auto 450px; }
     @media (max-width: 767px) {
       html, body { touch-action: pan-y !important; -webkit-overflow-scrolling: touch !important; }
       .vision-glass, .vision-glass-dark, .unified-nav-glass, .capsule-glass, .carousel-arrow, .premium-nav-arrow { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; background-color: rgba(248, 245, 239, 0.98) !important; }
@@ -244,7 +246,7 @@
         </p>
         <div class="reveal-text flex flex-row items-center justify-center md:justify-start gap-2.5 sm:gap-4 w-full">
           <a href="plans.html" class="premium-btn px-5 sm:px-8 py-2.5 sm:py-4 rounded-full font-manrope font-bold text-[11px] sm:text-xs tracking-wider uppercase shadow-xl hover:-translate-y-1.5 transition-all duration-300 whitespace-nowrap">View Plans <i class="fa-solid fa-arrow-right ml-1.5 text-xs sm:text-sm"></i></a>
-          <a href="#capsule-section" class="px-5 sm:px-8 py-2.5 sm:py-4 rounded-full font-manrope font-bold text-[11px] sm:text-xs tracking-wider uppercase text-white/90 bg-white/10 border border-white/25 backdrop-blur-md hover:bg-white/20 hover:text-white hover:-translate-y-1.5 transition-all duration-300 shadow-lg text-center whitespace-nowrap">Learn More</a>
+          <a href="#capsule-section" class="premium-btn px-5 sm:px-8 py-2.5 sm:py-4 rounded-full font-manrope font-bold text-[11px] sm:text-xs tracking-wider uppercase text-white/90 bg-white/10 border border-white/25 backdrop-blur-md hover:bg-white/20 hover:text-white hover:-translate-y-1.5 transition-all duration-300 shadow-lg text-center whitespace-nowrap">Learn More</a>
         </div>
       </div>
       <div class="w-full md:w-[50%] lg:w-[55%] pointer-events-none"></div>
@@ -258,7 +260,7 @@
                      https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=800&auto=format&fit=crop 800w,
                      https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200&auto=format&fit=crop 1200w"
              sizes="(max-width: 767px) 100vw, 1200px"
-             class="w-full h-full object-cover object-center animate-fade-in" alt="" loading="lazy" decoding="async">
+             class="w-full h-full object-cover object-center" alt="" loading="lazy" decoding="async" fetchpriority="low">
       </div>
       <div class="global-item hardware-layer absolute top-[22%] left-[2%] w-16 h-16 md:w-24 md:h-24 opacity-90 drop-shadow-[0_15px_30px_rgba(244,140,6,0.3)] animate-float-slow pointer-events-none z-0" data-speed="0.15" data-rotation="120">
         <svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="46" fill="#F48C06" /><circle cx="50" cy="50" r="40" fill="#F8F5EF" /><circle cx="50" cy="50" r="36" fill="#FFB703" /></svg>
@@ -389,7 +391,7 @@
                      https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1200&auto=format&fit=crop 1200w,
                      https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=2000&auto=format&fit=crop 2000w"
              sizes="(max-width: 767px) 100vw, 1200px"
-             class="absolute inset-0 w-full h-[130%] object-cover top-[-15%]" alt="CTA Background" loading="lazy" decoding="async">
+             class="absolute inset-0 w-full h-[130%] object-cover top-[-15%]" alt="CTA Background" loading="lazy" decoding="async" fetchpriority="low">
         <div class="absolute inset-0 bg-black/40"></div>
         <div class="relative z-10 vision-glass-dark p-8 md:py-12 md:px-16 rounded-[32px] text-center max-w-[calc(100%-2rem)] md:max-w-fit mx-auto backdrop-blur-2xl border-white/20">
           <h2 class="font-montserrat font-black text-[clamp(1.8rem,4vw,3.5rem)] text-white tracking-tighter mb-4 leading-tight whitespace-normal md:whitespace-nowrap">Ready to Feel Great?</h2>
@@ -469,7 +471,8 @@
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", async () => {
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. INSTANT CRITICAL PATH SETUP
       gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
       const isMobileDevice = window.innerWidth < 768;
       ScrollTrigger.config({ ignoreMobileResize: true, limitCallbacks: true, syncInterval: isMobileDevice ? 250 : 16 });
@@ -489,7 +492,7 @@
         gsap.ticker.lagSmoothing(1000, 16);
       }
       
-      gsap.fromTo("main, footer", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", clearProps: "all" });
+      gsap.fromTo("main, footer", { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: "power1.out", clearProps: "all" });
 
       const navPill = document.getElementById('nav-pill');
       const headerContainer = document.getElementById('header-container');
@@ -542,24 +545,36 @@
         if (currentLoadIdx >= TOTAL_SLIDES) return;
         const img = preloadedImages[currentLoadIdx];
         img.onload = img.onerror = () => {
-          currentLoadIdx++;
-          if (window.requestIdleCallback) {
-            window.requestIdleCallback(() => loadNextSequential());
+          if (img.decode) {
+            img.decode().then(() => {
+              currentLoadIdx++;
+              scheduleNextLoad();
+            }).catch(() => {
+              currentLoadIdx++;
+              scheduleNextLoad();
+            });
           } else {
-            setTimeout(loadNextSequential, 100);
+            currentLoadIdx++;
+            scheduleNextLoad();
           }
         };
         img.src = `${imgFolder}${imgPrefix}${currentLoadIdx + 1}${ext}`;
       }
 
-      // Eagerly set slide 1 and 2 sources
-      preloadedImages[0].src = `${imgFolder}${imgPrefix}1${ext}`;
-      preloadedImages[1].onload = preloadedImages[1].onerror = () => {
+      function scheduleNextLoad() {
         if (window.requestIdleCallback) {
           window.requestIdleCallback(() => loadNextSequential());
         } else {
-          setTimeout(loadNextSequential, 1000);
+          setTimeout(loadNextSequential, 200);
         }
+      }
+
+      // Eagerly set slide 1 and 2 sources
+      preloadedImages[0].src = `${imgFolder}${imgPrefix}1${ext}`;
+      preloadedImages[1].onload = preloadedImages[1].onerror = () => {
+        setTimeout(() => {
+          scheduleNextLoad();
+        }, 3000);
       };
       preloadedImages[1].src = `${imgFolder}${imgPrefix}2${ext}`;
 
@@ -572,6 +587,18 @@
         // Start the initial scale animation
         activeScaleTween = gsap.to(layerA, { scale: 1.04, duration: SLIDE_DURATION, ease: 'none', force3D: true, overwrite: 'auto' });
       }
+
+      // Apply will-change dynamically during active transitions
+      const applyWillChange = (layers) => {
+        layers.forEach(l => {
+          if (l) l.style.willChange = 'transform, opacity';
+        });
+      };
+      const removeWillChange = (layers) => {
+        layers.forEach(l => {
+          if (l) l.style.willChange = 'auto';
+        });
+      };
 
       const stepSlideshow = async () => {
         if (isTransitioning || !isHeroVisible || !isPageVisible) return;
@@ -605,6 +632,8 @@
         gsap.set(nextLayer, { opacity: 0, scale: 1.0, zIndex: 2 });
         gsap.set(activeLayer, { zIndex: 1 });
 
+        applyWillChange([activeLayer, nextLayer]);
+
         const t1 = gsap.to(nextLayer, { 
           opacity: 1, 
           duration: TRANSITION_DURATION, 
@@ -628,6 +657,7 @@
           force3D: true,
           overwrite: 'auto', 
           onComplete: () => {
+            removeWillChange([activeLayer, nextLayer]);
             currentIdx = nextIdx;
             [activeLayer, nextLayer] = [nextLayer, activeLayer];
             isTransitioning = false;
@@ -707,19 +737,21 @@
         activeTransitionTweens.forEach(t => t.kill());
       }, { passive: true });
 
-      // DEFERRING NON-CRITICAL FOLD ANIMATIONS & LISTENERS FOR MAIN THREAD FREEDOM
-      setTimeout(async () => {
+      // 2. IDLE / DEFERRED SETUP FOR OFF-SCREEN SECTIONS
+      const runDeferredSetup = () => {
         // --- TESTIMONIALS / REVIEWS SYSTEM (CRITICAL: RETAINED INTACT) ---
         const track = document.getElementById('testimonial-track');
         try {
-          const reviews = await AdminAPI.getReviews();
-          const visibleReviews = reviews.filter(r => r.visible);
-          if (visibleReviews.length > 0) {
-            track.innerHTML = visibleReviews.map(r => {
-              let starsHtml = Array.from({ length: 5 }, (_, i) => i < r.rating ? '<i class="fa-solid fa-star"></i>' : '<i class="fa-regular fa-star"></i>').join('');
-              return `<div class="testimonial-card snap-center shrink-0 w-[85vw] md:w-[380px] vision-glass p-8 md:p-10 rounded-[32px] relative group hardware-layer flex flex-col justify-center min-h-[220px] md:min-h-[250px] overflow-hidden"><div class="glass-glare"></div><div class="quote-icon absolute top-6 right-6 text-6xl text-wellness-sage/5 font-montserrat font-black leading-none select-none">"</div><div class="flex gap-1 text-yellow-400 mb-6 text-sm relative z-10">${starsHtml}</div><p class="font-jakarta text-base md:text-lg text-wellness-dark/90 leading-relaxed font-medium relative z-10">"${r.text}"</p><p class="font-jakarta text-xs text-wellness-dark/50 mt-4 font-bold relative z-10">- ${r.name}</p></div>`;
-            }).join('');
-          } else { track.innerHTML = `<div class="w-full text-center py-10 text-wellness-dark/50 font-jakarta">No reviews yet. Be the first!</div>`; }
+          AdminAPI.getReviews().then(reviews => {
+            const visibleReviews = reviews.filter(r => r.visible);
+            if (visibleReviews.length > 0) {
+              track.innerHTML = visibleReviews.map(r => {
+                let starsHtml = Array.from({ length: 5 }, (_, i) => i < r.rating ? '<i class="fa-solid fa-star"></i>' : '<i class="fa-regular fa-star"></i>').join('');
+                return `<div class="testimonial-card snap-center shrink-0 w-[85vw] md:w-[380px] vision-glass p-8 md:p-10 rounded-[32px] relative group hardware-layer flex flex-col justify-center min-h-[220px] md:min-h-[250px] overflow-hidden"><div class="glass-glare"></div><div class="quote-icon absolute top-6 right-6 text-6xl text-wellness-sage/5 font-montserrat font-black leading-none select-none">"</div><div class="flex gap-1 text-yellow-400 mb-6 text-sm relative z-10">${starsHtml}</div><p class="font-jakarta text-base md:text-lg text-wellness-dark/90 leading-relaxed font-medium relative z-10">"${r.text}"</p><p class="font-jakarta text-xs text-wellness-dark/50 mt-4 font-bold relative z-10">- ${r.name}</p></div>`;
+              }).join('');
+              if(testimonialTrack) enableDragScroll(testimonialTrack);
+            } else { track.innerHTML = `<div class="w-full text-center py-10 text-wellness-dark/50 font-jakarta">No reviews yet. Be the first!</div>`; }
+          }).catch(e => console.error("Review retrieval error:", e));
         } catch (e) { console.error("Failed to load reviews", e); }
 
         // Parallax parallax calculations on course pointer match
@@ -733,7 +765,7 @@
                 const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
                 globalItems.forEach(item => {
                   const speed = parseFloat(item.getAttribute('data-speed')) * 50;
-                  gsap.to(item, { x: mouseX * speed, y: mouseY * speed, duration: 2, ease: "power2.out", overwrite: "auto" });
+                  gsap.to(item, { x: mouseX * speed, y: mouseY * speed, duration: 1.5, ease: "power1.out", overwrite: "auto" });
                 });
                 ticking = false;
               });
@@ -782,7 +814,6 @@
         });
 
         // Testimonial track scroll helpers
-        if(testimonialTrack) enableDragScroll(testimonialTrack);
         if(capsuleTrack) enableDragScroll(capsuleTrack);
 
         const featureCards = document.querySelectorAll('.feature-card');
@@ -800,7 +831,7 @@
         });
 
         gsap.utils.toArray('.reveal-text').forEach(text => {
-          gsap.fromTo(text, { opacity: 0, y: isMobileDevice ? 20 : 30 }, { opacity: 1, y: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: text, start: "top 90%", toggleActions: "play none none reverse" } });
+          gsap.fromTo(text, { opacity: 0, y: isMobileDevice ? 20 : 30 }, { opacity: 1, y: 0, duration: 0.8, ease: "power1.out", force3D: true, scrollTrigger: { trigger: text, start: "top 90%", toggleActions: "play none none reverse" } });
         });
 
         function initTiltCard(card) {
@@ -859,7 +890,25 @@
         }
 
         initializeWhatsAppWidget();
-      }, 100);
+      };
+
+      function enableDragScroll(slider) {
+        let isDown = false, startX, scrollLeft;
+        slider.addEventListener('mousedown', (e) => { isDown = true; slider.style.scrollSnapType = 'none'; slider.classList.add('cursor-grabbing'); startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
+        const endDrag = () => { if(!isDown) return; isDown = false; slider.style.scrollSnapType = 'x mandatory'; slider.classList.remove('cursor-grabbing'); };
+        slider.addEventListener('mouseleave', endDrag);
+        slider.addEventListener('mouseup', endDrag);
+        slider.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); const x = e.pageX - slider.offsetLeft; const walk = (x - startX) * 1.5; slider.scrollLeft = scrollLeft - walk; });
+      }
+
+      const testimonialTrack = document.getElementById('testimonial-track');
+      const capsuleTrack = document.getElementById('capsule-track');
+
+      if (window.requestIdleCallback) {
+        window.requestIdleCallback(runDeferredSetup);
+      } else {
+        setTimeout(runDeferredSetup, 150);
+      }
 
       // Mobile toggles
       const mobileMenuBtn = document.getElementById('mobile-menu-btn');

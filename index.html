@@ -77,9 +77,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js" defer></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-client.js"></script>
-  <script src="backend-api.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="supabase-client.js" defer></script>
+  <script src="backend-api.js" defer></script>
 
   <style>
     :root {
@@ -559,7 +559,8 @@
         },
 
         start() {
-          if (this.timer || !this.isVisible || !this.isPageVisible) return;
+          this.stop();
+          if (!this.isVisible || !this.isPageVisible) return;
           this.timer = setTimeout(() => {
             this.step();
             this.start();
@@ -603,6 +604,7 @@
             }, { rootMargin: '200px' }).observe(section);
           }
         });
+        initializeWhatsAppWidget();
       });
 
       function initializeSection(selector) {

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Diet Dheko — Premium Nutrition Showroom</title>
 
-  <!-- OPTIMIZED: Preload only the first, most critical hero images for mobile and desktop. -->
+  <!-- INSTANT 0ms FIRST-IMAGE PRELOAD HINTS -->
   <link rel="preload" as="image" href="images/desktop/pc-1.jpg" media="(min-width: 768px)">
   <link rel="preload" as="image" href="images/mobile/mobile-1.jpg" media="(max-width: 767px)">
 
@@ -119,7 +119,10 @@
     .premium-nav-arrow { transition: all 300ms cubic-bezier(0.22, 0.61, 0.36, 1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background: rgba(248, 245, 239, 0.85); border: 1px solid rgba(54, 92, 61, 0.15); box-shadow: 0 10px 25px rgba(54, 92, 61, 0.05); }
     .premium-nav-arrow:hover { transform: translateY(-50%) scale(1.08); background: #F8F5EF; border-color: rgba(200, 106, 34, 0.35); color: #C86A22; box-shadow: 0 15px 35px rgba(200, 106, 34, 0.12); }
     .hero-bg-slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
-    .mobile-slide-mode { object-position: center top !important; }
+    
+    /* OPTIMIZED: Shifted object-position to 80% to properly frame the meal tray on mobile */
+    .mobile-slide-mode { object-position: 80% center !important; }
+    
     .modal-overlay { opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); }
     .modal-overlay.active { opacity: 1; visibility: visible; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
     .premium-modal { opacity: 0; transform: scale(0.95) translateY(20px); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); background: #F8F5EF !important; border: 1px solid rgba(31, 31, 31, 0.1) !important; box-shadow: 0 40px 80px rgba(0, 0, 0, 0.3); }
@@ -146,7 +149,9 @@
     .luxury-cta-btn { background: linear-gradient(180deg, #E58A2A 0%, #C96A12 100%); color: #FFFFFF !important; border: 1px solid rgba(255, 255, 255, 0.22); box-shadow: 0 8px 24px rgba(214, 122, 29, 0.28); transition: transform 300ms cubic-bezier(0.25, 1, 0.5, 1), box-shadow 300ms cubic-bezier(0.25, 1, 0.5, 1), background 300ms ease; }
     .luxury-cta-btn:hover { transform: translateY(-2px); background: linear-gradient(180deg, #F19A38 0%, #D47415 100%); box-shadow: 0 12px 28px rgba(214, 122, 29, 0.38); }
     .luxury-cta-btn:active { transform: translateY(0); box-shadow: 0 4px 12px rgba(214, 122, 29, 0.20); }
-    .mobile-menu { background: linear-gradient(180deg, #F9F5EF 0%, #F5EFE6 100%); border: 1px solid rgba(193, 170, 140, 0.35); box-shadow: 0 16px 35px rgba(0, 0, 0, 0.12); border-radius: 32px; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; transform: translateY(-10px) scale(0.98); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); transform-origin: top center; }
+    
+    /* OPTIMIZED: Added will-change to mobile menu for hardware acceleration */
+    .mobile-menu { background: linear-gradient(180deg, #F9F5EF 0%, #F5EFE6 100%); border: 1px solid rgba(193, 170, 140, 0.35); box-shadow: 0 16px 35px rgba(0, 0, 0, 0.12); border-radius: 32px; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; transform: translateY(-10px) scale(0.98); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); transform-origin: top center; will-change: transform, opacity; }
     .mobile-menu.active { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; transform: translateY(0) scale(1); }
     .mobile-link { position: relative; display: block; padding: 0.5rem 0; }
     .mobile-link::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background: #D67A1D; transition: width 0.3s ease; }
@@ -166,7 +171,8 @@
 <body class="antialiased selection:bg-wellness-sage selection:text-wellness-cream paper-texture flex flex-col min-h-screen">
 
   <!-- LAYER 1: GLOBAL ATMOSPHERIC BACKDROP & SUBTLE PARTICLE GRAIN -->
-  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+  <!-- OPTIMIZED: Added contain: strict to isolate expensive blur rendering -->
+  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden" style="contain: strict;">
     <div class="absolute top-[-10%] left-[-10%] w-[55vw] h-[55vw] bg-[#C86A22]/4 rounded-full blur-[140px] animate-blob mix-blend-multiply"></div>
     <div class="absolute top-[35%] right-[-10%] w-[45vw] h-[45vw] bg-[#365C3D]/4 rounded-full blur-[130px] animate-blob mix-blend-multiply hardware-layer" style="animation-delay: -3s;"></div>
     <div class="absolute bottom-[-10%] left-[15%] w-[60vw] h-[60vw] bg-[#D6A04B]/3 rounded-full blur-[150px] animate-blob mix-blend-multiply hardware-layer" style="animation-delay: -6s;"></div>
@@ -216,10 +222,6 @@
              fetchpriority="high">
         <img id="slide-layer-b" class="hero-bg-slide hardware-layer" alt="Background Slide B" style="opacity: 0;">
       </div>
-      <script>
-        // OPTIMIZED: This script is no longer needed as srcset handles initial image loading.
-        // The main script at the bottom of the page will handle the slideshow logic.
-      </script>
       <div class="absolute inset-0 z-10 bg-[linear-gradient(to_right,rgba(0,0,0,0.75)_0%,rgba(0,0,0,0.50)_40%,transparent_75%)] md:block hidden pointer-events-none"></div>
       <div class="absolute inset-0 z-10 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.75)_0%,rgba(0,0,0,0.45)_50%,transparent_85%)] md:hidden pointer-events-none"></div>
       <div class="absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_top_left,rgba(200,106,34,0.12),transparent_55%)] pointer-events-none"></div>
@@ -450,15 +452,20 @@
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", async () => {
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. CRITICAL INITIALIZATION (Synchronous)
+      // Initialize Lenis and GSAP immediately so scrolling feels native from frame 1.
       gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
       const isMobileDevice = window.innerWidth < 768;
       ScrollTrigger.config({ ignoreMobileResize: true, limitCallbacks: true, syncInterval: isMobileDevice ? 250 : 16 });
+      
       const lenis = new Lenis({ duration: isMobileDevice ? 1.0 : 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true, mouseMultiplier: 1, smoothTouch: false, touchMultiplier: 1.2 });
       lenis.on('scroll', ScrollTrigger.update);
       gsap.ticker.add((time) => { lenis.raf(time * 1000); });
       gsap.ticker.lagSmoothing(1000, 16);
-      gsap.fromTo("main, footer", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", clearProps: "all" });
+      
+      // Remove the blocking opacity animation on main/footer to speed up perceived paint.
+      // gsap.fromTo("main, footer", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", clearProps: "all" });
 
       const navPill = document.getElementById('nav-pill');
       const headerContainer = document.getElementById('header-container');
@@ -469,7 +476,6 @@
         navPill.style.setProperty('--nav-left-offset', `${leftOffset}px`);
       }
       calculateNavOffset();
-      // OPTIMIZED: Added passive: true to resize listener
       window.addEventListener('resize', calculateNavOffset, { passive: true });
 
       const heroSection = document.getElementById('hero');
@@ -488,24 +494,21 @@
       const preloadedImages = Array.from({ length: TOTAL_SLIDES }, (_, i) => {
           const img = new Image();
           img.decoding = 'async';
-          // OPTIMIZED: Set srcset and sizes for responsive background loading
           img.srcset = `images/mobile/mobile-${i + 1}.jpg 767w, images/desktop/pc-${i + 1}.jpg 1920w`;
           img.sizes = "(max-width: 767px) 100vw, 100vw";
           return img;
       });
 
-      // Eagerly load only the next slide
       preloadedImages[1].src = `${imgFolder}${imgPrefix}2${ext}`;
 
       const idle = window.requestIdleCallback || function (cb) { return setTimeout(() => cb({ timeRemaining: () => 50 }), 200); };
-      let queuedSlide = 2; // Start lazy loading from the 3rd slide
+      let queuedSlide = 2;
       function loadNextSlideInBackground() {
         if (queuedSlide >= TOTAL_SLIDES) return;
         preloadedImages[queuedSlide].src = `${imgFolder}${imgPrefix}${queuedSlide + 1}${ext}`;
         queuedSlide++;
         idle(loadNextSlideInBackground);
       }
-      // Start lazy loading after a short delay
       setTimeout(() => idle(loadNextSlideInBackground), 1000);
 
       const layerA = document.getElementById('slide-layer-a');
@@ -565,7 +568,7 @@
           slideshowState.isPlaying = true;
           if (slideshowState.kenBurnsTimeline) slideshowState.kenBurnsTimeline.resume();
           clearInterval(slideshowInterval);
-          slideshowInterval = setInterval(stepSlideshow, 5800); // OPTIMIZED: Slightly faster duration
+          slideshowInterval = setInterval(stepSlideshow, 5800);
       }
 
       function pauseSlideshow() {
@@ -579,7 +582,6 @@
           if (document.hidden) {
               pauseSlideshow();
           } else if (heroSection.getBoundingClientRect().top < window.innerHeight && heroSection.getBoundingClientRect().bottom > 0) {
-              // Only resume if it's also in viewport
               resumeSlideshow();
           }
       }
@@ -589,12 +591,10 @@
               layerA.classList.add('mobile-slide-mode');
               layerB.classList.add('mobile-slide-mode');
           }
-          // Initial setup
           layerA.onload = () => {
               gsap.set(layerA, { opacity: 1, zIndex: 1 });
               playKenBurns(layerA);
 
-              // Observer to pause/play slideshow when it enters/leaves viewport
               const slideshowObserver = new IntersectionObserver((entries) => {
                   entries.forEach(entry => {
                       if (entry.isIntersecting) {
@@ -608,115 +608,40 @@
               slideshowObserver.observe(heroSection);
               document.addEventListener('visibilitychange', handleVisibilityChange);
           };
-          // Ensure onload fires even if image is cached
           if (layerA.complete) layerA.onload();
       }
-      // --- END OF OPTIMIZED SLIDESHOW LOGIC ---
 
-
-      const track = document.getElementById('testimonial-track');
-      try {
-        const reviews = await AdminAPI.getReviews();
-        const visibleReviews = reviews.filter(r => r.visible);
-        if (visibleReviews.length > 0) {
-          track.innerHTML = visibleReviews.map(r => {
-            let starsHtml = Array.from({ length: 5 }, (_, i) => i < r.rating ? '<i class="fa-solid fa-star"></i>' : '<i class="fa-regular fa-star"></i>').join('');
-            return `<div class="testimonial-card snap-center shrink-0 w-[85vw] md:w-[380px] vision-glass p-8 md:p-10 rounded-[32px] relative group hardware-layer flex flex-col justify-center min-h-[220px] md:min-h-[250px] overflow-hidden"><div class="glass-glare"></div><div class="quote-icon absolute top-6 right-6 text-6xl text-wellness-sage/5 font-montserrat font-black leading-none select-none">"</div><div class="flex gap-1 text-yellow-400 mb-6 text-sm relative z-10">${starsHtml}</div><p class="font-jakarta text-base md:text-lg text-wellness-dark/90 leading-relaxed font-medium relative z-10">"${r.text}"</p><p class="font-jakarta text-xs text-wellness-dark/50 mt-4 font-bold relative z-10">- ${r.name}</p></div>`;
-          }).join('');
-        } else { track.innerHTML = `<div class="w-full text-center py-10 text-wellness-dark/50 font-jakarta">No reviews yet. Be the first!</div>`; }
-      } catch (e) { console.error("Failed to load reviews", e); }
-
-      const globalItems = gsap.utils.toArray('.global-item');
-      if (!window.matchMedia("(pointer: coarse)").matches) {
-        let ticking = false;
-        window.addEventListener('mousemove', (e) => {
-          if (!ticking) {
-            window.requestAnimationFrame(() => {
-              const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-              const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-              globalItems.forEach(item => {
-                const speed = parseFloat(item.getAttribute('data-speed')) * 50;
-                gsap.to(item, { x: mouseX * speed, y: mouseY * speed, duration: 2, ease: "power2.out", overwrite: "auto" });
-              });
-              ticking = false;
-            });
-            ticking = true;
-          }
-        }, { passive: true });
-      }
-      globalItems.forEach(item => {
-        const speed = parseFloat(item.getAttribute('data-speed')) * (isMobileDevice ? 0.3 : 1);
-        const rotation = parseFloat(item.getAttribute('data-rotation')) || 180;
-        gsap.to(item, { yPercent: 200 * speed, rotation: rotation, ease: "none", scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: isMobileDevice ? 0.5 : true } });
-      });
-
-      if ('IntersectionObserver' in window) {
-        const animatedEls = document.querySelectorAll('.animate-blob, .animate-float-slow, .animate-float-fast, .animate-leaf-sway, .animate-float-spin');
-        const animObserver = new IntersectionObserver((entries) => {
-          entries.forEach(entry => { entry.target.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused'; });
-        }, { rootMargin: '200px 0px' });
-        animatedEls.forEach(el => animObserver.observe(el));
-      }
-
-      gsap.to('.capsule-orbiter', { rotation: 360, transformOrigin: "50% 50%", ease: "none", duration: 30, repeat: -1, scrollTrigger: { trigger: '#capsule-section', start: 'top bottom', end: 'bottom top', toggleActions: 'resume pause resume pause' } });
-      function enableDragScroll(slider) {
-        let isDown = false, startX, scrollLeft;
-        slider.addEventListener('mousedown', (e) => { isDown = true; slider.style.scrollSnapType = 'none'; slider.classList.add('cursor-grabbing'); startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
-        const endDrag = () => { if(!isDown) return; isDown = false; slider.style.scrollSnapType = 'x mandatory'; slider.classList.remove('cursor-grabbing'); };
-        slider.addEventListener('mouseleave', endDrag);
-        slider.addEventListener('mouseup', endDrag);
-        slider.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); const x = e.pageX - slider.offsetLeft; const walk = (x - startX) * 1.5; slider.scrollLeft = scrollLeft - walk; });
-      }
-      const testimonialTrack = document.getElementById('testimonial-track');
-      const capsuleTrack = document.getElementById('capsule-track');
-      if(testimonialTrack) enableDragScroll(testimonialTrack);
-      if(capsuleTrack) enableDragScroll(capsuleTrack);
-      const featureCards = document.querySelectorAll('.feature-card');
-      featureCards.forEach(card => {
-        card.addEventListener('click', () => {
-          const isHighlighted = card.classList.contains('highlighted');
-          featureCards.forEach(c => c.classList.remove('highlighted'));
-          if (!isHighlighted) card.classList.add('highlighted');
-        });
-      });
-      gsap.utils.toArray('.img-container').forEach(container => {
-        const img = container.querySelector('img');
-        gsap.fromTo(img, { yPercent: -10 }, { yPercent: 10, ease: "none", scrollTrigger: { trigger: container, start: "top bottom", end: "bottom top", scrub: isMobileDevice ? 0.5 : true } });
-      });
-      gsap.utils.toArray('.reveal-text').forEach(text => {
-        gsap.fromTo(text, { opacity: 0, y: isMobileDevice ? 20 : 30 }, { opacity: 1, y: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: text, start: "top 90%", toggleActions: "play none none reverse" } });
-      });
-      function initTiltCard(card) {
-        const isTestimonial = card.classList.contains('testimonial-card');
-        const glare = card.querySelector('.glass-glare');
-        if (!window.matchMedia("(pointer: coarse)").matches) {
-          card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left, y = e.clientY - rect.top;
-            gsap.to(card, { rotateX: ((y - rect.height/2) / (rect.height/2)) * -3, rotateY: ((x - rect.width/2) / (rect.width/2)) * 3, transformPerspective: 1000, duration: 0.5, ease: "power2.out", overwrite: "auto" });
-            if (isTestimonial && glare) { glare.style.transform = `translate(${x}px, ${y}px)`; glare.style.opacity = '1'; }
-          });
-          card.addEventListener('mouseleave', () => {
-            gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.7, ease: "power2.out", overwrite: "auto" });
-            if (isTestimonial && glare) glare.style.opacity = '0';
-          });
-        }
-      }
-      document.querySelectorAll('.tilt-card, .testimonial-card').forEach(initTiltCard);
+      // --- MENU LAG FIX ---
       let lastScrollY = window.scrollY;
       const mobileMenuBtn = document.getElementById('mobile-menu-btn');
       const mobileMenu = document.getElementById('mobile-menu');
       let isMenuOpen = false;
+      
       if (mobileMenuBtn && mobileMenu) {
-        mobileMenuBtn.addEventListener('click', () => {
+        mobileMenuBtn.addEventListener('click', (e) => {
+          e.preventDefault();
           isMenuOpen = !isMenuOpen;
-          mobileMenu.classList.toggle('active');
-          mobileMenuBtn.innerHTML = isMenuOpen ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+          // Use requestAnimationFrame to ensure the menu paints immediately without main-thread blocking
+          requestAnimationFrame(() => {
+            if (isMenuOpen) {
+              mobileMenu.classList.add('active');
+              mobileMenuBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+            } else {
+              mobileMenu.classList.remove('active');
+              mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+            }
+          });
         });
       }
+      
       document.querySelectorAll('.mobile-link').forEach(link => {
-        link.addEventListener('click', () => { isMenuOpen = false; if (mobileMenu) mobileMenu.classList.remove('active'); if (mobileMenuBtn) mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>'; });
+        link.addEventListener('click', () => { 
+          isMenuOpen = false; 
+          if (mobileMenu) mobileMenu.classList.remove('active'); 
+          if (mobileMenuBtn) mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>'; 
+        });
       });
+      
       lenis.on('scroll', (e) => {
         if (isMenuOpen) return;
         const currentScrollY = e.animatedScroll;
@@ -724,18 +649,214 @@
         else { headerContainer.style.transform = 'translateY(0)'; }
         lastScrollY = currentScrollY;
       });
-      const prevBtn = document.getElementById('prev-review'), nextBtn = document.getElementById('next-review');
-      if (prevBtn && nextBtn && track) {
-        const scrollAmount = isMobileDevice ? window.innerWidth * 0.85 : 400;
-        prevBtn.addEventListener('click', () => track.scrollBy({ left: -scrollAmount, behavior: 'smooth' }));
-        nextBtn.addEventListener('click', () => track.scrollBy({ left: scrollAmount, behavior: 'smooth' }));
-      }
-      const prevBtnCapsule = document.getElementById('capsule-prev'), nextBtnCapsule = document.getElementById('capsule-next');
-      if (prevBtnCapsule && nextBtnCapsule && capsuleTrack) {
-        const scrollAmount = isMobileDevice ? window.innerWidth * 0.75 : 294;
-        prevBtnCapsule.addEventListener('click', () => capsuleTrack.scrollBy({ left: -scrollAmount, behavior: 'smooth' }));
-        nextBtnCapsule.addEventListener('click', () => capsuleTrack.scrollBy({ left: scrollAmount, behavior: 'smooth' }));
-      }
+
+      // 2. DEFERRED INITIALIZATION (Non-Critical)
+      // Move heavy logic out of the initial paint cycle to ensure the page feels instantly responsive.
+      setTimeout(async () => {
+        
+        // A. Fetch and Render Reviews
+        const track = document.getElementById('testimonial-track');
+        try {
+          const reviews = await AdminAPI.getReviews();
+          const visibleReviews = reviews.filter(r => r.visible);
+          if (visibleReviews.length > 0) {
+            track.innerHTML = visibleReviews.map(r => {
+              let starsHtml = Array.from({ length: 5 }, (_, i) => i < r.rating ? '<i class="fa-solid fa-star"></i>' : '<i class="fa-regular fa-star"></i>').join('');
+              return `<div class="testimonial-card snap-center shrink-0 w-[85vw] md:w-[380px] vision-glass p-8 md:p-10 rounded-[32px] relative group hardware-layer flex flex-col justify-center min-h-[220px] md:min-h-[250px] overflow-hidden"><div class="glass-glare"></div><div class="quote-icon absolute top-6 right-6 text-6xl text-wellness-sage/5 font-montserrat font-black leading-none select-none">"</div><div class="flex gap-1 text-yellow-400 mb-6 text-sm relative z-10">${starsHtml}</div><p class="font-jakarta text-base md:text-lg text-wellness-dark/90 leading-relaxed font-medium relative z-10">"${r.text}"</p><p class="font-jakarta text-xs text-wellness-dark/50 mt-4 font-bold relative z-10">- ${r.name}</p></div>`;
+            }).join('');
+          } else { track.innerHTML = `<div class="w-full text-center py-10 text-wellness-dark/50 font-jakarta">No reviews yet. Be the first!</div>`; }
+        } catch (e) { console.error("Failed to load reviews", e); }
+
+        // B. Initialize Parallax Global Items
+        const globalItems = gsap.utils.toArray('.global-item');
+        if (!window.matchMedia("(pointer: coarse)").matches) {
+          let ticking = false;
+          window.addEventListener('mousemove', (e) => {
+            if (!ticking) {
+              window.requestAnimationFrame(() => {
+                const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+                const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+                globalItems.forEach(item => {
+                  const speed = parseFloat(item.getAttribute('data-speed')) * 50;
+                  gsap.to(item, { x: mouseX * speed, y: mouseY * speed, duration: 2, ease: "power2.out", overwrite: "auto" });
+                });
+                ticking = false;
+              });
+              ticking = true;
+            }
+          }, { passive: true });
+        }
+        globalItems.forEach(item => {
+          const speed = parseFloat(item.getAttribute('data-speed')) * (isMobileDevice ? 0.3 : 1);
+          const rotation = parseFloat(item.getAttribute('data-rotation')) || 180;
+          gsap.to(item, { yPercent: 200 * speed, rotation: rotation, ease: "none", scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: isMobileDevice ? 0.5 : true } });
+        });
+
+        // C. Initialize Intersection Observers for CSS Animations
+        if ('IntersectionObserver' in window) {
+          const animatedEls = document.querySelectorAll('.animate-blob, .animate-float-slow, .animate-float-fast, .animate-leaf-sway, .animate-float-spin');
+          const animObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { entry.target.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused'; });
+          }, { rootMargin: '200px 0px' });
+          animatedEls.forEach(el => animObserver.observe(el));
+        }
+
+        // D. Initialize Minor GSAP Triggers
+        gsap.to('.capsule-orbiter', { rotation: 360, transformOrigin: "50% 50%", ease: "none", duration: 30, repeat: -1, scrollTrigger: { trigger: '#capsule-section', start: 'top bottom', end: 'bottom top', toggleActions: 'resume pause resume pause' } });
+        
+        function enableDragScroll(slider) {
+          let isDown = false, startX, scrollLeft;
+          slider.addEventListener('mousedown', (e) => { isDown = true; slider.style.scrollSnapType = 'none'; slider.classList.add('cursor-grabbing'); startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
+          const endDrag = () => { if(!isDown) return; isDown = false; slider.style.scrollSnapType = 'x mandatory'; slider.classList.remove('cursor-grabbing'); };
+          slider.addEventListener('mouseleave', endDrag);
+          slider.addEventListener('mouseup', endDrag);
+          slider.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); const x = e.pageX - slider.offsetLeft; const walk = (x - startX) * 1.5; slider.scrollLeft = scrollLeft - walk; });
+        }
+        
+        const testimonialTrack = document.getElementById('testimonial-track');
+        const capsuleTrack = document.getElementById('capsule-track');
+        if(testimonialTrack) enableDragScroll(testimonialTrack);
+        if(capsuleTrack) enableDragScroll(capsuleTrack);
+        
+        const featureCards = document.querySelectorAll('.feature-card');
+        featureCards.forEach(card => {
+          card.addEventListener('click', () => {
+            const isHighlighted = card.classList.contains('highlighted');
+            featureCards.forEach(c => c.classList.remove('highlighted'));
+            if (!isHighlighted) card.classList.add('highlighted');
+          });
+        });
+        
+        gsap.utils.toArray('.img-container').forEach(container => {
+          const img = container.querySelector('img');
+          gsap.fromTo(img, { yPercent: -10 }, { yPercent: 10, ease: "none", scrollTrigger: { trigger: container, start: "top bottom", end: "bottom top", scrub: isMobileDevice ? 0.5 : true } });
+        });
+        
+        gsap.utils.toArray('.reveal-text').forEach(text => {
+          gsap.fromTo(text, { opacity: 0, y: isMobileDevice ? 20 : 30 }, { opacity: 1, y: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: text, start: "top 90%", toggleActions: "play none none reverse" } });
+        });
+        
+        function initTiltCard(card) {
+          const isTestimonial = card.classList.contains('testimonial-card');
+          const glare = card.querySelector('.glass-glare');
+          if (!window.matchMedia("(pointer: coarse)").matches) {
+            card.addEventListener('mousemove', (e) => {
+              const rect = card.getBoundingClientRect();
+              const x = e.clientX - rect.left, y = e.clientY - rect.top;
+              gsap.to(card, { rotateX: ((y - rect.height/2) / (rect.height/2)) * -3, rotateY: ((x - rect.width/2) / (rect.width/2)) * 3, transformPerspective: 1000, duration: 0.5, ease: "power2.out", overwrite: "auto" });
+              if (isTestimonial && glare) { glare.style.transform = `translate(${x}px, ${y}px)`; glare.style.opacity = '1'; }
+            });
+            card.addEventListener('mouseleave', () => {
+              gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.7, ease: "power2.out", overwrite: "auto" });
+              if (isTestimonial && glare) glare.style.opacity = '0';
+            });
+          }
+        }
+        document.querySelectorAll('.tilt-card, .testimonial-card').forEach(initTiltCard);
+
+        const prevBtn = document.getElementById('prev-review'), nextBtn = document.getElementById('next-review');
+        if (prevBtn && nextBtn && track) {
+          const scrollAmount = isMobileDevice ? window.innerWidth * 0.85 : 400;
+          prevBtn.addEventListener('click', () => track.scrollBy({ left: -scrollAmount, behavior: 'smooth' }));
+          nextBtn.addEventListener('click', () => track.scrollBy({ left: scrollAmount, behavior: 'smooth' }));
+        }
+        const prevBtnCapsule = document.getElementById('capsule-prev'), nextBtnCapsule = document.getElementById('capsule-next');
+        if (prevBtnCapsule && nextBtnCapsule && capsuleTrack) {
+          const scrollAmount = isMobileDevice ? window.innerWidth * 0.75 : 294;
+          prevBtnCapsule.addEventListener('click', () => capsuleTrack.scrollBy({ left: -scrollAmount, behavior: 'smooth' }));
+          nextBtnCapsule.addEventListener('click', () => capsuleTrack.scrollBy({ left: scrollAmount, behavior: 'smooth' }));
+        }
+
+        // E. Initialize WhatsApp Widget
+        function initializeWhatsAppWidget() {
+          let isDDChatOpen = false;
+          let ddMessagesLoaded = false;
+          let ddWaNum = "919876543210";
+          let ddGreetings = ["👋 Hey, Hii!", "Welcome to Diet Dheko.", "If you have any doubts about our plans, menu, delivery, or subscription process, feel free to ask us below."];
+
+          const chatWidget = document.getElementById('dd-chat-widget');
+          const chatBox = document.getElementById('dd-chat-box');
+          const chatInput = document.getElementById('dd-chat-input');
+          const messagesContainer = document.getElementById('dd-chat-messages');
+          const openBtn = document.getElementById('dd-chat-open-btn');
+          const closeBtn = document.getElementById('dd-chat-close-btn');
+          const sendBtn = document.getElementById('dd-chat-send-btn');
+
+          function toggleDDChat(e) {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
+            isDDChatOpen = !isDDChatOpen;
+            if (isDDChatOpen) {
+              chatBox.style.display = 'flex';
+              setTimeout(() => { chatBox.classList.remove('scale-0', 'opacity-0'); chatBox.classList.add('scale-100', 'opacity-100'); }, 10);
+              if (!ddMessagesLoaded) { loadDDMessages(); ddMessagesLoaded = true; }
+              setTimeout(() => chatInput.focus(), 300);
+            } else {
+              chatBox.classList.remove('scale-100', 'opacity-100');
+              chatBox.classList.add('scale-0', 'opacity-0');
+              setTimeout(() => { chatBox.style.display = 'none'; }, 400);
+            }
+          }
+
+          function loadDDMessages() {
+            let delay = 400;
+            ddGreetings.forEach((msg) => {
+              setTimeout(() => {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'dd-chat-bubble bg-white shadow-sm border border-slate-100 text-slate-700 text-[13px] leading-relaxed p-3.5 rounded-2xl rounded-tl-none w-fit max-w-[90%] transform transition-all duration-500 translate-y-4 opacity-0 flex-shrink-0';
+                msgDiv.innerHTML = msg;
+                messagesContainer.appendChild(msgDiv);
+                requestAnimationFrame(() => {
+                  msgDiv.classList.remove('translate-y-4', 'opacity-0');
+                  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                });
+              }, delay);
+              delay += 900;
+            });
+          }
+
+          function updateWhatsAppLink() {
+            const text = chatInput.value.trim();
+            if (!text) { sendBtn.href = "#"; return; }
+            const formalMessage = `Hello Diet Dheko Support,\n\nI have an inquiry regarding your services.\n\n*My Question:*\n"${text}"\n\nLooking forward to your response.`;
+            sendBtn.href = `https://wa.me/${ddWaNum}?text=${encodeURIComponent(formalMessage)}`;
+          }
+
+          if (openBtn) openBtn.addEventListener('click', toggleDDChat);
+          if (closeBtn) closeBtn.addEventListener('click', toggleDDChat);
+          if (chatInput) {
+            chatInput.addEventListener('input', updateWhatsAppLink);
+            chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (chatInput.value.trim()) sendBtn.click(); } });
+          }
+          if (sendBtn) {
+            sendBtn.addEventListener('click', (e) => {
+              if (sendBtn.getAttribute('href') === '#') { e.preventDefault(); chatInput.focus(); return; }
+              setTimeout(() => { chatInput.value = ''; updateWhatsAppLink(); if (isDDChatOpen) toggleDDChat(); }, 500);
+            });
+          }
+          if (chatBox) chatBox.addEventListener('click', (e) => e.stopPropagation());
+          const stopScrollHijack = (e) => { e.stopPropagation(); };
+          if (messagesContainer) { messagesContainer.addEventListener('wheel', stopScrollHijack, { passive: false }); messagesContainer.addEventListener('touchmove', stopScrollHijack, { passive: false }); }
+          if (chatInput) { chatInput.addEventListener('wheel', stopScrollHijack, { passive: false }); chatInput.addEventListener('touchmove', stopScrollHijack, { passive: false }); }
+          document.addEventListener('click', (e) => { if (isDDChatOpen && chatWidget && !chatWidget.contains(e.target)) toggleDDChat(); });
+
+          (async function fetchDynamicData() {
+            try {
+              if (typeof AdminAPI !== 'undefined') {
+                const config = await AdminAPI.getConfig();
+                if (config.settings) {
+                  if (config.settings.waNumber) ddWaNum = (config.settings.waCountryCode || '91') + config.settings.waNumber.replace(/\D/g, '');
+                  if (config.settings.waMessages && config.settings.waMessages.length > 0) ddGreetings = config.settings.waMessages;
+                }
+              }
+            } catch (e) { console.warn("Using default chat settings."); }
+          })();
+        }
+        
+        initializeWhatsAppWidget();
+
+      }, 150); // End of Deferred Initialization
+
+      // 3. Smooth Link Navigation (Synchronous setup)
       const power3InOut = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
       document.querySelectorAll('a').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -756,6 +877,8 @@
           }
         });
       });
+
+      // 4. Review Modal Logic (Synchronous setup, logic untouched)
       const modal = document.getElementById('review-modal'), addReviewBtn = document.getElementById('add-review-btn'), closeModalBtn = document.getElementById('close-modal'), cancelReviewBtn = document.getElementById('cancel-review'), reviewForm = document.getElementById('review-form'), starRating = document.getElementById('star-rating'), stars = starRating.querySelectorAll('i'), textarea = document.getElementById('reviewer-text'), charCounter = document.getElementById('char-counter');
       let currentRating = 5;
       if (textarea) { textarea.addEventListener('input', function() { this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px'; charCounter.textContent = `${this.value.length}/300`; }); }
@@ -791,92 +914,6 @@
           finally { submitBtn.innerHTML = originalText; submitBtn.disabled = false; }
         });
       }
-      
-      function initializeWhatsAppWidget() {
-        let isDDChatOpen = false;
-        let ddMessagesLoaded = false;
-        let ddWaNum = "919876543210";
-        let ddGreetings = ["👋 Hey, Hii!", "Welcome to Diet Dheko.", "If you have any doubts about our plans, menu, delivery, or subscription process, feel free to ask us below."];
-
-        const chatWidget = document.getElementById('dd-chat-widget');
-        const chatBox = document.getElementById('dd-chat-box');
-        const chatInput = document.getElementById('dd-chat-input');
-        const messagesContainer = document.getElementById('dd-chat-messages');
-        const openBtn = document.getElementById('dd-chat-open-btn');
-        const closeBtn = document.getElementById('dd-chat-close-btn');
-        const sendBtn = document.getElementById('dd-chat-send-btn');
-
-        function toggleDDChat(e) {
-          if (e) { e.preventDefault(); e.stopPropagation(); }
-          isDDChatOpen = !isDDChatOpen;
-          if (isDDChatOpen) {
-            chatBox.style.display = 'flex';
-            setTimeout(() => { chatBox.classList.remove('scale-0', 'opacity-0'); chatBox.classList.add('scale-100', 'opacity-100'); }, 10);
-            if (!ddMessagesLoaded) { loadDDMessages(); ddMessagesLoaded = true; }
-            setTimeout(() => chatInput.focus(), 300);
-          } else {
-            chatBox.classList.remove('scale-100', 'opacity-100');
-            chatBox.classList.add('scale-0', 'opacity-0');
-            setTimeout(() => { chatBox.style.display = 'none'; }, 400);
-          }
-        }
-
-        function loadDDMessages() {
-          let delay = 400;
-          ddGreetings.forEach((msg) => {
-            setTimeout(() => {
-              const msgDiv = document.createElement('div');
-              msgDiv.className = 'dd-chat-bubble bg-white shadow-sm border border-slate-100 text-slate-700 text-[13px] leading-relaxed p-3.5 rounded-2xl rounded-tl-none w-fit max-w-[90%] transform transition-all duration-500 translate-y-4 opacity-0 flex-shrink-0';
-              msgDiv.innerHTML = msg;
-              messagesContainer.appendChild(msgDiv);
-              requestAnimationFrame(() => {
-                msgDiv.classList.remove('translate-y-4', 'opacity-0');
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-              });
-            }, delay);
-            delay += 900;
-          });
-        }
-
-        function updateWhatsAppLink() {
-          const text = chatInput.value.trim();
-          if (!text) { sendBtn.href = "#"; return; }
-          const formalMessage = `Hello Diet Dheko Support,\n\nI have an inquiry regarding your services.\n\n*My Question:*\n"${text}"\n\nLooking forward to your response.`;
-          sendBtn.href = `https://wa.me/${ddWaNum}?text=${encodeURIComponent(formalMessage)}`;
-        }
-
-        if (openBtn) openBtn.addEventListener('click', toggleDDChat);
-        if (closeBtn) closeBtn.addEventListener('click', toggleDDChat);
-        if (chatInput) {
-          chatInput.addEventListener('input', updateWhatsAppLink);
-          chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (chatInput.value.trim()) sendBtn.click(); } });
-        }
-        if (sendBtn) {
-          sendBtn.addEventListener('click', (e) => {
-            if (sendBtn.getAttribute('href') === '#') { e.preventDefault(); chatInput.focus(); return; }
-            setTimeout(() => { chatInput.value = ''; updateWhatsAppLink(); if (isDDChatOpen) toggleDDChat(); }, 500);
-          });
-        }
-        if (chatBox) chatBox.addEventListener('click', (e) => e.stopPropagation());
-        const stopScrollHijack = (e) => { e.stopPropagation(); };
-        if (messagesContainer) { messagesContainer.addEventListener('wheel', stopScrollHijack, { passive: false }); messagesContainer.addEventListener('touchmove', stopScrollHijack, { passive: false }); }
-        if (chatInput) { chatInput.addEventListener('wheel', stopScrollHijack, { passive: false }); chatInput.addEventListener('touchmove', stopScrollHijack, { passive: false }); }
-        document.addEventListener('click', (e) => { if (isDDChatOpen && chatWidget && !chatWidget.contains(e.target)) toggleDDChat(); });
-
-        (async function fetchDynamicData() {
-          try {
-            if (typeof AdminAPI !== 'undefined') {
-              const config = await AdminAPI.getConfig();
-              if (config.settings) {
-                if (config.settings.waNumber) ddWaNum = (config.settings.waCountryCode || '91') + config.settings.waNumber.replace(/\D/g, '');
-                if (config.settings.waMessages && config.settings.waMessages.length > 0) ddGreetings = config.settings.waMessages;
-              }
-            }
-          } catch (e) { console.warn("Using default chat settings."); }
-        })();
-      }
-      
-      initializeWhatsAppWidget();
     });
 
     // --- HIDDEN ADMIN TRIGGER (UNMODIFIED) ---

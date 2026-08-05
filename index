@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Diet Dheko — Premium Nutrition Showroom</title>
+
+  <!-- OPTIMIZED: Preload only the first, most critical hero images for mobile and desktop. -->
+  <link rel="preload" as="image" href="images/desktop/pc-1.jpg" media="(min-width: 768px)">
+  <link rel="preload" as="image" href="images/mobile/mobile-1.jpg" media="(max-width: 767px)">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- PERF: Google Fonts loaded non-render-blocking. Page paints instantly with system fonts, then swaps. -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700;800&family=Outfit:wght@800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700;800&family=Outfit:wght@800;900&display=swap"></noscript>
+
+  <!-- PERF: Warm up connections to every third-party origin used below -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="https://images.unsplash.com">
+
+  <!-- PERF: Font Awesome CSS loaded non-render-blocking -->
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'wellness-bg': '#F4F0E8',
+            'wellness-cream': '#F8F5EF',
+            'wellness-green': '#365C3D',
+            'wellness-sage': '#C86A22',
+            'wellness-sage-light': '#ECE4D8',
+            'wellness-dark': '#1F1F1F',
+          },
+          fontFamily: {
+            montserrat: ['Outfit', 'sans-serif'],
+            manrope: ['Manrope', 'sans-serif'],
+            jakarta: ['Inter', 'sans-serif'],
+          },
+          animation: {
+            'blob': 'blob 18s infinite alternate cubic-bezier(0.4, 0, 0.2, 1)',
+            'glass-shine': 'glass-shine 8s infinite linear',
+            'float-slow': 'float 10s ease-in-out infinite',
+            'float-fast': 'float 5s ease-in-out infinite',
+            'leaf-sway': 'sway 8s ease-in-out infinite alternate',
+            'float-spin': 'floatSpin 14s linear infinite',
+          },
+          keyframes: {
+            blob: { '0%': { transform: 'translate(0px, 0px) scale(1)' }, '100%': { transform: 'translate(30px, -40px) scale(1.1)' } },
+            'glass-shine': { '0%': { transform: 'translateX(-200%) rotate(45deg)' }, '100%': { transform: 'translateX(200%) rotate(45deg)' } },
+            float: { '0%, 100%': { transform: 'translateY(0) rotate(0deg)' }, '50%': { transform: 'translateY(-20px) rotate(3deg)' } },
+            sway: { '0%': { transform: 'translate(0, 0) rotate(0deg)' }, '100%': { transform: 'translate(12px, -15px) rotate(8deg)' } },
+            floatSpin: {
+              '0%': { transform: 'translateY(0) rotate(0deg)' },
+              '50%': { transform: 'translateY(-15px) rotate(180deg)' },
+              '100%': { transform: 'translateY(0) rotate(360deg)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js" defer></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="backend-api.js"></script>
+
+  <style>
+    :root {
+      --nav-bg: linear-gradient(180deg, #F9F5EF 0%, #F5EFE6 45%, #EFE7DC 100%);
+      --nav-border: rgba(193, 170, 140, 0.35);
+      --nav-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+      --nav-left-offset: 0px;
+    }
+    body { background: #120E0C; font-family: 'Inter', sans-serif; font-weight: 500; overflow-x: hidden; color: #F8F5EF; overscroll-behavior: none; -webkit-font-smoothing: antialiased; }
+    html.lenis { height: auto; } .lenis.lenis-smooth { scroll-behavior: auto; } .lenis.lenis-stopped { overflow: hidden; }
+    .hardware-layer { will-change: transform, opacity; }
+    .font-montserrat { font-family: 'Outfit', sans-serif !important; }
+    .font-black { font-weight: 900 !important; }
+    .font-manrope { font-family: 'Manrope', sans-serif !important; }
+    .font-jakarta { font-family: 'Inter', sans-serif !important; font-weight: 500 !important; }
+    .paper-texture { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E"); }
+    .wood-grain-texture { background-image: radial-gradient(circle at 50% 50%, rgba(200, 106, 34, 0.01) 0%, transparent 60%), url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='woodNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02 0.15' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23woodNoise)' opacity='0.03'/%3E%3C/svg%3E"); }
+    .linen-texture { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpattern id='linenGrid' width='8' height='8' patternUnits='userSpaceOnUse'%3E%3Cpath d='M 8 0 L 0 0 0 8' fill='none' stroke='%23365C3D' stroke-width='0.4' opacity='0.03'/%3E%3C/pattern%3E%3Crect width='100%25' height='100%25' fill='url(%23linenGrid)'/%3E%3C/svg%3E"); }
+    .vision-glass { background: rgba(248, 245, 239, 0.92); backdrop-filter: blur(30px) saturate(160%); -webkit-backdrop-filter: blur(30px) saturate(160%); border: 1px solid rgba(31, 31, 31, 0.06); box-shadow: 0 20px 50px rgba(31, 31, 31, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.6); position: relative; overflow: hidden; }
+    .vision-glass-dark { background: #1F1F1F; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25); }
+    .ambient-fog { position: fixed; inset: 0; pointer-events: none; z-index: 1; mix-blend-mode: multiply; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; } .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    ::selection { background: #C86A22; color: #F8F5EF; }
+    .premium-btn { position: relative; overflow: hidden; transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.35s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s ease; z-index: 1; display: inline-flex; align-items: center; justify-content: center; text-align: center; background-color: #C86A22; color: #F8F5EF !important; font-family: 'Manrope', sans-serif !important; font-weight: 700 !important; box-shadow: 0 10px 28px -6px rgba(200, 106, 34, 0.35); }
+    .premium-btn:hover { transform: translateY(-4px); background-color: #A95518; box-shadow: 0 16px 36px -4px rgba(200, 106, 34, 0.5); }
+    .premium-btn::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0) 100%); transform: skewX(-20deg); transition: left 0.6s cubic-bezier(0.25, 1, 0.5, 1); z-index: -1; }
+    .premium-btn:hover::after { left: 150%; }
+    .premium-btn-green { background-color: #365C3D !important; box-shadow: 0 10px 28px -6px rgba(54, 92, 61, 0.3) !important; }
+    .premium-btn-green:hover { background-color: #24422E !important; box-shadow: 0 16px 36px -4px rgba(54, 92, 61, 0.5) !important; }
+    .feature-card { border: 1px solid rgba(31, 31, 31, 0.07) !important; box-shadow: 0 12px 35px rgba(31, 31, 31, 0.03) !important; background: #F8F5EF !important; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important; cursor: pointer; position: relative; overflow: hidden; }
+    .feature-card:hover, .feature-card.highlighted { transform: translateY(-4px) !important; box-shadow: 0 22px 50px rgba(0, 0, 0, 0.08) !important; border-color: rgba(200, 106, 34, 0.35) !important; background: #F2ECE3 !important; }
+    .feature-card.highlighted .w-12, .feature-card.highlighted .w-14 { background-color: #C86A22 !important; color: #F8F5EF !important; transform: scale(1.08); }
+    .testimonial-card { transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); transform-style: preserve-3d; border: 1px solid rgba(31, 31, 31, 0.07) !important; background: #F8F5EF !important; }
+    .testimonial-card:hover { transform: translateY(-4px) scale(1.01) !important; box-shadow: 0 22px 50px rgba(0, 0, 0, 0.08) !important; border-color: rgba(200, 106, 34, 0.3) !important; background: #F2ECE3 !important; }
+    .glass-glare { position: absolute; top: 0; left: 0; width: 150px; height: 150px; background: radial-gradient(circle, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity 0.3s ease; transform: translate(-50%, -50%); mix-blend-mode: overlay; z-index: 10; }
+    .carousel-arrow { transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); backdrop-filter: blur(20px); }
+    .carousel-arrow:hover { transform: translateY(-50%) scale(1.1) rotate(5deg); box-shadow: 0 15px 30px rgba(54,92,61,0.1); background: #F8F5EF; color: #C86A22; }
+    .premium-nav-arrow { transition: all 300ms cubic-bezier(0.22, 0.61, 0.36, 1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background: rgba(248, 245, 239, 0.85); border: 1px solid rgba(54, 92, 61, 0.15); box-shadow: 0 10px 25px rgba(54, 92, 61, 0.05); }
+    .premium-nav-arrow:hover { transform: translateY(-50%) scale(1.08); background: #F8F5EF; border-color: rgba(200, 106, 34, 0.35); color: #C86A22; box-shadow: 0 15px 35px rgba(200, 106, 34, 0.12); }
+    .hero-bg-slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    .mobile-slide-mode { object-position: center top !important; }
+    .modal-overlay { opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); }
+    .modal-overlay.active { opacity: 1; visibility: visible; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    .premium-modal { opacity: 0; transform: scale(0.95) translateY(20px); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); background: #F8F5EF !important; border: 1px solid rgba(31, 31, 31, 0.1) !important; box-shadow: 0 40px 80px rgba(0, 0, 0, 0.3); }
+    .modal-overlay.active .premium-modal { opacity: 1; transform: scale(1) translateY(0); }
+    .floating-group { position: relative; margin-bottom: 0.5rem; }
+    .floating-input { width: 100%; background: #F8F5EF !important; border: 1px solid rgba(31, 31, 31, 0.15) !important; border-radius: 16px; padding: 16px 20px; font-family: 'Inter', sans-serif; font-size: 14px; color: #1F1F1F !important; outline: none; transition: all 0.3s ease; }
+    .floating-input:focus { background: #FFFFFF !important; border-color: #C86A22 !important; box-shadow: 0 0 0 4px rgba(200, 106, 34, 0.12); }
+    .floating-label { position: absolute; left: 20px; top: 16px; font-family: 'Inter', sans-serif; font-size: 14px; color: #555555; pointer-events: none; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
+    .floating-input:focus ~ .floating-label, .floating-input:not(:placeholder-shown) ~ .floating-label { top: -10px; left: 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #365C3D; background: #F8F5EF; padding: 2px 8px; border-radius: 8px; box-shadow: 0 2px 4px rgba(54,92,61,0.04); }
+    textarea.floating-input { resize: none; overflow: hidden; min-height: 100px; }
+    .star-rating i { cursor: pointer; transition: color 0.3s ease, transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
+    .star-rating i:hover { transform: scale(1.3) rotate(-5deg); }
+    #dd-chat-open-btn { background-color: #25D366 !important; color: #ffffff !important; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4) !important; }
+    #dd-chat-open-btn:hover { background-color: #128C7E !important; }
+    .capsule-orbiter { transform-origin: center center !important; }
+    .unified-nav-glass { background: var(--nav-bg); backdrop-filter: none !important; -webkit-backdrop-filter: none !important; border: 1px solid var(--nav-border); box-shadow: var(--nav-shadow); border-radius: 999px; transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease; }
+    #nav-pill { will-change: transform; transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1); }
+    @media (min-width: 768px) { .in-hero #nav-pill { transform: translate3d(var(--nav-left-offset, 0px), 0, 0); } }
+    .nav-link-item { position: relative; color: #53483E; transition: color 300ms cubic-bezier(0.25, 1, 0.5, 1); }
+    .nav-link-item:hover { color: #D67A1D; }
+    .nav-link-item.active { color: #D67A1D; font-weight: 700; }
+    .nav-link-item.active::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2px; background: #D67A1D; border-radius: 2px; box-shadow: 0 2px 6px rgba(214, 122, 29, 0.30); animation: underline-grow 300ms cubic-bezier(0.22, 1, 0.36, 1); }
+    @keyframes underline-grow { from { transform: scaleX(0); opacity: 0; } to { transform: scaleX(1); opacity: 1; } }
+    .luxury-cta-btn { background: linear-gradient(180deg, #E58A2A 0%, #C96A12 100%); color: #FFFFFF !important; border: 1px solid rgba(255, 255, 255, 0.22); box-shadow: 0 8px 24px rgba(214, 122, 29, 0.28); transition: transform 300ms cubic-bezier(0.25, 1, 0.5, 1), box-shadow 300ms cubic-bezier(0.25, 1, 0.5, 1), background 300ms ease; }
+    .luxury-cta-btn:hover { transform: translateY(-2px); background: linear-gradient(180deg, #F19A38 0%, #D47415 100%); box-shadow: 0 12px 28px rgba(214, 122, 29, 0.38); }
+    .luxury-cta-btn:active { transform: translateY(0); box-shadow: 0 4px 12px rgba(214, 122, 29, 0.20); }
+    .mobile-menu { background: linear-gradient(180deg, #F9F5EF 0%, #F5EFE6 100%); border: 1px solid rgba(193, 170, 140, 0.35); box-shadow: 0 16px 35px rgba(0, 0, 0, 0.12); border-radius: 32px; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; transform: translateY(-10px) scale(0.98); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); transform-origin: top center; }
+    .mobile-menu.active { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; transform: translateY(0) scale(1); }
+    .mobile-link { position: relative; display: block; padding: 0.5rem 0; }
+    .mobile-link::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background: #D67A1D; transition: width 0.3s ease; }
+    .mobile-link:hover::after { width: 20px; }
+    @media (max-width: 767px) {
+      html, body { touch-action: pan-y !important; -webkit-overflow-scrolling: touch !important; }
+      .vision-glass, .vision-glass-dark, .unified-nav-glass, .capsule-glass, .carousel-arrow, .premium-nav-arrow { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; background-color: rgba(248, 245, 239, 0.98) !important; }
+      .vision-glass-dark { background-color: #1F1F1F !important; }
+      .feature-card, .testimonial-card, .capsule-glass { contain: layout style paint; }
+      #hero h1 { font-size: 8.8vw !important; line-height: 1.08 !important; }
+      #hero p { font-size: 12px !important; max-width: 320px !important; }
+      .premium-btn { padding: 0.6rem 1.2rem !important; font-size: 11px !important; }
+      .ambient-fog { display: none !important; }
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-wellness-sage selection:text-wellness-cream paper-texture flex flex-col min-h-screen">
+
+  <!-- LAYER 1: GLOBAL ATMOSPHERIC BACKDROP & SUBTLE PARTICLE GRAIN -->
+  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+    <div class="absolute top-[-10%] left-[-10%] w-[55vw] h-[55vw] bg-[#C86A22]/4 rounded-full blur-[140px] animate-blob mix-blend-multiply"></div>
+    <div class="absolute top-[35%] right-[-10%] w-[45vw] h-[45vw] bg-[#365C3D]/4 rounded-full blur-[130px] animate-blob mix-blend-multiply hardware-layer" style="animation-delay: -3s;"></div>
+    <div class="absolute bottom-[-10%] left-[15%] w-[60vw] h-[60vw] bg-[#D6A04B]/3 rounded-full blur-[150px] animate-blob mix-blend-multiply hardware-layer" style="animation-delay: -6s;"></div>
+  </div>
+  
+  <!-- LAYER 2: EDITORIAL GRAIN PAPER OVERLAY -->
+  <div class="ambient-fog"></div>
+
+  <!-- NAVBAR CONTAINER -->
+  <header class="fixed top-4 md:top-6 left-0 right-0 z-50 px-4 md:px-12 flex flex-col items-center pointer-events-none transition-transform duration-500 in-hero" id="header-container">
+    <div id="nav-pill" class="w-full max-w-2xl lg:max-w-3xl relative h-[54px] md:h-[58px] flex items-center pointer-events-auto">
+      <div class="absolute inset-0 rounded-full unified-nav-glass overflow-hidden pointer-events-none z-0"></div>
+      <nav class="relative z-10 w-full px-5 flex items-center justify-between" id="navbar">
+        <a href="index.html" class="relative flex items-center h-full w-[65px] md:w-[80px] group py-1">
+          <img src="logo.png" alt="Diet Dheko Logo" class="absolute left-[-5px] md:left-[-10px] top-1/2 -translate-y-1/2 h-[60px] md:h-[75px] w-auto max-w-none object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm" decoding="async" fetchpriority="high">
+        </a>
+        <div class="hidden md:flex items-center gap-7 font-jakarta text-[11px] font-semibold tracking-widest uppercase relative z-10">
+          <a href="index.html" class="nav-link-item active">Home</a>
+          <a href="plans.html" class="nav-link-item">Plans</a>
+          <a href="menu.html" class="nav-link-item">Menu</a>
+        </div>
+        <a href="plans.html" class="hidden md:inline-flex luxury-cta-btn px-5 py-2 rounded-full font-manrope text-[10px] md:text-[11px] font-bold tracking-widest uppercase relative z-10 overflow-hidden group">
+          <span class="relative z-10">View Plans</span>
+        </a>
+        <button id="mobile-menu-btn" class="md:hidden text-[#53483E] hover:text-[#D67A1D] text-xl focus:outline-none pointer-events-auto relative z-10 transition-colors"><i class="fa-solid fa-bars"></i></button>
+      </nav>
+    </div>
+    <div id="mobile-menu" class="mobile-menu w-full max-w-2xl mt-2 p-6 rounded-[32px] pointer-events-auto flex flex-col gap-4 md:hidden">
+      <a href="index.html" class="mobile-link font-jakarta text-sm font-bold tracking-widest uppercase text-[#53483E] hover:text-[#D67A1D] transition-colors text-center">Home</a>
+      <a href="plans.html" class="mobile-link font-jakarta text-sm font-bold tracking-widest uppercase text-[#53483E] hover:text-[#D67A1D] transition-colors text-center">Plans</a>
+      <a href="menu.html" class="mobile-link font-jakarta text-sm font-bold tracking-widest uppercase text-[#53483E] hover:text-[#D67A1D] transition-colors text-center">Menu</a>
+      <a href="plans.html" class="luxury-cta-btn w-full py-3.5 mt-2 rounded-full font-manrope text-xs font-bold tracking-widest uppercase transition-colors text-center relative overflow-hidden group">
+        <span class="relative z-10">View Plans</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="relative z-10 w-full overflow-hidden flex-grow">
+
+    <!-- PAGE 1: LUXURY CINEMATIC HERO SHOWROOM SECTION -->
+    <section id="hero" class="relative h-screen min-h-[600px] max-h-[1080px] flex flex-col md:flex-row items-center justify-between p-4 sm:p-8 md:px-16 overflow-hidden bg-[#120E0C]">
+      <div id="hero-slideshow" class="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-100">
+        <!-- OPTIMIZED: Use srcset for responsive images and add fetchpriority to the first slide -->
+        <img id="slide-layer-a" class="hero-bg-slide hardware-layer" alt="Background Slide A" style="opacity: 0;"
+             srcset="images/mobile/mobile-1.jpg 767w, images/desktop/pc-1.jpg 1920w"
+             sizes="(max-width: 767px) 100vw, 100vw"
+             fetchpriority="high">
+        <img id="slide-layer-b" class="hero-bg-slide hardware-layer" alt="Background Slide B" style="opacity: 0;">
+      </div>
+      <script>
+        // OPTIMIZED: This script is no longer needed as srcset handles initial image loading.
+        // The main script at the bottom of the page will handle the slideshow logic.
+      </script>
+      <div class="absolute inset-0 z-10 bg-[linear-gradient(to_right,rgba(0,0,0,0.75)_0%,rgba(0,0,0,0.50)_40%,transparent_75%)] md:block hidden pointer-events-none"></div>
+      <div class="absolute inset-0 z-10 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.75)_0%,rgba(0,0,0,0.45)_50%,transparent_85%)] md:hidden pointer-events-none"></div>
+      <div class="absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_top_left,rgba(200,106,34,0.12),transparent_55%)] pointer-events-none"></div>
+      <div class="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[90vw] sm:w-[500px] h-[500px] bg-gradient-to-tr from-[#365C3D]/20 to-[#C86A22]/20 rounded-full blur-[100px] pointer-events-none z-10 animate-blob"></div>
+      <div class="w-full md:w-[50%] lg:w-[45%] text-center md:text-left z-20 flex flex-col items-center md:items-start pt-16 sm:pt-20 md:pt-0 md:my-auto mr-auto md:ml-8 lg:ml-12">
+        <div class="mb-3 md:mb-5 inline-flex items-center">
+          <span class="inline-block font-jakarta text-[9px] sm:text-xs font-bold tracking-[0.35em] uppercase text-[#FFB067] bg-black/40 border border-[#FFB067]/40 backdrop-blur-md px-3.5 py-1 md:px-4 md:py-1.5 rounded-full reveal-text text-center shadow-md">WELCOME TO DIET DHEKO</span>
+        </div>
+        <h1 class="font-montserrat font-black text-white text-[clamp(2.0rem,7vw,3.8rem)] md:text-[clamp(2.4rem,4.2vw,3.8rem)] leading-[1.08] tracking-tight mb-3 md:mb-6 reveal-text drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+          <span class="text-[#52C41A] drop-shadow">HEALTHY</span> EATING<br>MADE <span class="text-[#FF8C38] drop-shadow">SIMPLE</span>
+        </h1>
+        <p class="font-jakarta text-sm sm:text-base text-white/90 font-semibold leading-snug md:leading-relaxed mb-5 md:mb-8 max-w-[320px] sm:max-w-md reveal-text drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+          Experience chef-crafted, nutritionist-approved meals delivered fresh to your doorstep every day.
+        </p>
+        <div class="reveal-text flex flex-row items-center justify-center md:justify-start gap-2.5 sm:gap-4 w-full">
+          <a href="plans.html" class="premium-btn px-5 sm:px-8 py-2.5 sm:py-4 rounded-full font-manrope font-bold text-[11px] sm:text-xs tracking-wider uppercase shadow-xl hover:-translate-y-1.5 transition-all duration-300 whitespace-nowrap">View Plans <i class="fa-solid fa-arrow-right ml-1.5 text-xs sm:text-sm"></i></a>
+          <a href="#capsule-section" class="px-5 sm:px-8 py-2.5 sm:py-4 rounded-full font-manrope font-bold text-[11px] sm:text-xs tracking-wider uppercase text-white/90 bg-white/10 border border-white/25 backdrop-blur-md hover:bg-white/20 hover:text-white hover:-translate-y-1.5 transition-all duration-300 shadow-lg text-center whitespace-nowrap">Learn More</a>
+        </div>
+      </div>
+      <div class="w-full md:w-[50%] lg:w-[55%] pointer-events-none"></div>
+    </section>
+
+    <!-- PAGE 2: CAPSULE / HIGHLIGHTS SECTION -->
+    <section id="capsule-section" class="relative min-h-[100svh] md:min-h-[85vh] flex flex-col justify-center z-20 bg-wellness-bg overflow-hidden py-16 md:py-24 wood-grain-texture">
+      <div class="absolute inset-0 pointer-events-none z-0 overflow-hidden mix-blend-multiply opacity-[0.04] filter blur-[12px] hardware-layer">
+        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover object-center" alt="" loading="lazy" decoding="async">
+      </div>
+      <div class="global-item hardware-layer absolute top-[22%] left-[2%] w-16 h-16 md:w-24 md:h-24 opacity-90 drop-shadow-[0_15px_30px_rgba(244,140,6,0.3)] animate-float-slow pointer-events-none z-0" data-speed="0.15" data-rotation="120">
+        <svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="46" fill="#F48C06" /><circle cx="50" cy="50" r="40" fill="#F8F5EF" /><circle cx="50" cy="50" r="36" fill="#FFB703" /></svg>
+      </div>
+      <div class="global-item hardware-layer absolute top-[20%] right-[3%] w-14 h-14 md:w-22 md:h-22 opacity-90 drop-shadow-[0_15px_30px_rgba(143,61,13,0.25)] animate-float-spin pointer-events-none z-0" data-speed="-0.12" data-rotation="75">
+        <svg viewBox="0 0 100 100" class="w-full h-full"><path d="M50 10 C28 10, 15 32, 15 58 C15 80, 48 92, 50 92 C52 92, 85 80, 85 58 Z" fill="#D6742A" /></svg>
+      </div>
+      <div class="global-item hardware-layer absolute bottom-[18%] left-[4%] w-12 h-12 md:w-18 md:h-18 opacity-85 drop-shadow-[0_12px_24px_rgba(214,160,75,0.2)] animate-float-slow pointer-events-none z-0" data-speed="0.1">
+        <svg viewBox="0 0 100 100" class="w-full h-full"><path d="M25 35 C25 15, 65 10, 85 38 C95 55, 80 82, 50 82 Z" fill="#D6A04B" /></svg>
+      </div>
+      <div class="global-item hardware-layer absolute bottom-[15%] right-[5%] w-12 h-12 opacity-40 animate-float-slow pointer-events-none z-0">
+        <svg viewBox="0 0 100 100" class="w-full h-full fill-none stroke-[#365C3D]" stroke-width="2"><circle cx="50" cy="50" r="30" stroke-dasharray="6,4" /></svg>
+      </div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] md:w-[120vw] max-w-[700px] aspect-square pointer-events-none z-10">
+        <div class="capsule-orbiter w-full h-full relative hardware-layer">
+          <div class="absolute top-[15%] left-[25%] w-10 h-10 md:w-12 md:h-12 drop-shadow-[0_20px_25px_rgba(54,92,61,0.05)] opacity-20 blur-[2px]">
+            <svg viewBox="0 0 100 100" class="w-full h-full fill-none stroke-[#365C3D]" stroke-width="1.5"><path d="M50 15 C 30 15, 15 35, 15 55 C 15 80, 50 95, 50 95 C 50 95, 85 80, 85 55 C 85 35, 70 15, 50 15 Z" /></svg>
+          </div>
+        </div>
+      </div>
+      <div class="relative max-w-[1320px] mx-auto w-full px-2 md:px-8 z-20">
+        <button id="capsule-prev" class="premium-nav-arrow absolute left-4 md:left-0 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full flex items-center justify-center text-wellness-dark/70 z-30 focus:outline-none hidden md:flex cursor-pointer"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="flex gap-[20px] md:gap-[24px] overflow-x-auto pb-12 px-4 md:px-8 snap-x snap-mandatory hide-scrollbar justify-start items-stretch" id="capsule-track" style="scroll-behavior: smooth;">
+          <div class="capsule-glass vision-glass snap-center shrink-0 w-[75vw] md:w-[270px] p-6 md:p-8 rounded-[40px] relative group hardware-layer flex flex-col items-center justify-center min-h-[200px] md:min-h-[240px] overflow-hidden text-center">
+            <div class="absolute inset-0 bg-gradient-to-b from-[#F8F5EF]/60 to-transparent pointer-events-none z-10"></div>
+            <div class="relative z-20 flex flex-col items-center justify-center w-full h-full"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-wellness-sage/10 flex items-center justify-center mb-4 text-lg md:text-xl text-wellness-sage"><i class="fa-solid fa-user-doctor"></i></div><h3 class="font-montserrat font-black text-[18px] md:text-[21px] text-wellness-dark uppercase tracking-tight leading-tight w-full px-1">Nutritionist Curated</h3></div>
+          </div>
+          <div class="capsule-glass vision-glass snap-center shrink-0 w-[75vw] md:w-[270px] p-6 md:p-8 rounded-[40px] relative group hardware-layer flex flex-col items-center justify-center min-h-[200px] md:min-h-[240px] overflow-hidden text-center">
+            <div class="absolute inset-0 bg-gradient-to-b from-[#F8F5EF]/60 to-transparent pointer-events-none z-10"></div>
+            <div class="relative z-20 flex flex-col items-center justify-center w-full h-full"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-wellness-green/10 flex items-center justify-center mb-4 text-lg md:text-xl text-wellness-green"><i class="fa-solid fa-fire-burner"></i></div><h3 class="font-montserrat font-black text-[18px] md:text-[21px] text-wellness-dark uppercase tracking-tight leading-tight w-full px-1">Freshly Prepared</h3></div>
+          </div>
+          <div class="capsule-glass vision-glass snap-center shrink-0 w-[75vw] md:w-[270px] p-6 md:p-8 rounded-[40px] relative group hardware-layer flex flex-col items-center justify-center min-h-[200px] md:min-h-[240px] overflow-hidden text-center">
+            <div class="absolute inset-0 bg-gradient-to-b from-[#F8F5EF]/60 to-transparent pointer-events-none z-10"></div>
+            <div class="relative z-20 flex flex-col items-center justify-center w-full h-full"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-wellness-sage/10 flex items-center justify-center mb-4 text-lg md:text-xl text-wellness-sage"><i class="fa-solid fa-scale-balanced"></i></div><h3 class="font-montserrat font-black text-[18px] md:text-[21px] text-wellness-dark uppercase tracking-tight leading-tight w-full px-1">Macro Controlled</h3></div>
+          </div>
+          <div class="capsule-glass vision-glass snap-center shrink-0 w-[75vw] md:w-[270px] p-6 md:p-8 rounded-[40px] relative group hardware-layer flex flex-col items-center justify-center min-h-[200px] md:min-h-[240px] overflow-hidden text-center">
+            <div class="absolute inset-0 bg-gradient-to-b from-[#F8F5EF]/60 to-transparent pointer-events-none z-10"></div>
+            <div class="relative z-20 flex flex-col items-center justify-center w-full h-full"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-wellness-green/10 flex items-center justify-center mb-4 text-lg md:text-xl text-wellness-green"><i class="fa-solid fa-calendar-days"></i></div><h3 class="font-montserrat font-black text-[18px] md:text-[21px] text-wellness-dark uppercase tracking-tight leading-tight w-full px-1">Weekly New Menus</h3></div>
+          </div>
+          <div class="capsule-glass vision-glass snap-center shrink-0 w-[75vw] md:w-[270px] p-6 md:p-8 rounded-[40px] relative group hardware-layer flex flex-col items-center justify-center min-h-[200px] md:min-h-[240px] overflow-hidden text-center">
+            <div class="absolute inset-0 bg-gradient-to-b from-[#F8F5EF]/60 to-transparent pointer-events-none z-10"></div>
+            <div class="relative z-20 flex flex-col items-center justify-center w-full h-full"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-wellness-sage/10 flex items-center justify-center mb-4 text-lg md:text-xl text-wellness-sage"><i class="fa-solid fa-truck-fast"></i></div><h3 class="font-montserrat font-black text-[18px] md:text-[21px] text-wellness-dark uppercase tracking-tight leading-tight w-full px-1">Doorstep Delivery</h3></div>
+          </div>
+          <div class="capsule-glass vision-glass snap-center shrink-0 w-[75vw] md:w-[270px] p-6 md:p-8 rounded-[40px] relative group hardware-layer flex flex-col items-center justify-center min-h-[200px] md:min-h-[240px] overflow-hidden text-center">
+            <div class="absolute inset-0 bg-gradient-to-b from-[#F8F5EF]/60 to-transparent pointer-events-none z-10"></div>
+            <div class="relative z-20 flex flex-col items-center justify-center w-full h-full"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-wellness-green/10 flex items-center justify-center mb-4 text-lg md:text-xl text-wellness-green"><i class="fa-solid fa-trophy"></i></div><h3 class="font-montserrat font-black text-[18px] md:text-[21px] text-wellness-dark uppercase tracking-tight leading-tight w-full px-1">Trusted By Hundreds</h3></div>
+          </div>
+        </div>
+        <button id="capsule-next" class="premium-nav-arrow absolute right-4 md:right-0 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full flex items-center justify-center text-wellness-dark/70 z-30 focus:outline-none hidden md:flex cursor-pointer"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+    <!-- PAGE 3: TRUST / WHY CHOOSE SECTION -->
+    <section id="trust" class="relative z-20 bg-wellness-bg py-16 md:py-24 px-4 md:px-6 flex flex-col justify-center">
+      <div class="absolute inset-0 pointer-events-none z-0 opacity-[0.035] flex items-center justify-center">
+        <svg class="w-[85%] h-[85%] stroke-[#365C3D] fill-none" viewBox="0 0 100 100" stroke-width="0.4"><path d="M50 95 C 45 70, 30 50, 50 10 C 70 50, 55 70, 50 95 M 50 30 C 35 25, 25 15, 45 10 M 50 50 C 65 45, 75 35, 55 30" /></svg>
+      </div>
+      <div class="global-item hardware-layer absolute top-[28%] left-[2%] w-16 h-16 md:w-28 md:h-28 opacity-90 drop-shadow-[0_18px_30px_rgba(143,61,13,0.3)] animate-float-slow pointer-events-none z-0" data-speed="0.12" data-rotation="30">
+        <svg viewBox="0 0 100 100" class="w-full h-full"><path d="M78 35 C78 18, 56 8, 38 20 C20 32, 16 50, 22 66 C28 80, 48 84, 64 78 Z" fill="#C86A22" /></svg>
+      </div>
+      <div class="global-item hardware-layer absolute top-[15%] left-[12%] w-12 h-12 md:w-18 md:h-18 opacity-90 drop-shadow-[0_15px_25px_rgba(200,106,34,0.25)] animate-float-fast pointer-events-none z-0" data-speed="0.08">
+        <svg viewBox="0 0 100 100" class="w-full h-full"><path d="M25 80 L75 25 Q85 22, 88 28 Z" fill="#FF7B00" /></svg>
+      </div>
+      <div class="global-item hardware-layer absolute bottom-[10%] right-[3%] w-16 h-16 md:w-20 md:h-20 opacity-[0.4] animate-leaf-sway pointer-events-none z-0" data-speed="-0.15" data-rotation="-110">
+        <svg viewBox="0 0 100 100" class="w-full h-full fill-none stroke-[#365C3D]" stroke-width="2.5"><path d="M50 95 C 50 60, 40 40, 60 10 M 50 75 C 30 65, 20 45, 45 40" /></svg>
+      </div>
+      <div class="global-item hardware-layer absolute top-[8%] left-[45%] w-10 h-10 opacity-30 animate-leaf-sway pointer-events-none z-0">
+        <svg viewBox="0 0 100 100" class="w-full h-full fill-none stroke-[#365C3D]" stroke-width="2"><path d="M50 90 Q30 50, 50 10" /></svg>
+      </div>
+      <div class="absolute top-[5%] left-[10%] right-[10%] h-[1px] bg-gradient-to-r from-transparent via-[#C86A22]/20 to-transparent pointer-events-none z-0"></div>
+      <div class="absolute bottom-[5%] left-[10%] right-[10%] h-[1px] bg-gradient-to-r from-transparent via-[#C86A22]/20 to-transparent pointer-events-none z-0"></div>
+      <div class="text-center mb-10 md:mb-16 relative z-10 max-w-6xl mx-auto">
+        <h2 class="font-manrope font-extrabold text-[clamp(1.8rem,4vw,3.5rem)] text-[#1F1F1F] tracking-tighter mb-4 reveal-text whitespace-normal md:whitespace-nowrap">Why Choose Diet Dheko?</h2>
+        <p class="font-jakarta text-sm md:text-lg text-[#555555] font-medium reveal-text px-2">Eating healthy has never been this simple.</p>
+        <div class="w-12 h-[2px] bg-[#C86A22]/30 mx-auto mt-4"></div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 relative z-10 w-[92%] md:w-full max-w-6xl mx-auto">
+        <div class="vision-glass feature-card p-6 md:p-8 rounded-[32px] flex flex-col items-center text-center hardware-layer tilt-card reveal-text"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-wellness-green/10 flex items-center justify-center text-wellness-green text-lg md:text-xl mb-4 md:mb-6 transition-all duration-300"><i class="fa-solid fa-user-doctor"></i></div><h3 class="font-jakarta text-sm md:text-base text-[#1F1F1F] font-bold leading-snug">Meals Planned<br class="block md:hidden"> by Nutritionists</h3></div>
+        <div class="vision-glass feature-card p-6 md:p-8 rounded-[32px] flex flex-col items-center text-center hardware-layer tilt-card reveal-text"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#F47B20]/10 flex items-center justify-center text-[#F47B20] text-lg md:text-xl mb-4 md:mb-6 transition-all duration-300"><i class="fa-solid fa-fire-burner"></i></div><h3 class="font-jakarta text-sm md:text-base text-[#1F1F1F] font-bold leading-snug">Cooked Fresh<br class="block md:hidden"> Every Day</h3></div>
+        <div class="vision-glass feature-card p-6 md:p-8 rounded-[32px] flex flex-col items-center text-center hardware-layer tilt-card reveal-text"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-wellness-green/10 flex items-center justify-center text-wellness-green text-lg md:text-xl mb-4 md:mb-6 transition-all duration-300"><i class="fa-solid fa-scale-balanced"></i></div><h3 class="font-jakarta text-sm md:text-base text-[#1F1F1F] font-bold leading-snug">Perfectly Balanced<br class="block md:hidden"> Portions</h3></div>
+        <div class="vision-glass feature-card p-6 md:p-8 rounded-[32px] flex flex-col items-center text-center hardware-layer tilt-card reveal-text"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#F47B20]/10 flex items-center justify-center text-[#F47B20] text-lg md:text-xl mb-4 md:mb-6 transition-all duration-300"><i class="fa-solid fa-calendar-days"></i></div><h3 class="font-jakarta text-sm md:text-base text-[#1F1F1F] font-bold leading-snug">New Tasty Menus<br class="block md:hidden"> Every Week</h3></div>
+        <div class="vision-glass feature-card p-6 md:p-8 rounded-[32px] flex flex-col items-center text-center hardware-layer tilt-card reveal-text"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-wellness-green/10 flex items-center justify-center text-wellness-green text-lg md:text-xl mb-4 md:mb-6 transition-all duration-300"><i class="fa-solid fa-truck-fast"></i></div><h3 class="font-jakarta text-sm md:text-base text-[#1F1F1F] font-bold leading-snug">Delivered Right<br class="block md:hidden"> to Your Door</h3></div>
+        <div class="vision-glass feature-card p-6 md:p-8 rounded-[32px] flex flex-col items-center text-center hardware-layer tilt-card reveal-text"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#F47B20]/10 flex items-center justify-center text-[#F47B20] text-lg md:text-xl mb-4 md:mb-6 transition-all duration-300"><i class="fa-solid fa-heart"></i></div><h3 class="font-jakarta text-sm md:text-base text-[#1F1F1F] font-bold leading-snug">Loved by Hundreds<br class="block md:hidden"> of Happy People</h3></div>
+      </div>
+    </section>
+
+    <!-- PAGE 4: REVIEWS / TESTIMONIALS -->
+    <section id="testimonials" class="relative z-20 bg-wellness-bg py-16 md:py-24 overflow-hidden flex flex-col justify-center linen-texture">
+      <div class="absolute bottom-4 left-4 w-72 h-72 pointer-events-none z-0 opacity-[0.04] filter blur-[1px]">
+        <svg viewBox="0 0 120 120" class="w-full h-full fill-none stroke-[#365C3D]" stroke-width="0.8"><path d="M10 110 C 20 80, 50 60, 110 50 M 40 85 C 20 70, 30 50, 60 55 M 70 70 C 50 50, 60 30, 90 35" /></svg>
+      </div>
+      <div class="global-item hardware-layer absolute top-[38%] left-[3%] w-16 h-16 md:w-26 md:h-26 opacity-90 drop-shadow-[0_18px_30px_rgba(45,89,54,0.3)] animate-float-slow pointer-events-none z-0" data-speed="0.1" data-rotation="45">
+        <svg viewBox="0 0 100 100" class="w-full h-full"><path d="M50 15 C25 15, 12 38, 25 58 C35 70, 65 70, 75 58 Z" fill="#365C3D" /></svg>
+      </div>
+      <div class="global-item hardware-layer absolute bottom-[10%] left-[5%] w-16 h-16 opacity-[0.3] animate-leaf-sway pointer-events-none z-0" data-speed="0.1" data-rotation="30">
+        <svg viewBox="0 0 100 100" class="w-full h-full fill-none stroke-[#D6A04B]" stroke-width="2"><path d="M20 30 L40 20 L60 30 L60 50 L40 60 L20 50 Z" /></svg>
+      </div>
+      <div class="global-item hardware-layer absolute bottom-[25%] right-[15%] w-12 h-12 opacity-80 animate-leaf-sway pointer-events-none z-0">
+        <svg viewBox="0 0 100 100" class="w-full h-full fill-[#365C3D]"><path d="M10 50 Q50 20, 90 50 Q50 80, 10 50 Z" /></svg>
+      </div>
+      <div class="max-w-5xl mx-auto text-center mb-10 md:mb-12 px-4 md:px-6 relative z-10">
+        <h2 class="font-manrope font-extrabold text-[clamp(1.8rem,4vw,3.5rem)] text-[#1F1F1F] tracking-tighter mb-4 reveal-text whitespace-normal md:whitespace-nowrap">Customer Testimonials</h2>
+        <p class="font-jakarta text-sm md:text-lg text-[#555555] font-medium reveal-text px-2">See how our meals have helped people feel great.</p>
+        <div class="w-12 h-[2px] bg-[#365C3D]/30 mx-auto mt-4"></div>
+      </div>
+      <div class="relative max-w-6xl mx-auto w-full px-2 md:px-12 z-10">
+        <button id="prev-review" class="carousel-arrow absolute left-4 md:left-0 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full vision-glass flex items-center justify-center text-[#1F1F1F]/70 z-30 focus:outline-none hidden md:flex"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="flex gap-4 md:gap-6 overflow-x-auto pb-12 px-4 md:px-12 snap-x snap-mandatory hide-scrollbar items-stretch" id="testimonial-track">
+          <!-- Reviews will be loaded dynamically from Supabase here -->
+        </div>
+        <button id="next-review" class="carousel-arrow absolute right-4 md:right-0 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full vision-glass flex items-center justify-center text-[#1F1F1F]/70 z-30 focus:outline-none hidden md:flex"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+      <div class="text-center mt-2 md:mt-4 reveal-text px-4 md:px-6 relative z-10">
+        <a href="#" id="add-review-btn" class="premium-btn px-8 py-4 rounded-full font-manrope font-bold text-xs tracking-widest uppercase text-[#F8F5EF]">+ Add Your Review</a>
+      </div>
+    </section>
+
+    <!-- PAGE 5: CTA SECTION -->
+    <section id="cta" class="relative z-20 bg-wellness-bg py-20 px-4 md:px-6 flex flex-col justify-center">
+      <div class="absolute inset-0 pointer-events-none z-0 opacity-[0.03] flex items-center justify-center">
+        <svg class="w-full h-full stroke-[#C86A22]" viewBox="0 0 100 100" stroke-width="0.3"><pattern id="ctaGrid" width="15" height="15" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r="1" fill="#C86A22" opacity="0.15" /></pattern><rect width="100%" height="100%" fill="url(#ctaGrid)" /></svg>
+      </div>
+      <div class="max-w-5xl mx-auto rounded-[32px] md:rounded-[40px] overflow-hidden relative h-[400px] md:h-[450px] w-full flex items-center justify-center shadow-2xl img-container hardware-layer">
+        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=2000&auto=format&fit=crop" class="absolute inset-0 w-full h-[130%] object-cover top-[-15%]" alt="CTA Background" loading="lazy" decoding="async">
+        <div class="absolute inset-0 bg-black/40"></div>
+        <div class="relative z-10 vision-glass-dark p-8 md:py-12 md:px-16 rounded-[32px] text-center max-w-[calc(100%-2rem)] md:max-w-fit mx-auto backdrop-blur-2xl border-white/20">
+          <h2 class="font-montserrat font-black text-[clamp(1.8rem,4vw,3.5rem)] text-white tracking-tighter mb-4 leading-tight whitespace-normal md:whitespace-nowrap">Ready to Feel Great?</h2>
+          <p class="font-jakarta text-sm md:text-base text-wellness-cream/90 mb-8 font-light leading-relaxed px-2 whitespace-normal md:whitespace-nowrap">Pick your favorite meals and let us do all the cooking for you.</p>
+          <a href="plans.html" class="premium-btn px-8 py-4 rounded-full font-manrope font-bold text-xs tracking-widest uppercase text-[#F8F5EF] shadow-2xl">View Plans</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="relative z-20 w-full border-t border-[#C86A22]/30 bg-gradient-to-b from-[#EBE4D8] to-[#DFD6C5] h-auto md:h-[54px] flex items-center text-[#1F1F1F] mt-auto shadow-[0_50px_0_0_#DFD6C5] py-6 md:py-0">
+    <div class="absolute inset-0 pointer-events-none opacity-40 linen-texture mix-blend-multiply"></div>
+    <div class="relative z-10 w-full max-w-6xl mx-auto px-4 md:px-6 flex flex-col md:flex-row items-center justify-between h-full gap-3 md:gap-0">
+      <div class="flex flex-col md:flex-row items-center gap-1 md:gap-4 h-full justify-center md:justify-start w-full md:w-auto">
+        <a href="#hero" class="relative flex items-center justify-center w-[70px] md:w-[90px] h-full -mb-3 md:mb-0">
+          <img src="logo.png" alt="Diet Dheko Logo" class="relative md:absolute md:top-[68%] md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 h-[70px] md:h-[90px] w-auto max-w-none object-contain drop-shadow-sm" loading="lazy" decoding="async">
+        </a>
+        <p class="font-jakarta text-[9.5px] sm:text-[11px] text-[#1F1F1F]/90 font-bold tracking-wide z-10 relative leading-none translate-y-[3px] whitespace-nowrap text-center md:text-left">Cherry Road, Hastampatti, Salem &bull; 88834 82728</p>
+      </div>
+      <div class="flex items-center justify-center md:justify-end h-full w-full md:w-auto mt-1 md:mt-0">
+        <p class="font-jakarta text-[8.5px] sm:text-[10px] text-[#1F1F1F]/60 font-bold tracking-wider uppercase text-center md:text-right leading-none translate-y-[3px] whitespace-nowrap hidden sm:block">&copy; 2026 Diet Dheko. Premium Nutrition Showroom.</p>
+        <p class="font-jakarta text-[8.5px] sm:text-[10px] text-[#1F1F1F]/60 font-bold tracking-wider uppercase text-center md:text-right leading-none translate-y-[3px] whitespace-nowrap sm:hidden">&copy; 2026 Diet Dheko.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- REVIEW MODAL (UNMODIFIED) -->
+  <div id="review-modal" class="fixed inset-0 z-[100] flex items-center justify-center px-4 modal-overlay bg-wellness-dark/20 hidden pointer-events-none">
+    <div class="premium-modal w-full max-w-lg p-8 md:p-10 rounded-[40px] relative overflow-hidden">
+      <div class="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-gradient-to-br from-white/40 to-transparent rotate-45 pointer-events-none"></div>
+      <button id="close-modal" class="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/40 flex items-center justify-center text-wellness-dark/70 hover:text-wellness-dark hover:bg-white/70 transition-all focus:outline-none z-50 cursor-pointer"><i class="fa-solid fa-xmark text-lg pointer-events-none"></i></button>
+      <div class="relative z-10">
+        <h3 class="font-montserrat font-black text-2xl md:text-3xl text-[#232323] mb-2 tracking-tight">Add Your Review</h3>
+        <p class="font-jakarta text-sm text-[#232323]/70 mb-8 flex items-center gap-2">
+          <img src="logo.png" alt="Diet Dheko Logo" class="h-6 w-auto object-contain inline-block" loading="lazy" decoding="async">
+          <span>Share your experience with Diet Dheko.</span>
+        </p>
+        <form id="review-form" class="flex flex-col gap-5">
+          <div class="flex flex-col gap-3 items-center mb-2">
+            <div class="flex gap-3 text-wellness-sage-light text-3xl star-rating" id="star-rating">
+              <i class="fa-solid fa-star" data-rating="1"></i><i class="fa-solid fa-star" data-rating="2"></i><i class="fa-solid fa-star" data-rating="3"></i><i class="fa-solid fa-star" data-rating="4"></i><i class="fa-solid fa-star" data-rating="5"></i>
+            </div>
+          </div>
+          <div class="floating-group"><input type="text" id="reviewer-name" required class="floating-input" placeholder=" "><label class="floating-label">Your Name</label></div>
+          <div class="floating-group"><textarea id="reviewer-text" required class="floating-input" placeholder=" " maxlength="300"></textarea><label class="floating-label">Share your experience...</label><div class="absolute bottom-3 right-4 text-[10px] font-jakarta font-bold text-wellness-sage" id="char-counter">0/300</div></div>
+          <div class="flex gap-3 mt-4">
+            <button type="button" id="cancel-review" class="flex-1 px-4 py-4 rounded-2xl font-manrope font-bold text-xs tracking-widest uppercase border border-[#1F1F1F]/20 text-[#1F1F1F] bg-transparent hover:bg-[#1F1F1F]/5 transition-all text-center">Cancel</button>
+            <button type="submit" id="submit-review-btn" class="flex-1 premium-btn premium-btn-green text-white py-4 rounded-2xl font-jakarta font-bold text-xs tracking-widest uppercase">Submit Review</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHATSAPP WIDGET (UNMODIFIED) -->
+  <div id="dd-chat-widget" class="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[9999] font-jakarta flex flex-col items-end pointer-events-none">
+    <div id="dd-chat-box" class="mb-4 w-[90vw] max-w-[360px] bg-white/95 backdrop-blur-3xl border border-white/60 shadow-[0_30px_60px_rgba(0,0,0,0.2)] rounded-3xl overflow-hidden transition-all duration-400 origin-bottom-right scale-0 opacity-0 hidden flex-col pointer-events-auto">
+      <div class="bg-gradient-to-r from-[#25D366] to-[#128C7E] p-3 md:p-4 flex items-center justify-between text-white shadow-md relative z-10">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 md:w-10 md:h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30"><i class="fa-brands fa-whatsapp text-xl md:text-2xl"></i></div>
+          <div><h3 class="font-montserrat font-bold text-xs md:text-sm tracking-wide">Diet Dheko Support</h3><div class="flex items-center gap-1.5 mt-0.5"><span class="w-1.5 h-1.5 md:w-2 md:h-2 bg-white rounded-full animate-pulse"></span><span class="text-[9px] md:text-[10px] font-medium opacity-90 uppercase tracking-wider">Online</span></div></div>
+        </div>
+        <button id="dd-chat-close-btn" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/20 transition-colors focus:outline-none cursor-pointer"><i class="fa-solid fa-xmark text-base md:text-lg pointer-events-none"></i></button>
+      </div>
+      <div id="dd-chat-messages" data-lenis-prevent class="p-5 h-[320px] flex flex-col gap-3 bg-slate-50/80"></div>
+      <div class="p-3 md:p-4 bg-white border-t border-slate-100 flex flex-col gap-2 md:gap-3">
+        <textarea id="dd-chat-input" data-lenis-prevent rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 focus:outline-none focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 resize-none transition-all placeholder:text-slate-400 overscroll-contain" placeholder="Type your inquiry here..."></textarea>
+        <a id="dd-chat-send-btn" href="#" target="_blank" class="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white py-3 rounded-xl font-jakarta font-bold text-sm tracking-wide flex items-center justify-center gap-2 transition-all shadow-lg shadow-[#25D366]/30 hover:shadow-[#25D366]/50 hover:-translate-y-0.5 cursor-pointer">Send on WhatsApp <i class="fa-solid fa-paper-plane pointer-events-none"></i></a>
+      </div>
+    </div>
+    <button id="dd-chat-open-btn" class="relative w-14 h-14 md:w-16 md:h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center text-2xl md:text-3xl shadow-[0_10px_25px_rgba(37,211,102,0.5)] hover:scale-105 hover:-translate-y-1 transition-all duration-300 focus:outline-none group z-20 cursor-pointer pointer-events-auto">
+      <div class="absolute inset-0 rounded-full border-2 border-[#25D366] animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite] opacity-40"></div>
+      <i class="fa-brands fa-whatsapp transform group-hover:rotate-12 transition-transform duration-300 pointer-events-none"></i>
+    </button>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+      const isMobileDevice = window.innerWidth < 768;
+      ScrollTrigger.config({ ignoreMobileResize: true, limitCallbacks: true, syncInterval: isMobileDevice ? 250 : 16 });
+      const lenis = new Lenis({ duration: isMobileDevice ? 1.0 : 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true, mouseMultiplier: 1, smoothTouch: false, touchMultiplier: 1.2 });
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+      gsap.ticker.lagSmoothing(1000, 16);
+      gsap.fromTo("main, footer", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", clearProps: "all" });
+
+      const navPill = document.getElementById('nav-pill');
+      const headerContainer = document.getElementById('header-container');
+      function calculateNavOffset() {
+        if (!navPill || window.innerWidth < 768) { navPill.style.setProperty('--nav-left-offset', '0px'); return; }
+        const leftPadding = 48;
+        const leftOffset = -((window.innerWidth - navPill.offsetWidth) / 2 - leftPadding);
+        navPill.style.setProperty('--nav-left-offset', `${leftOffset}px`);
+      }
+      calculateNavOffset();
+      // OPTIMIZED: Added passive: true to resize listener
+      window.addEventListener('resize', calculateNavOffset, { passive: true });
+
+      const heroSection = document.getElementById('hero');
+      if (heroSection && headerContainer) {
+        const heroObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => { headerContainer.classList.toggle('in-hero', entry.isIntersecting); });
+        }, { threshold: 0.1 });
+        heroObserver.observe(heroSection);
+      }
+
+      // --- OPTIMIZED SLIDESHOW LOGIC ---
+      const TOTAL_SLIDES = 11;
+      const imgFolder = isMobileDevice ? 'images/mobile/' : 'images/desktop/';
+      const imgPrefix = isMobileDevice ? 'mobile-' : 'pc-';
+      const ext = '.jpg';
+      const preloadedImages = Array.from({ length: TOTAL_SLIDES }, (_, i) => {
+          const img = new Image();
+          img.decoding = 'async';
+          // OPTIMIZED: Set srcset and sizes for responsive background loading
+          img.srcset = `images/mobile/mobile-${i + 1}.jpg 767w, images/desktop/pc-${i + 1}.jpg 1920w`;
+          img.sizes = "(max-width: 767px) 100vw, 100vw";
+          return img;
+      });
+
+      // Eagerly load only the next slide
+      preloadedImages[1].src = `${imgFolder}${imgPrefix}2${ext}`;
+
+      const idle = window.requestIdleCallback || function (cb) { return setTimeout(() => cb({ timeRemaining: () => 50 }), 200); };
+      let queuedSlide = 2; // Start lazy loading from the 3rd slide
+      function loadNextSlideInBackground() {
+        if (queuedSlide >= TOTAL_SLIDES) return;
+        preloadedImages[queuedSlide].src = `${imgFolder}${imgPrefix}${queuedSlide + 1}${ext}`;
+        queuedSlide++;
+        idle(loadNextSlideInBackground);
+      }
+      // Start lazy loading after a short delay
+      setTimeout(() => idle(loadNextSlideInBackground), 1000);
+
+      const layerA = document.getElementById('slide-layer-a');
+      const layerB = document.getElementById('slide-layer-b');
+      
+      let slideshowInterval;
+      let slideshowState = {
+          currentIdx: 0,
+          activeLayer: layerA,
+          nextLayer: layerB,
+          isTransitioning: false,
+          isPlaying: false,
+          kenBurnsTimeline: null
+      };
+
+      function playKenBurns(layer) {
+          if (slideshowState.kenBurnsTimeline) slideshowState.kenBurnsTimeline.kill();
+          slideshowState.kenBurnsTimeline = gsap.timeline()
+              .fromTo(layer, { scale: 1.0 }, { scale: 1.04, duration: 8, ease: 'none' });
+      }
+
+      async function stepSlideshow() {
+          if (slideshowState.isTransitioning) return;
+          slideshowState.isTransitioning = true;
+
+          const nextIdx = (slideshowState.currentIdx + 1) % TOTAL_SLIDES;
+          const nextImg = preloadedImages[nextIdx];
+
+          slideshowState.nextLayer.srcset = nextImg.srcset;
+          slideshowState.nextLayer.sizes = nextImg.sizes;
+          
+          try {
+              if (slideshowState.nextLayer.decode) await slideshowState.nextLayer.decode();
+          } catch (e) {
+              console.warn("Image decode failed, continuing anyway.", e);
+          }
+
+          gsap.set(slideshowState.nextLayer, { opacity: 0, zIndex: 2 });
+          gsap.set(slideshowState.activeLayer, { zIndex: 1 });
+
+          gsap.to(slideshowState.nextLayer, { opacity: 1, duration: 1.5, ease: 'power2.inOut' });
+          gsap.to(slideshowState.activeLayer, {
+              opacity: 0,
+              duration: 1.5,
+              ease: 'power2.inOut',
+              onComplete: () => {
+                  slideshowState.currentIdx = nextIdx;
+                  [slideshowState.activeLayer, slideshowState.nextLayer] = [slideshowState.nextLayer, slideshowState.activeLayer];
+                  slideshowState.isTransitioning = false;
+              }
+          });
+          playKenBurns(slideshowState.nextLayer);
+      }
+
+      function resumeSlideshow() {
+          if (slideshowState.isPlaying || !heroSection) return;
+          slideshowState.isPlaying = true;
+          if (slideshowState.kenBurnsTimeline) slideshowState.kenBurnsTimeline.resume();
+          clearInterval(slideshowInterval);
+          slideshowInterval = setInterval(stepSlideshow, 5800); // OPTIMIZED: Slightly faster duration
+      }
+
+      function pauseSlideshow() {
+          if (!slideshowState.isPlaying) return;
+          slideshowState.isPlaying = false;
+          clearInterval(slideshowInterval);
+          if (slideshowState.kenBurnsTimeline) slideshowState.kenBurnsTimeline.pause();
+      }
+
+      function handleVisibilityChange() {
+          if (document.hidden) {
+              pauseSlideshow();
+          } else if (heroSection.getBoundingClientRect().top < window.innerHeight && heroSection.getBoundingClientRect().bottom > 0) {
+              // Only resume if it's also in viewport
+              resumeSlideshow();
+          }
+      }
+
+      if (layerA && layerB) {
+          if (isMobileDevice) {
+              layerA.classList.add('mobile-slide-mode');
+              layerB.classList.add('mobile-slide-mode');
+          }
+          // Initial setup
+          layerA.onload = () => {
+              gsap.set(layerA, { opacity: 1, zIndex: 1 });
+              playKenBurns(layerA);
+
+              // Observer to pause/play slideshow when it enters/leaves viewport
+              const slideshowObserver = new IntersectionObserver((entries) => {
+                  entries.forEach(entry => {
+                      if (entry.isIntersecting) {
+                          resumeSlideshow();
+                      } else {
+                          pauseSlideshow();
+                      }
+                  });
+              }, { threshold: 0.01 });
+
+              slideshowObserver.observe(heroSection);
+              document.addEventListener('visibilitychange', handleVisibilityChange);
+          };
+          // Ensure onload fires even if image is cached
+          if (layerA.complete) layerA.onload();
+      }
+      // --- END OF OPTIMIZED SLIDESHOW LOGIC ---
+
+
+      const track = document.getElementById('testimonial-track');
+      try {
+        const reviews = await AdminAPI.getReviews();
+        const visibleReviews = reviews.filter(r => r.visible);
+        if (visibleReviews.length > 0) {
+          track.innerHTML = visibleReviews.map(r => {
+            let starsHtml = Array.from({ length: 5 }, (_, i) => i < r.rating ? '<i class="fa-solid fa-star"></i>' : '<i class="fa-regular fa-star"></i>').join('');
+            return `<div class="testimonial-card snap-center shrink-0 w-[85vw] md:w-[380px] vision-glass p-8 md:p-10 rounded-[32px] relative group hardware-layer flex flex-col justify-center min-h-[220px] md:min-h-[250px] overflow-hidden"><div class="glass-glare"></div><div class="quote-icon absolute top-6 right-6 text-6xl text-wellness-sage/5 font-montserrat font-black leading-none select-none">"</div><div class="flex gap-1 text-yellow-400 mb-6 text-sm relative z-10">${starsHtml}</div><p class="font-jakarta text-base md:text-lg text-wellness-dark/90 leading-relaxed font-medium relative z-10">"${r.text}"</p><p class="font-jakarta text-xs text-wellness-dark/50 mt-4 font-bold relative z-10">- ${r.name}</p></div>`;
+          }).join('');
+        } else { track.innerHTML = `<div class="w-full text-center py-10 text-wellness-dark/50 font-jakarta">No reviews yet. Be the first!</div>`; }
+      } catch (e) { console.error("Failed to load reviews", e); }
+
+      const globalItems = gsap.utils.toArray('.global-item');
+      if (!window.matchMedia("(pointer: coarse)").matches) {
+        let ticking = false;
+        window.addEventListener('mousemove', (e) => {
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+              const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+              globalItems.forEach(item => {
+                const speed = parseFloat(item.getAttribute('data-speed')) * 50;
+                gsap.to(item, { x: mouseX * speed, y: mouseY * speed, duration: 2, ease: "power2.out", overwrite: "auto" });
+              });
+              ticking = false;
+            });
+            ticking = true;
+          }
+        }, { passive: true });
+      }
+      globalItems.forEach(item => {
+        const speed = parseFloat(item.getAttribute('data-speed')) * (isMobileDevice ? 0.3 : 1);
+        const rotation = parseFloat(item.getAttribute('data-rotation')) || 180;
+        gsap.to(item, { yPercent: 200 * speed, rotation: rotation, ease: "none", scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: isMobileDevice ? 0.5 : true } });
+      });
+
+      if ('IntersectionObserver' in window) {
+        const animatedEls = document.querySelectorAll('.animate-blob, .animate-float-slow, .animate-float-fast, .animate-leaf-sway, .animate-float-spin');
+        const animObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => { entry.target.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused'; });
+        }, { rootMargin: '200px 0px' });
+        animatedEls.forEach(el => animObserver.observe(el));
+      }
+
+      gsap.to('.capsule-orbiter', { rotation: 360, transformOrigin: "50% 50%", ease: "none", duration: 30, repeat: -1, scrollTrigger: { trigger: '#capsule-section', start: 'top bottom', end: 'bottom top', toggleActions: 'resume pause resume pause' } });
+      function enableDragScroll(slider) {
+        let isDown = false, startX, scrollLeft;
+        slider.addEventListener('mousedown', (e) => { isDown = true; slider.style.scrollSnapType = 'none'; slider.classList.add('cursor-grabbing'); startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
+        const endDrag = () => { if(!isDown) return; isDown = false; slider.style.scrollSnapType = 'x mandatory'; slider.classList.remove('cursor-grabbing'); };
+        slider.addEventListener('mouseleave', endDrag);
+        slider.addEventListener('mouseup', endDrag);
+        slider.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); const x = e.pageX - slider.offsetLeft; const walk = (x - startX) * 1.5; slider.scrollLeft = scrollLeft - walk; });
+      }
+      const testimonialTrack = document.getElementById('testimonial-track');
+      const capsuleTrack = document.getElementById('capsule-track');
+      if(testimonialTrack) enableDragScroll(testimonialTrack);
+      if(capsuleTrack) enableDragScroll(capsuleTrack);
+      const featureCards = document.querySelectorAll('.feature-card');
+      featureCards.forEach(card => {
+        card.addEventListener('click', () => {
+          const isHighlighted = card.classList.contains('highlighted');
+          featureCards.forEach(c => c.classList.remove('highlighted'));
+          if (!isHighlighted) card.classList.add('highlighted');
+        });
+      });
+      gsap.utils.toArray('.img-container').forEach(container => {
+        const img = container.querySelector('img');
+        gsap.fromTo(img, { yPercent: -10 }, { yPercent: 10, ease: "none", scrollTrigger: { trigger: container, start: "top bottom", end: "bottom top", scrub: isMobileDevice ? 0.5 : true } });
+      });
+      gsap.utils.toArray('.reveal-text').forEach(text => {
+        gsap.fromTo(text, { opacity: 0, y: isMobileDevice ? 20 : 30 }, { opacity: 1, y: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: text, start: "top 90%", toggleActions: "play none none reverse" } });
+      });
+      function initTiltCard(card) {
+        const isTestimonial = card.classList.contains('testimonial-card');
+        const glare = card.querySelector('.glass-glare');
+        if (!window.matchMedia("(pointer: coarse)").matches) {
+          card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left, y = e.clientY - rect.top;
+            gsap.to(card, { rotateX: ((y - rect.height/2) / (rect.height/2)) * -3, rotateY: ((x - rect.width/2) / (rect.width/2)) * 3, transformPerspective: 1000, duration: 0.5, ease: "power2.out", overwrite: "auto" });
+            if (isTestimonial && glare) { glare.style.transform = `translate(${x}px, ${y}px)`; glare.style.opacity = '1'; }
+          });
+          card.addEventListener('mouseleave', () => {
+            gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.7, ease: "power2.out", overwrite: "auto" });
+            if (isTestimonial && glare) glare.style.opacity = '0';
+          });
+        }
+      }
+      document.querySelectorAll('.tilt-card, .testimonial-card').forEach(initTiltCard);
+      let lastScrollY = window.scrollY;
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      let isMenuOpen = false;
+      if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', () => {
+          isMenuOpen = !isMenuOpen;
+          mobileMenu.classList.toggle('active');
+          mobileMenuBtn.innerHTML = isMenuOpen ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+        });
+      }
+      document.querySelectorAll('.mobile-link').forEach(link => {
+        link.addEventListener('click', () => { isMenuOpen = false; if (mobileMenu) mobileMenu.classList.remove('active'); if (mobileMenuBtn) mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>'; });
+      });
+      lenis.on('scroll', (e) => {
+        if (isMenuOpen) return;
+        const currentScrollY = e.animatedScroll;
+        if (currentScrollY > 100) { headerContainer.style.transform = currentScrollY > lastScrollY ? 'translateY(-150%)' : 'translateY(0)'; } 
+        else { headerContainer.style.transform = 'translateY(0)'; }
+        lastScrollY = currentScrollY;
+      });
+      const prevBtn = document.getElementById('prev-review'), nextBtn = document.getElementById('next-review');
+      if (prevBtn && nextBtn && track) {
+        const scrollAmount = isMobileDevice ? window.innerWidth * 0.85 : 400;
+        prevBtn.addEventListener('click', () => track.scrollBy({ left: -scrollAmount, behavior: 'smooth' }));
+        nextBtn.addEventListener('click', () => track.scrollBy({ left: scrollAmount, behavior: 'smooth' }));
+      }
+      const prevBtnCapsule = document.getElementById('capsule-prev'), nextBtnCapsule = document.getElementById('capsule-next');
+      if (prevBtnCapsule && nextBtnCapsule && capsuleTrack) {
+        const scrollAmount = isMobileDevice ? window.innerWidth * 0.75 : 294;
+        prevBtnCapsule.addEventListener('click', () => capsuleTrack.scrollBy({ left: -scrollAmount, behavior: 'smooth' }));
+        nextBtnCapsule.addEventListener('click', () => capsuleTrack.scrollBy({ left: scrollAmount, behavior: 'smooth' }));
+      }
+      const power3InOut = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      document.querySelectorAll('a').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          const target = this.getAttribute('href');
+          if (!target || target === '#') return;
+          if (target.startsWith('#')) {
+            e.preventDefault();
+            if (isMenuOpen) { isMenuOpen = false; mobileMenu.classList.remove('active'); mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>'; }
+            lenis.scrollTo(target, { duration: 1.5, easing: power3InOut });
+          } else if (target.includes('.html')) {
+            e.preventDefault();
+            if (isMenuOpen) { isMenuOpen = false; mobileMenu.classList.remove('active'); mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>'; }
+            if (target === 'index.html' && (window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/'))) {
+              lenis.scrollTo(0, { duration: 1.5, easing: power3InOut });
+              return;
+            }
+            gsap.to("main, footer", { opacity: 0, y: -20, duration: 0.5, ease: "power2.inOut", onComplete: () => window.location.href = this.href });
+          }
+        });
+      });
+      const modal = document.getElementById('review-modal'), addReviewBtn = document.getElementById('add-review-btn'), closeModalBtn = document.getElementById('close-modal'), cancelReviewBtn = document.getElementById('cancel-review'), reviewForm = document.getElementById('review-form'), starRating = document.getElementById('star-rating'), stars = starRating.querySelectorAll('i'), textarea = document.getElementById('reviewer-text'), charCounter = document.getElementById('char-counter');
+      let currentRating = 5;
+      if (textarea) { textarea.addEventListener('input', function() { this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px'; charCounter.textContent = `${this.value.length}/300`; }); }
+      function updateStars(rating) { stars.forEach(star => { star.classList.toggle('text-yellow-400', star.dataset.rating <= rating); star.classList.toggle('fa-solid', star.dataset.rating <= rating); star.classList.toggle('text-[#ECE4D8]', star.dataset.rating > rating); star.classList.toggle('fa-regular', star.dataset.rating > rating); }); }
+      updateStars(currentRating);
+      function openModal(e) { if (e) e.preventDefault(); modal.classList.remove('hidden', 'pointer-events-none'); modal.classList.add('active'); document.body.style.overflow = 'hidden'; if (typeof lenis !== 'undefined') lenis.stop(); }
+      function closeModal(e) {
+        if (e) e.preventDefault();
+        modal.classList.remove('active');
+        modal.classList.add('pointer-events-none');
+        document.body.style.overflow = '';
+        if (typeof lenis !== 'undefined') lenis.start();
+        setTimeout(() => { modal.classList.add('hidden'); reviewForm.reset(); currentRating = 5; updateStars(currentRating); if (textarea) textarea.style.height = 'auto'; if (charCounter) charCounter.textContent = '0/300'; }, 400);
+      }
+      if (addReviewBtn) addReviewBtn.addEventListener('click', openModal);
+      if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+      if (cancelReviewBtn) cancelReviewBtn.addEventListener('click', closeModal);
+      if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(e); });
+      stars.forEach(star => {
+        star.addEventListener('mouseover', function() { updateStars(this.dataset.rating); });
+        star.addEventListener('mouseout', function() { updateStars(currentRating); });
+        star.addEventListener('click', function() { currentRating = this.dataset.rating; updateStars(currentRating); });
+      });
+      if (reviewForm) {
+        reviewForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const submitBtn = document.getElementById('submit-review-btn'), originalText = submitBtn.innerHTML;
+          submitBtn.innerHTML = 'Submitting...'; submitBtn.disabled = true;
+          try {
+            await AdminAPI.saveReview({ id: 'REV-' + Math.floor(Math.random() * 10000), name: document.getElementById('reviewer-name').value, location: 'Website User', text: document.getElementById('reviewer-text').value, rating: currentRating, featured: false, visible: true });
+            closeModal();
+          } catch (error) { alert("Failed to submit review."); } 
+          finally { submitBtn.innerHTML = originalText; submitBtn.disabled = false; }
+        });
+      }
+      
+      function initializeWhatsAppWidget() {
+        let isDDChatOpen = false;
+        let ddMessagesLoaded = false;
+        let ddWaNum = "919876543210";
+        let ddGreetings = ["👋 Hey, Hii!", "Welcome to Diet Dheko.", "If you have any doubts about our plans, menu, delivery, or subscription process, feel free to ask us below."];
+
+        const chatWidget = document.getElementById('dd-chat-widget');
+        const chatBox = document.getElementById('dd-chat-box');
+        const chatInput = document.getElementById('dd-chat-input');
+        const messagesContainer = document.getElementById('dd-chat-messages');
+        const openBtn = document.getElementById('dd-chat-open-btn');
+        const closeBtn = document.getElementById('dd-chat-close-btn');
+        const sendBtn = document.getElementById('dd-chat-send-btn');
+
+        function toggleDDChat(e) {
+          if (e) { e.preventDefault(); e.stopPropagation(); }
+          isDDChatOpen = !isDDChatOpen;
+          if (isDDChatOpen) {
+            chatBox.style.display = 'flex';
+            setTimeout(() => { chatBox.classList.remove('scale-0', 'opacity-0'); chatBox.classList.add('scale-100', 'opacity-100'); }, 10);
+            if (!ddMessagesLoaded) { loadDDMessages(); ddMessagesLoaded = true; }
+            setTimeout(() => chatInput.focus(), 300);
+          } else {
+            chatBox.classList.remove('scale-100', 'opacity-100');
+            chatBox.classList.add('scale-0', 'opacity-0');
+            setTimeout(() => { chatBox.style.display = 'none'; }, 400);
+          }
+        }
+
+        function loadDDMessages() {
+          let delay = 400;
+          ddGreetings.forEach((msg) => {
+            setTimeout(() => {
+              const msgDiv = document.createElement('div');
+              msgDiv.className = 'dd-chat-bubble bg-white shadow-sm border border-slate-100 text-slate-700 text-[13px] leading-relaxed p-3.5 rounded-2xl rounded-tl-none w-fit max-w-[90%] transform transition-all duration-500 translate-y-4 opacity-0 flex-shrink-0';
+              msgDiv.innerHTML = msg;
+              messagesContainer.appendChild(msgDiv);
+              requestAnimationFrame(() => {
+                msgDiv.classList.remove('translate-y-4', 'opacity-0');
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+              });
+            }, delay);
+            delay += 900;
+          });
+        }
+
+        function updateWhatsAppLink() {
+          const text = chatInput.value.trim();
+          if (!text) { sendBtn.href = "#"; return; }
+          const formalMessage = `Hello Diet Dheko Support,\n\nI have an inquiry regarding your services.\n\n*My Question:*\n"${text}"\n\nLooking forward to your response.`;
+          sendBtn.href = `https://wa.me/${ddWaNum}?text=${encodeURIComponent(formalMessage)}`;
+        }
+
+        if (openBtn) openBtn.addEventListener('click', toggleDDChat);
+        if (closeBtn) closeBtn.addEventListener('click', toggleDDChat);
+        if (chatInput) {
+          chatInput.addEventListener('input', updateWhatsAppLink);
+          chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (chatInput.value.trim()) sendBtn.click(); } });
+        }
+        if (sendBtn) {
+          sendBtn.addEventListener('click', (e) => {
+            if (sendBtn.getAttribute('href') === '#') { e.preventDefault(); chatInput.focus(); return; }
+            setTimeout(() => { chatInput.value = ''; updateWhatsAppLink(); if (isDDChatOpen) toggleDDChat(); }, 500);
+          });
+        }
+        if (chatBox) chatBox.addEventListener('click', (e) => e.stopPropagation());
+        const stopScrollHijack = (e) => { e.stopPropagation(); };
+        if (messagesContainer) { messagesContainer.addEventListener('wheel', stopScrollHijack, { passive: false }); messagesContainer.addEventListener('touchmove', stopScrollHijack, { passive: false }); }
+        if (chatInput) { chatInput.addEventListener('wheel', stopScrollHijack, { passive: false }); chatInput.addEventListener('touchmove', stopScrollHijack, { passive: false }); }
+        document.addEventListener('click', (e) => { if (isDDChatOpen && chatWidget && !chatWidget.contains(e.target)) toggleDDChat(); });
+
+        (async function fetchDynamicData() {
+          try {
+            if (typeof AdminAPI !== 'undefined') {
+              const config = await AdminAPI.getConfig();
+              if (config.settings) {
+                if (config.settings.waNumber) ddWaNum = (config.settings.waCountryCode || '91') + config.settings.waNumber.replace(/\D/g, '');
+                if (config.settings.waMessages && config.settings.waMessages.length > 0) ddGreetings = config.settings.waMessages;
+              }
+            }
+          } catch (e) { console.warn("Using default chat settings."); }
+        })();
+      }
+      
+      initializeWhatsAppWidget();
+    });
+
+    // --- HIDDEN ADMIN TRIGGER (UNMODIFIED) ---
+    let secretWord = "adminx";
+    (async () => { try { if (typeof AdminAPI !== 'undefined') secretWord = (await AdminAPI.getConfig()).security.secretWord; } catch(e){} })();
+    let tapCount = 0, tapTimer, typedWord = "";
+    const logo = document.querySelector('header a[href="index.html"]');
+    if (logo) {
+      logo.addEventListener('click', (e) => {
+        e.preventDefault(); tapCount++; clearTimeout(tapTimer);
+        if (tapCount >= 3) { window.location.href = 'admin-login.html'; tapCount = 0; } 
+        else { tapTimer = setTimeout(() => { if (tapCount < 3) window.location.href = 'index.html'; tapCount = 0; }, 400); }
+      });
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key.length === 1) {
+        typedWord = (typedWord + e.key.toLowerCase()).slice(-secretWord.length);
+        if (typedWord === secretWord) window.location.href = 'admin-login.html';
+      }
+    });
+  </script>
+</body>
+</html>

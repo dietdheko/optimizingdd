@@ -8,6 +8,7 @@
   <!-- INSTANT 0ms FIRST-IMAGE PRELOAD HINTS -->
   <link rel="preload" as="image" href="images/desktop/pc-1.jpg" media="(min-width: 768px)">
   <link rel="preload" as="image" href="images/mobile/mobile-1.jpg" media="(max-width: 767px)">
+  <link rel="preload" as="image" href="logo.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,14 +57,14 @@
             'float-spin': 'floatSpin 14s linear infinite',
           },
           keyframes: {
-            blob: { '0%': { transform: 'translate(0px, 0px) scale(1)' }, '100%': { transform: 'translate(30px, -40px) scale(1.1)' } },
-            'glass-shine': { '0%': { transform: 'translateX(-200%) rotate(45deg)' }, '100%': { transform: 'translateX(200%) rotate(45deg)' } },
-            float: { '0%, 100%': { transform: 'translateY(0) rotate(0deg)' }, '50%': { transform: 'translateY(-20px) rotate(3deg)' } },
-            sway: { '0%': { transform: 'translate(0, 0) rotate(0deg)' }, '100%': { transform: 'translate(12px, -15px) rotate(8deg)' } },
+            blob: { '0%': { transform: 'translate3d(0,0,0) scale(1)' }, '100%': { transform: 'translate3d(30px, -40px, 0) scale(1.1)' } },
+            'glass-shine': { '0%': { transform: 'translate3d(-200%, 0, 0) rotate(45deg)' }, '100%': { transform: 'translate3d(200%, 0, 0) rotate(45deg)' } },
+            float: { '0%, 100%': { transform: 'translate3d(0, 0, 0) rotate(0deg)' }, '50%': { transform: 'translate3d(0, -20px, 0) rotate(3deg)' } },
+            sway: { '0%': { transform: 'translate3d(0, 0, 0) rotate(0deg)' }, '100%': { transform: 'translate3d(12px, -15px, 0) rotate(8deg)' } },
             floatSpin: {
-              '0%': { transform: 'translateY(0) rotate(0deg)' },
-              '50%': { transform: 'translateY(-15px) rotate(180deg)' },
-              '100%': { transform: 'translateY(0) rotate(360deg)' }
+              '0%': { transform: 'translate3d(0, 0, 0) rotate(0deg)' },
+              '50%': { transform: 'translate3d(0, -15px, 0) rotate(180deg)' },
+              '100%': { transform: 'translate3d(0, 0, 0) rotate(360deg)' }
             }
           }
         }
@@ -89,7 +90,7 @@
     }
     body { background: #120E0C; font-family: 'Inter', sans-serif; font-weight: 500; overflow-x: hidden; color: #F8F5EF; overscroll-behavior: none; -webkit-font-smoothing: antialiased; }
     html.lenis { height: auto; } .lenis.lenis-smooth { scroll-behavior: auto; } .lenis.lenis-stopped { overflow: hidden; }
-    .hardware-layer { will-change: transform, opacity; }
+    .hardware-layer { will-change: transform, opacity; transform: translate3d(0,0,0); }
     .font-montserrat { font-family: 'Outfit', sans-serif !important; }
     .font-black { font-weight: 900 !important; }
     .font-manrope { font-family: 'Manrope', sans-serif !important; }
@@ -118,11 +119,8 @@
     .carousel-arrow:hover { transform: translateY(-50%) scale(1.1) rotate(5deg); box-shadow: 0 15px 30px rgba(54,92,61,0.1); background: #F8F5EF; color: #C86A22; }
     .premium-nav-arrow { transition: all 300ms cubic-bezier(0.22, 0.61, 0.36, 1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background: rgba(248, 245, 239, 0.85); border: 1px solid rgba(54, 92, 61, 0.15); box-shadow: 0 10px 25px rgba(54, 92, 61, 0.05); }
     .premium-nav-arrow:hover { transform: translateY(-50%) scale(1.08); background: #F8F5EF; border-color: rgba(200, 106, 34, 0.35); color: #C86A22; box-shadow: 0 15px 35px rgba(200, 106, 34, 0.12); }
-    
-    /* RESTORED: Original object-position center top */
-    .hero-bg-slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    .hero-bg-slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; will-change: transform, opacity; }
     .mobile-slide-mode { object-position: center top !important; }
-    
     .modal-overlay { opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); }
     .modal-overlay.active { opacity: 1; visibility: visible; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
     .premium-modal { opacity: 0; transform: scale(0.95) translateY(20px); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); background: #F8F5EF !important; border: 1px solid rgba(31, 31, 31, 0.1) !important; box-shadow: 0 40px 80px rgba(0, 0, 0, 0.3); }
@@ -149,12 +147,12 @@
     .luxury-cta-btn { background: linear-gradient(180deg, #E58A2A 0%, #C96A12 100%); color: #FFFFFF !important; border: 1px solid rgba(255, 255, 255, 0.22); box-shadow: 0 8px 24px rgba(214, 122, 29, 0.28); transition: transform 300ms cubic-bezier(0.25, 1, 0.5, 1), box-shadow 300ms cubic-bezier(0.25, 1, 0.5, 1), background 300ms ease; }
     .luxury-cta-btn:hover { transform: translateY(-2px); background: linear-gradient(180deg, #F19A38 0%, #D47415 100%); box-shadow: 0 12px 28px rgba(214, 122, 29, 0.38); }
     .luxury-cta-btn:active { transform: translateY(0); box-shadow: 0 4px 12px rgba(214, 122, 29, 0.20); }
-    
-    .mobile-menu { background: linear-gradient(180deg, #F9F5EF 0%, #F5EFE6 100%); border: 1px solid rgba(193, 170, 140, 0.35); box-shadow: 0 16px 35px rgba(0, 0, 0, 0.12); border-radius: 32px; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; transform: translateY(-10px) scale(0.98); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); transform-origin: top center; will-change: transform, opacity; }
+    .mobile-menu { background: linear-gradient(180deg, #F9F5EF 0%, #F5EFE6 100%); border: 1px solid rgba(193, 170, 140, 0.35); box-shadow: 0 16px 35px rgba(0, 0, 0, 0.12); border-radius: 32px; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; transform: translateY(-10px) scale(0.98); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); transform-origin: top center; }
     .mobile-menu.active { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; transform: translateY(0) scale(1); }
     .mobile-link { position: relative; display: block; padding: 0.5rem 0; }
     .mobile-link::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background: #D67A1D; transition: width 0.3s ease; }
     .mobile-link:hover::after { width: 20px; }
+    #trust, #testimonials, #cta { content-visibility: auto; contain-intrinsic-size: auto 600px; }
     @media (max-width: 767px) {
       html, body { touch-action: pan-y !important; -webkit-overflow-scrolling: touch !important; }
       .vision-glass, .vision-glass-dark, .unified-nav-glass, .capsule-glass, .carousel-arrow, .premium-nav-arrow { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; background-color: rgba(248, 245, 239, 0.98) !important; }
@@ -170,7 +168,7 @@
 <body class="antialiased selection:bg-wellness-sage selection:text-wellness-cream paper-texture flex flex-col min-h-screen">
 
   <!-- LAYER 1: GLOBAL ATMOSPHERIC BACKDROP & SUBTLE PARTICLE GRAIN -->
-  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden" style="contain: strict;">
+  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
     <div class="absolute top-[-10%] left-[-10%] w-[55vw] h-[55vw] bg-[#C86A22]/4 rounded-full blur-[140px] animate-blob mix-blend-multiply"></div>
     <div class="absolute top-[35%] right-[-10%] w-[45vw] h-[45vw] bg-[#365C3D]/4 rounded-full blur-[130px] animate-blob mix-blend-multiply hardware-layer" style="animation-delay: -3s;"></div>
     <div class="absolute bottom-[-10%] left-[15%] w-[60vw] h-[60vw] bg-[#D6A04B]/3 rounded-full blur-[150px] animate-blob mix-blend-multiply hardware-layer" style="animation-delay: -6s;"></div>
@@ -211,15 +209,25 @@
   <main class="relative z-10 w-full overflow-hidden flex-grow">
 
     <!-- PAGE 1: LUXURY CINEMATIC HERO SHOWROOM SECTION -->
-    <!-- RESTORED: Original h-screen height -->
     <section id="hero" class="relative h-screen min-h-[600px] max-h-[1080px] flex flex-col md:flex-row items-center justify-between p-4 sm:p-8 md:px-16 overflow-hidden bg-[#120E0C]">
       <div id="hero-slideshow" class="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-100">
-        <img id="slide-layer-a" class="hero-bg-slide hardware-layer" alt="Background Slide A" style="opacity: 0;"
-             srcset="images/mobile/mobile-1.jpg 767w, images/desktop/pc-1.jpg 1920w"
-             sizes="(max-width: 767px) 100vw, 100vw"
-             fetchpriority="high">
+        <img id="slide-layer-a" class="hero-bg-slide hardware-layer" alt="Background Slide A" style="opacity: 0;">
         <img id="slide-layer-b" class="hero-bg-slide hardware-layer" alt="Background Slide B" style="opacity: 0;">
       </div>
+      <script>
+        (function() {
+          var isMob = window.innerWidth < 768;
+          var path = isMob ? 'images/mobile/mobile-1.jpg' : 'images/desktop/pc-1.jpg';
+          var layerA = document.getElementById('slide-layer-a');
+          if (layerA) {
+            layerA.src = path;
+            if (isMob) layerA.classList.add('mobile-slide-mode');
+            if (layerA.decode) {
+              layerA.decode().then(function() { layerA.style.opacity = '1'; }).catch(function() { layerA.style.opacity = '1'; });
+            } else { layerA.style.opacity = '1'; }
+          }
+        })();
+      </script>
       <div class="absolute inset-0 z-10 bg-[linear-gradient(to_right,rgba(0,0,0,0.75)_0%,rgba(0,0,0,0.50)_40%,transparent_75%)] md:block hidden pointer-events-none"></div>
       <div class="absolute inset-0 z-10 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.75)_0%,rgba(0,0,0,0.45)_50%,transparent_85%)] md:hidden pointer-events-none"></div>
       <div class="absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_top_left,rgba(200,106,34,0.12),transparent_55%)] pointer-events-none"></div>
@@ -245,7 +253,12 @@
     <!-- PAGE 2: CAPSULE / HIGHLIGHTS SECTION -->
     <section id="capsule-section" class="relative min-h-[100svh] md:min-h-[85vh] flex flex-col justify-center z-20 bg-wellness-bg overflow-hidden py-16 md:py-24 wood-grain-texture">
       <div class="absolute inset-0 pointer-events-none z-0 overflow-hidden mix-blend-multiply opacity-[0.04] filter blur-[12px] hardware-layer">
-        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover object-center" alt="" loading="lazy" decoding="async">
+        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=800&auto=format&fit=crop"
+             srcset="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=480&auto=format&fit=crop 480w,
+                     https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=800&auto=format&fit=crop 800w,
+                     https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200&auto=format&fit=crop 1200w"
+             sizes="(max-width: 767px) 100vw, 1200px"
+             class="w-full h-full object-cover object-center animate-fade-in" alt="" loading="lazy" decoding="async">
       </div>
       <div class="global-item hardware-layer absolute top-[22%] left-[2%] w-16 h-16 md:w-24 md:h-24 opacity-90 drop-shadow-[0_15px_30px_rgba(244,140,6,0.3)] animate-float-slow pointer-events-none z-0" data-speed="0.15" data-rotation="120">
         <svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="46" fill="#F48C06" /><circle cx="50" cy="50" r="40" fill="#F8F5EF" /><circle cx="50" cy="50" r="36" fill="#FFB703" /></svg>
@@ -323,6 +336,7 @@
         <div class="w-12 h-[2px] bg-[#C86A22]/30 mx-auto mt-4"></div>
       </div>
       
+      <!-- MODIFICATION: Added w-[92%] and md:w-full to make cards wider on mobile -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 relative z-10 w-[92%] md:w-full max-w-6xl mx-auto">
         <div class="vision-glass feature-card p-6 md:p-8 rounded-[32px] flex flex-col items-center text-center hardware-layer tilt-card reveal-text"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-wellness-green/10 flex items-center justify-center text-wellness-green text-lg md:text-xl mb-4 md:mb-6 transition-all duration-300"><i class="fa-solid fa-user-doctor"></i></div><h3 class="font-jakarta text-sm md:text-base text-[#1F1F1F] font-bold leading-snug">Meals Planned<br class="block md:hidden"> by Nutritionists</h3></div>
         <div class="vision-glass feature-card p-6 md:p-8 rounded-[32px] flex flex-col items-center text-center hardware-layer tilt-card reveal-text"><div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#F47B20]/10 flex items-center justify-center text-[#F47B20] text-lg md:text-xl mb-4 md:mb-6 transition-all duration-300"><i class="fa-solid fa-fire-burner"></i></div><h3 class="font-jakarta text-sm md:text-base text-[#1F1F1F] font-bold leading-snug">Cooked Fresh<br class="block md:hidden"> Every Day</h3></div>
@@ -370,7 +384,12 @@
         <svg class="w-full h-full stroke-[#C86A22]" viewBox="0 0 100 100" stroke-width="0.3"><pattern id="ctaGrid" width="15" height="15" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r="1" fill="#C86A22" opacity="0.15" /></pattern><rect width="100%" height="100%" fill="url(#ctaGrid)" /></svg>
       </div>
       <div class="max-w-5xl mx-auto rounded-[32px] md:rounded-[40px] overflow-hidden relative h-[400px] md:h-[450px] w-full flex items-center justify-center shadow-2xl img-container hardware-layer">
-        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=2000&auto=format&fit=crop" class="absolute inset-0 w-full h-[130%] object-cover top-[-15%]" alt="CTA Background" loading="lazy" decoding="async">
+        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1000&auto=format&fit=crop"
+             srcset="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=600&auto=format&fit=crop 600w,
+                     https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1200&auto=format&fit=crop 1200w,
+                     https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=2000&auto=format&fit=crop 2000w"
+             sizes="(max-width: 767px) 100vw, 1200px"
+             class="absolute inset-0 w-full h-[130%] object-cover top-[-15%]" alt="CTA Background" loading="lazy" decoding="async">
         <div class="absolute inset-0 bg-black/40"></div>
         <div class="relative z-10 vision-glass-dark p-8 md:py-12 md:px-16 rounded-[32px] text-center max-w-[calc(100%-2rem)] md:max-w-fit mx-auto backdrop-blur-2xl border-white/20">
           <h2 class="font-montserrat font-black text-[clamp(1.8rem,4vw,3.5rem)] text-white tracking-tighter mb-4 leading-tight whitespace-normal md:whitespace-nowrap">Ready to Feel Great?</h2>
@@ -399,7 +418,7 @@
     </div>
   </footer>
 
-  <!-- REVIEW MODAL (UNMODIFIED) -->
+  <!-- REVIEW MODAL -->
   <div id="review-modal" class="fixed inset-0 z-[100] flex items-center justify-center px-4 modal-overlay bg-wellness-dark/20 hidden pointer-events-none">
     <div class="premium-modal w-full max-w-lg p-8 md:p-10 rounded-[40px] relative overflow-hidden">
       <div class="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-gradient-to-br from-white/40 to-transparent rotate-45 pointer-events-none"></div>
@@ -427,7 +446,7 @@
     </div>
   </div>
 
-  <!-- WHATSAPP WIDGET (UNMODIFIED) -->
+  <!-- WHATSAPP WIDGET -->
   <div id="dd-chat-widget" class="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[9999] font-jakarta flex flex-col items-end pointer-events-none">
     <div id="dd-chat-box" class="mb-4 w-[90vw] max-w-[360px] bg-white/95 backdrop-blur-3xl border border-white/60 shadow-[0_30px_60px_rgba(0,0,0,0.2)] rounded-3xl overflow-hidden transition-all duration-400 origin-bottom-right scale-0 opacity-0 hidden flex-col pointer-events-auto">
       <div class="bg-gradient-to-r from-[#25D366] to-[#128C7E] p-3 md:p-4 flex items-center justify-between text-white shadow-md relative z-10">
@@ -450,20 +469,27 @@
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // 1. CRITICAL INITIALIZATION (Synchronous)
-      // Initialize Lenis and GSAP immediately so scrolling feels native from frame 1.
+    document.addEventListener("DOMContentLoaded", async () => {
       gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
       const isMobileDevice = window.innerWidth < 768;
       ScrollTrigger.config({ ignoreMobileResize: true, limitCallbacks: true, syncInterval: isMobileDevice ? 250 : 16 });
       
-      const lenis = new Lenis({ duration: isMobileDevice ? 1.0 : 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true, mouseMultiplier: 1, smoothTouch: false, touchMultiplier: 1.2 });
-      lenis.on('scroll', ScrollTrigger.update);
-      gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-      gsap.ticker.lagSmoothing(1000, 16);
+      let lenis;
+      if (typeof Lenis !== 'undefined') {
+        lenis = new Lenis({ 
+          duration: isMobileDevice ? 1.0 : 1.2, 
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
+          smooth: true, 
+          mouseMultiplier: 1, 
+          smoothTouch: false, 
+          touchMultiplier: 1.2 
+        });
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+        gsap.ticker.lagSmoothing(1000, 16);
+      }
       
-      // Remove the blocking opacity animation on main/footer to speed up perceived paint.
-      // gsap.fromTo("main, footer", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", clearProps: "all" });
+      gsap.fromTo("main, footer", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", clearProps: "all" });
 
       const navPill = document.getElementById('nav-pill');
       const headerContainer = document.getElementById('header-container');
@@ -474,186 +500,216 @@
         navPill.style.setProperty('--nav-left-offset', `${leftOffset}px`);
       }
       calculateNavOffset();
-      window.addEventListener('resize', calculateNavOffset, { passive: true });
-
-      const heroSection = document.getElementById('hero');
-      if (heroSection && headerContainer) {
-        const heroObserver = new IntersectionObserver((entries) => {
-          entries.forEach(entry => { headerContainer.classList.toggle('in-hero', entry.isIntersecting); });
-        }, { threshold: 0.1 });
-        heroObserver.observe(heroSection);
+      
+      // DEBOUNCE RESIZE LISTENER to prevent layout thrashing
+      function debounce(func, wait) {
+        let timeout;
+        return function(...args) {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(this, args), wait);
+        };
       }
+      window.addEventListener('resize', debounce(calculateNavOffset, 150), { passive: true });
 
-      // --- OPTIMIZED SLIDESHOW LOGIC ---
+      // SLIDESHOW OPTIMIZATION
       const TOTAL_SLIDES = 11;
       const imgFolder = isMobileDevice ? 'images/mobile/' : 'images/desktop/';
       const imgPrefix = isMobileDevice ? 'mobile-' : 'pc-';
       const ext = '.jpg';
-      const preloadedImages = Array.from({ length: TOTAL_SLIDES }, (_, i) => {
-          const img = new Image();
-          img.decoding = 'async';
-          img.srcset = `images/mobile/mobile-${i + 1}.jpg 767w, images/desktop/pc-${i + 1}.jpg 1920w`;
-          img.sizes = "(max-width: 767px) 100vw, 100vw";
-          return img;
-      });
-
-      preloadedImages[1].src = `${imgFolder}${imgPrefix}2${ext}`;
-
-      const idle = window.requestIdleCallback || function (cb) { return setTimeout(() => cb({ timeRemaining: () => 50 }), 200); };
-      let queuedSlide = 2;
-      function loadNextSlideInBackground() {
-        if (queuedSlide >= TOTAL_SLIDES) return;
-        preloadedImages[queuedSlide].src = `${imgFolder}${imgPrefix}${queuedSlide + 1}${ext}`;
-        queuedSlide++;
-        idle(loadNextSlideInBackground);
-      }
-      setTimeout(() => idle(loadNextSlideInBackground), 1000);
-
+      const preloadedImages = Array.from({ length: TOTAL_SLIDES }, () => new Image());
+      preloadedImages.forEach(img => img.decoding = 'async');
+      
       const layerA = document.getElementById('slide-layer-a');
       const layerB = document.getElementById('slide-layer-b');
       
-      let slideshowInterval;
-      let slideshowState = {
-          currentIdx: 0,
-          activeLayer: layerA,
-          nextLayer: layerB,
-          isTransitioning: false,
-          isPlaying: false,
-          kenBurnsTimeline: null
+      let isHeroVisible = true;
+      let isPageVisible = true;
+      let currentIdx = 0;
+      let activeLayer = layerA;
+      let nextLayer = layerB;
+      let isTransitioning = false;
+      let slideTimer = null;
+      
+      const SLIDE_DURATION = 5.0; // Optimized duration
+      const TRANSITION_DURATION = 1.2; // Optimized premium timing
+      
+      let activeScaleTween = null;
+      let activeTransitionTweens = [];
+
+      // STRICTLY SEQUENTIAL BACKGROUND LOAD (Yields priority to initial fold paint)
+      let currentLoadIdx = 2; // Slide 3 onwards load lazily
+      function loadNextSequential() {
+        if (currentLoadIdx >= TOTAL_SLIDES) return;
+        const img = preloadedImages[currentLoadIdx];
+        img.onload = img.onerror = () => {
+          currentLoadIdx++;
+          if (window.requestIdleCallback) {
+            window.requestIdleCallback(() => loadNextSequential());
+          } else {
+            setTimeout(loadNextSequential, 100);
+          }
+        };
+        img.src = `${imgFolder}${imgPrefix}${currentLoadIdx + 1}${ext}`;
+      }
+
+      // Eagerly set slide 1 and 2 sources
+      preloadedImages[0].src = `${imgFolder}${imgPrefix}1${ext}`;
+      preloadedImages[1].onload = preloadedImages[1].onerror = () => {
+        if (window.requestIdleCallback) {
+          window.requestIdleCallback(() => loadNextSequential());
+        } else {
+          setTimeout(loadNextSequential, 1000);
+        }
+      };
+      preloadedImages[1].src = `${imgFolder}${imgPrefix}2${ext}`;
+
+      if (layerA && layerB) {
+        if (isMobileDevice) { layerA.classList.add('mobile-slide-mode'); layerB.classList.add('mobile-slide-mode'); }
+        layerA.src = preloadedImages[0].src;
+        gsap.set(layerA, { opacity: 1, zIndex: 1, scale: 1.0 });
+        gsap.set(layerB, { opacity: 0, zIndex: 2, scale: 1.0 });
+        
+        // Start the initial scale animation
+        activeScaleTween = gsap.to(layerA, { scale: 1.04, duration: SLIDE_DURATION, ease: 'none', force3D: true, overwrite: 'auto' });
+      }
+
+      const stepSlideshow = async () => {
+        if (isTransitioning || !isHeroVisible || !isPageVisible) return;
+        isTransitioning = true;
+        
+        const nextIdx = (currentIdx + 1) % TOTAL_SLIDES;
+        const nextImgObj = preloadedImages[nextIdx];
+        
+        if (!nextImgObj.src) {
+          nextImgObj.src = `${imgFolder}${imgPrefix}${nextIdx + 1}${ext}`;
+        }
+        
+        try {
+          if (nextImgObj.decode) {
+            await nextImgObj.decode();
+          }
+        } catch (e) {
+          console.warn("Decode failed, running fallback swap:", e);
+        }
+        
+        if (!isHeroVisible || !isPageVisible) {
+          isTransitioning = false;
+          return;
+        }
+
+        nextLayer.src = nextImgObj.src;
+
+        activeTransitionTweens.forEach(t => t.kill());
+        activeTransitionTweens = [];
+
+        gsap.set(nextLayer, { opacity: 0, scale: 1.0, zIndex: 2 });
+        gsap.set(activeLayer, { zIndex: 1 });
+
+        const t1 = gsap.to(nextLayer, { 
+          opacity: 1, 
+          duration: TRANSITION_DURATION, 
+          ease: 'power2.inOut', 
+          force3D: true,
+          overwrite: 'auto' 
+        });
+
+        const t2 = gsap.to(nextLayer, { 
+          scale: 1.04, 
+          duration: SLIDE_DURATION + TRANSITION_DURATION, 
+          ease: 'none', 
+          force3D: true,
+          overwrite: 'auto' 
+        });
+
+        const t3 = gsap.to(activeLayer, { 
+          opacity: 0, 
+          duration: TRANSITION_DURATION, 
+          ease: 'power2.inOut', 
+          force3D: true,
+          overwrite: 'auto', 
+          onComplete: () => {
+            currentIdx = nextIdx;
+            [activeLayer, nextLayer] = [nextLayer, activeLayer];
+            isTransitioning = false;
+          }
+        });
+
+        activeTransitionTweens = [t1, t2, t3];
+        if (activeScaleTween) activeScaleTween.kill();
+        activeScaleTween = t2;
       };
 
-      function playKenBurns(layer) {
-          if (slideshowState.kenBurnsTimeline) slideshowState.kenBurnsTimeline.kill();
-          // RESTORED: Original Ken Burns scale for all devices
-          slideshowState.kenBurnsTimeline = gsap.timeline()
-              .fromTo(layer, { scale: 1.0 }, { scale: 1.04, duration: 8, ease: 'none' });
+      function startSlideshowTimer() {
+        stopSlideshowTimer();
+        if (!isHeroVisible || !isPageVisible) return;
+        
+        slideTimer = setTimeout(async () => {
+          await stepSlideshow();
+          startSlideshowTimer();
+        }, SLIDE_DURATION * 1000);
       }
 
-      async function stepSlideshow() {
-          if (slideshowState.isTransitioning) return;
-          slideshowState.isTransitioning = true;
-
-          const nextIdx = (slideshowState.currentIdx + 1) % TOTAL_SLIDES;
-          const nextImg = preloadedImages[nextIdx];
-
-          slideshowState.nextLayer.srcset = nextImg.srcset;
-          slideshowState.nextLayer.sizes = nextImg.sizes;
-          
-          try {
-              if (slideshowState.nextLayer.decode) await slideshowState.nextLayer.decode();
-          } catch (e) {
-              console.warn("Image decode failed, continuing anyway.", e);
-          }
-
-          gsap.set(slideshowState.nextLayer, { opacity: 0, zIndex: 2 });
-          gsap.set(slideshowState.activeLayer, { zIndex: 1 });
-
-          gsap.to(slideshowState.nextLayer, { opacity: 1, duration: 1.5, ease: 'power2.inOut' });
-          gsap.to(slideshowState.activeLayer, {
-              opacity: 0,
-              duration: 1.5,
-              ease: 'power2.inOut',
-              onComplete: () => {
-                  slideshowState.currentIdx = nextIdx;
-                  [slideshowState.activeLayer, slideshowState.nextLayer] = [slideshowState.nextLayer, slideshowState.activeLayer];
-                  slideshowState.isTransitioning = false;
-              }
-          });
-          playKenBurns(slideshowState.nextLayer);
-      }
-
-      function resumeSlideshow() {
-          if (slideshowState.isPlaying || !heroSection) return;
-          slideshowState.isPlaying = true;
-          if (slideshowState.kenBurnsTimeline) slideshowState.kenBurnsTimeline.resume();
-          clearInterval(slideshowInterval);
-          slideshowInterval = setInterval(stepSlideshow, 5800);
+      function stopSlideshowTimer() {
+        if (slideTimer) {
+          clearTimeout(slideTimer);
+          slideTimer = null;
+        }
       }
 
       function pauseSlideshow() {
-          if (!slideshowState.isPlaying) return;
-          slideshowState.isPlaying = false;
-          clearInterval(slideshowInterval);
-          if (slideshowState.kenBurnsTimeline) slideshowState.kenBurnsTimeline.pause();
+        stopSlideshowTimer();
+        if (activeScaleTween) activeScaleTween.pause();
+        activeTransitionTweens.forEach(t => t.pause());
       }
 
-      function handleVisibilityChange() {
-          if (document.hidden) {
-              pauseSlideshow();
-          } else if (heroSection.getBoundingClientRect().top < window.innerHeight && heroSection.getBoundingClientRect().bottom > 0) {
+      function resumeSlideshow() {
+        if (!isHeroVisible || !isPageVisible) return;
+        if (activeScaleTween) activeScaleTween.play();
+        activeTransitionTweens.forEach(t => t.play());
+        startSlideshowTimer();
+      }
+
+      startSlideshowTimer();
+
+      // INTERSECTION OBSERVER FOR HERO (Pauses all slide processing and triggers in-hero classes)
+      const heroSection = document.getElementById('hero');
+      if (heroSection) {
+        const heroObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            isHeroVisible = entry.isIntersecting;
+            if (isHeroVisible) {
               resumeSlideshow();
-          }
-      }
-
-      if (layerA && layerB) {
-          if (isMobileDevice) {
-              layerA.classList.add('mobile-slide-mode');
-              layerB.classList.add('mobile-slide-mode');
-          }
-          layerA.onload = () => {
-              gsap.set(layerA, { opacity: 1, zIndex: 1 });
-              playKenBurns(layerA);
-
-              const slideshowObserver = new IntersectionObserver((entries) => {
-                  entries.forEach(entry => {
-                      if (entry.isIntersecting) {
-                          resumeSlideshow();
-                      } else {
-                          pauseSlideshow();
-                      }
-                  });
-              }, { threshold: 0.01 });
-
-              slideshowObserver.observe(heroSection);
-              document.addEventListener('visibilitychange', handleVisibilityChange);
-          };
-          if (layerA.complete) layerA.onload();
-      }
-
-      // --- MENU LAG FIX ---
-      let lastScrollY = window.scrollY;
-      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-      const mobileMenu = document.getElementById('mobile-menu');
-      let isMenuOpen = false;
-      
-      if (mobileMenuBtn && mobileMenu) {
-        mobileMenuBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          isMenuOpen = !isMenuOpen;
-          // Use requestAnimationFrame to ensure the menu paints immediately without main-thread blocking
-          requestAnimationFrame(() => {
-            if (isMenuOpen) {
-              mobileMenu.classList.add('active');
-              mobileMenuBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
             } else {
-              mobileMenu.classList.remove('active');
-              mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+              pauseSlideshow();
+            }
+            if (headerContainer) {
+              headerContainer.classList.toggle('in-hero', isHeroVisible);
             }
           });
-        });
+        }, { threshold: 0.1 });
+        heroObserver.observe(heroSection);
       }
-      
-      document.querySelectorAll('.mobile-link').forEach(link => {
-        link.addEventListener('click', () => { 
-          isMenuOpen = false; 
-          if (mobileMenu) mobileMenu.classList.remove('active'); 
-          if (mobileMenuBtn) mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>'; 
-        });
-      });
-      
-      lenis.on('scroll', (e) => {
-        if (isMenuOpen) return;
-        const currentScrollY = e.animatedScroll;
-        if (currentScrollY > 100) { headerContainer.style.transform = currentScrollY > lastScrollY ? 'translateY(-150%)' : 'translateY(0)'; } 
-        else { headerContainer.style.transform = 'translateY(0)'; }
-        lastScrollY = currentScrollY;
-      });
 
-      // 2. DEFERRED INITIALIZATION (Non-Critical)
-      // Move heavy logic out of the initial paint cycle to ensure the page feels instantly responsive.
+      // PAGE VISIBILITY API to suspend operations in background tabs
+      document.addEventListener('visibilitychange', () => {
+        isPageVisible = document.visibilityState === 'visible';
+        if (isPageVisible) {
+          resumeSlideshow();
+        } else {
+          pauseSlideshow();
+        }
+      }, { passive: true });
+
+      // UNLOAD EVENT to prevent memory leaks
+      window.addEventListener('unload', () => {
+        stopSlideshowTimer();
+        if (activeScaleTween) activeScaleTween.kill();
+        activeTransitionTweens.forEach(t => t.kill());
+      }, { passive: true });
+
+      // DEFERRING NON-CRITICAL FOLD ANIMATIONS & LISTENERS FOR MAIN THREAD FREEDOM
       setTimeout(async () => {
-        
-        // A. Fetch and Render Reviews
+        // --- TESTIMONIALS / REVIEWS SYSTEM (CRITICAL: RETAINED INTACT) ---
         const track = document.getElementById('testimonial-track');
         try {
           const reviews = await AdminAPI.getReviews();
@@ -666,7 +722,7 @@
           } else { track.innerHTML = `<div class="w-full text-center py-10 text-wellness-dark/50 font-jakarta">No reviews yet. Be the first!</div>`; }
         } catch (e) { console.error("Failed to load reviews", e); }
 
-        // B. Initialize Parallax Global Items
+        // Parallax parallax calculations on course pointer match
         const globalItems = gsap.utils.toArray('.global-item');
         if (!window.matchMedia("(pointer: coarse)").matches) {
           let ticking = false;
@@ -685,13 +741,24 @@
             }
           }, { passive: true });
         }
+
         globalItems.forEach(item => {
           const speed = parseFloat(item.getAttribute('data-speed')) * (isMobileDevice ? 0.3 : 1);
           const rotation = parseFloat(item.getAttribute('data-rotation')) || 180;
-          gsap.to(item, { yPercent: 200 * speed, rotation: rotation, ease: "none", scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: isMobileDevice ? 0.5 : true } });
+          gsap.to(item, { 
+            yPercent: 200 * speed, 
+            rotation: rotation, 
+            ease: "none", 
+            force3D: true,
+            scrollTrigger: { 
+              trigger: document.body, 
+              start: "top top", 
+              end: "bottom bottom", 
+              scrub: isMobileDevice ? 0.5 : true 
+            } 
+          });
         });
 
-        // C. Initialize Intersection Observers for CSS Animations
         if ('IntersectionObserver' in window) {
           const animatedEls = document.querySelectorAll('.animate-blob, .animate-float-slow, .animate-float-fast, .animate-leaf-sway, .animate-float-spin');
           const animObserver = new IntersectionObserver((entries) => {
@@ -700,23 +767,24 @@
           animatedEls.forEach(el => animObserver.observe(el));
         }
 
-        // D. Initialize Minor GSAP Triggers
-        gsap.to('.capsule-orbiter', { rotation: 360, transformOrigin: "50% 50%", ease: "none", duration: 30, repeat: -1, scrollTrigger: { trigger: '#capsule-section', start: 'top bottom', end: 'bottom top', toggleActions: 'resume pause resume pause' } });
-        
-        function enableDragScroll(slider) {
-          let isDown = false, startX, scrollLeft;
-          slider.addEventListener('mousedown', (e) => { isDown = true; slider.style.scrollSnapType = 'none'; slider.classList.add('cursor-grabbing'); startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
-          const endDrag = () => { if(!isDown) return; isDown = false; slider.style.scrollSnapType = 'x mandatory'; slider.classList.remove('cursor-grabbing'); };
-          slider.addEventListener('mouseleave', endDrag);
-          slider.addEventListener('mouseup', endDrag);
-          slider.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); const x = e.pageX - slider.offsetLeft; const walk = (x - startX) * 1.5; slider.scrollLeft = scrollLeft - walk; });
-        }
-        
-        const testimonialTrack = document.getElementById('testimonial-track');
-        const capsuleTrack = document.getElementById('capsule-track');
+        gsap.to('.capsule-orbiter', { 
+          rotation: 360, 
+          transformOrigin: "50% 50%", 
+          ease: "none", 
+          duration: 30, 
+          repeat: -1, 
+          scrollTrigger: { 
+            trigger: '#capsule-section', 
+            start: 'top bottom', 
+            end: 'bottom top', 
+            toggleActions: 'resume pause resume pause' 
+          } 
+        });
+
+        // Testimonial track scroll helpers
         if(testimonialTrack) enableDragScroll(testimonialTrack);
         if(capsuleTrack) enableDragScroll(capsuleTrack);
-        
+
         const featureCards = document.querySelectorAll('.feature-card');
         featureCards.forEach(card => {
           card.addEventListener('click', () => {
@@ -725,16 +793,16 @@
             if (!isHighlighted) card.classList.add('highlighted');
           });
         });
-        
+
         gsap.utils.toArray('.img-container').forEach(container => {
           const img = container.querySelector('img');
           gsap.fromTo(img, { yPercent: -10 }, { yPercent: 10, ease: "none", scrollTrigger: { trigger: container, start: "top bottom", end: "bottom top", scrub: isMobileDevice ? 0.5 : true } });
         });
-        
+
         gsap.utils.toArray('.reveal-text').forEach(text => {
           gsap.fromTo(text, { opacity: 0, y: isMobileDevice ? 20 : 30 }, { opacity: 1, y: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: text, start: "top 90%", toggleActions: "play none none reverse" } });
         });
-        
+
         function initTiltCard(card) {
           const isTestimonial = card.classList.contains('testimonial-card');
           const glare = card.querySelector('.glass-glare');
@@ -766,96 +834,48 @@
           nextBtnCapsule.addEventListener('click', () => capsuleTrack.scrollBy({ left: scrollAmount, behavior: 'smooth' }));
         }
 
-        // E. Initialize WhatsApp Widget
-        function initializeWhatsAppWidget() {
-          let isDDChatOpen = false;
-          let ddMessagesLoaded = false;
-          let ddWaNum = "919876543210";
-          let ddGreetings = ["👋 Hey, Hii!", "Welcome to Diet Dheko.", "If you have any doubts about our plans, menu, delivery, or subscription process, feel free to ask us below."];
-
-          const chatWidget = document.getElementById('dd-chat-widget');
-          const chatBox = document.getElementById('dd-chat-box');
-          const chatInput = document.getElementById('dd-chat-input');
-          const messagesContainer = document.getElementById('dd-chat-messages');
-          const openBtn = document.getElementById('dd-chat-open-btn');
-          const closeBtn = document.getElementById('dd-chat-close-btn');
-          const sendBtn = document.getElementById('dd-chat-send-btn');
-
-          function toggleDDChat(e) {
-            if (e) { e.preventDefault(); e.stopPropagation(); }
-            isDDChatOpen = !isDDChatOpen;
-            if (isDDChatOpen) {
-              chatBox.style.display = 'flex';
-              setTimeout(() => { chatBox.classList.remove('scale-0', 'opacity-0'); chatBox.classList.add('scale-100', 'opacity-100'); }, 10);
-              if (!ddMessagesLoaded) { loadDDMessages(); ddMessagesLoaded = true; }
-              setTimeout(() => chatInput.focus(), 300);
-            } else {
-              chatBox.classList.remove('scale-100', 'opacity-100');
-              chatBox.classList.add('scale-0', 'opacity-0');
-              setTimeout(() => { chatBox.style.display = 'none'; }, 400);
-            }
-          }
-
-          function loadDDMessages() {
-            let delay = 400;
-            ddGreetings.forEach((msg) => {
-              setTimeout(() => {
-                const msgDiv = document.createElement('div');
-                msgDiv.className = 'dd-chat-bubble bg-white shadow-sm border border-slate-100 text-slate-700 text-[13px] leading-relaxed p-3.5 rounded-2xl rounded-tl-none w-fit max-w-[90%] transform transition-all duration-500 translate-y-4 opacity-0 flex-shrink-0';
-                msgDiv.innerHTML = msg;
-                messagesContainer.appendChild(msgDiv);
-                requestAnimationFrame(() => {
-                  msgDiv.classList.remove('translate-y-4', 'opacity-0');
-                  messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                });
-              }, delay);
-              delay += 900;
-            });
-          }
-
-          function updateWhatsAppLink() {
-            const text = chatInput.value.trim();
-            if (!text) { sendBtn.href = "#"; return; }
-            const formalMessage = `Hello Diet Dheko Support,\n\nI have an inquiry regarding your services.\n\n*My Question:*\n"${text}"\n\nLooking forward to your response.`;
-            sendBtn.href = `https://wa.me/${ddWaNum}?text=${encodeURIComponent(formalMessage)}`;
-          }
-
-          if (openBtn) openBtn.addEventListener('click', toggleDDChat);
-          if (closeBtn) closeBtn.addEventListener('click', toggleDDChat);
-          if (chatInput) {
-            chatInput.addEventListener('input', updateWhatsAppLink);
-            chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (chatInput.value.trim()) sendBtn.click(); } });
-          }
-          if (sendBtn) {
-            sendBtn.addEventListener('click', (e) => {
-              if (sendBtn.getAttribute('href') === '#') { e.preventDefault(); chatInput.focus(); return; }
-              setTimeout(() => { chatInput.value = ''; updateWhatsAppLink(); if (isDDChatOpen) toggleDDChat(); }, 500);
-            });
-          }
-          if (chatBox) chatBox.addEventListener('click', (e) => e.stopPropagation());
-          const stopScrollHijack = (e) => { e.stopPropagation(); };
-          if (messagesContainer) { messagesContainer.addEventListener('wheel', stopScrollHijack, { passive: false }); messagesContainer.addEventListener('touchmove', stopScrollHijack, { passive: false }); }
-          if (chatInput) { chatInput.addEventListener('wheel', stopScrollHijack, { passive: false }); chatInput.addEventListener('touchmove', stopScrollHijack, { passive: false }); }
-          document.addEventListener('click', (e) => { if (isDDChatOpen && chatWidget && !chatWidget.contains(e.target)) toggleDDChat(); });
-
-          (async function fetchDynamicData() {
+        // --- REVIEW MODAL (CRITICAL: RETAINED INTACT) ---
+        if (textarea) { textarea.addEventListener('input', function() { this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px'; charCounter.textContent = `${this.value.length}/300`; }); }
+        if (addReviewBtn) addReviewBtn.addEventListener('click', openModal);
+        if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+        if (cancelReviewBtn) cancelReviewBtn.addEventListener('click', closeModal);
+        if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(e); });
+        stars.forEach(star => {
+          star.addEventListener('mouseover', function() { updateStars(this.dataset.rating); });
+          star.addEventListener('mouseout', function() { updateStars(currentRating); });
+          star.addEventListener('click', function() { currentRating = this.dataset.rating; updateStars(currentRating); });
+        });
+        if (reviewForm) {
+          reviewForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submit-review-btn'), originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = 'Submitting...'; submitBtn.disabled = true;
             try {
-              if (typeof AdminAPI !== 'undefined') {
-                const config = await AdminAPI.getConfig();
-                if (config.settings) {
-                  if (config.settings.waNumber) ddWaNum = (config.settings.waCountryCode || '91') + config.settings.waNumber.replace(/\D/g, '');
-                  if (config.settings.waMessages && config.settings.waMessages.length > 0) ddGreetings = config.settings.waMessages;
-                }
-              }
-            } catch (e) { console.warn("Using default chat settings."); }
-          })();
+              await AdminAPI.saveReview({ id: 'REV-' + Math.floor(Math.random() * 10000), name: document.getElementById('reviewer-name').value, location: 'Website User', text: document.getElementById('reviewer-text').value, rating: currentRating, featured: false, visible: true });
+              closeModal();
+            } catch (error) { alert("Failed to submit review."); } 
+            finally { submitBtn.innerHTML = originalText; submitBtn.disabled = false; }
+          });
         }
-        
+
         initializeWhatsAppWidget();
+      }, 100);
 
-      }, 150); // End of Deferred Initialization
+      // Mobile toggles
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      let isMenuOpen = false;
+      if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', () => {
+          isMenuOpen = !isMenuOpen;
+          mobileMenu.classList.toggle('active');
+          mobileMenuBtn.innerHTML = isMenuOpen ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+        });
+      }
+      document.querySelectorAll('.mobile-link').forEach(link => {
+        link.addEventListener('click', () => { isMenuOpen = false; if (mobileMenu) mobileMenu.classList.remove('active'); if (mobileMenuBtn) mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>'; });
+      });
 
-      // 3. Smooth Link Navigation (Synchronous setup)
       const power3InOut = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
       document.querySelectorAll('a').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -864,12 +884,12 @@
           if (target.startsWith('#')) {
             e.preventDefault();
             if (isMenuOpen) { isMenuOpen = false; mobileMenu.classList.remove('active'); mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>'; }
-            lenis.scrollTo(target, { duration: 1.5, easing: power3InOut });
+            if (lenis) lenis.scrollTo(target, { duration: 1.5, easing: power3InOut });
           } else if (target.includes('.html')) {
             e.preventDefault();
             if (isMenuOpen) { isMenuOpen = false; mobileMenu.classList.remove('active'); mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>'; }
             if (target === 'index.html' && (window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/'))) {
-              lenis.scrollTo(0, { duration: 1.5, easing: power3InOut });
+              if (lenis) lenis.scrollTo(0, { duration: 1.5, easing: power3InOut });
               return;
             }
             gsap.to("main, footer", { opacity: 0, y: -20, duration: 0.5, ease: "power2.inOut", onComplete: () => window.location.href = this.href });
@@ -877,10 +897,9 @@
         });
       });
 
-      // 4. Review Modal Logic (Synchronous setup, logic untouched)
+      // --- REVIEW MODAL PROGRAMMATIC INITIALIZERS (CRITICAL: RETAINED INTACT) ---
       const modal = document.getElementById('review-modal'), addReviewBtn = document.getElementById('add-review-btn'), closeModalBtn = document.getElementById('close-modal'), cancelReviewBtn = document.getElementById('cancel-review'), reviewForm = document.getElementById('review-form'), starRating = document.getElementById('star-rating'), stars = starRating.querySelectorAll('i'), textarea = document.getElementById('reviewer-text'), charCounter = document.getElementById('char-counter');
       let currentRating = 5;
-      if (textarea) { textarea.addEventListener('input', function() { this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px'; charCounter.textContent = `${this.value.length}/300`; }); }
       function updateStars(rating) { stars.forEach(star => { star.classList.toggle('text-yellow-400', star.dataset.rating <= rating); star.classList.toggle('fa-solid', star.dataset.rating <= rating); star.classList.toggle('text-[#ECE4D8]', star.dataset.rating > rating); star.classList.toggle('fa-regular', star.dataset.rating > rating); }); }
       updateStars(currentRating);
       function openModal(e) { if (e) e.preventDefault(); modal.classList.remove('hidden', 'pointer-events-none'); modal.classList.add('active'); document.body.style.overflow = 'hidden'; if (typeof lenis !== 'undefined') lenis.stop(); }
@@ -892,30 +911,93 @@
         if (typeof lenis !== 'undefined') lenis.start();
         setTimeout(() => { modal.classList.add('hidden'); reviewForm.reset(); currentRating = 5; updateStars(currentRating); if (textarea) textarea.style.height = 'auto'; if (charCounter) charCounter.textContent = '0/300'; }, 400);
       }
-      if (addReviewBtn) addReviewBtn.addEventListener('click', openModal);
-      if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-      if (cancelReviewBtn) cancelReviewBtn.addEventListener('click', closeModal);
-      if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(e); });
-      stars.forEach(star => {
-        star.addEventListener('mouseover', function() { updateStars(this.dataset.rating); });
-        star.addEventListener('mouseout', function() { updateStars(currentRating); });
-        star.addEventListener('click', function() { currentRating = this.dataset.rating; updateStars(currentRating); });
-      });
-      if (reviewForm) {
-        reviewForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const submitBtn = document.getElementById('submit-review-btn'), originalText = submitBtn.innerHTML;
-          submitBtn.innerHTML = 'Submitting...'; submitBtn.disabled = true;
+
+      function initializeWhatsAppWidget() {
+        let isDDChatOpen = false;
+        let ddMessagesLoaded = false;
+        let ddWaNum = "919876543210";
+        let ddGreetings = ["👋 Hey, Hii!", "Welcome to Diet Dheko.", "If you have any doubts about our plans, menu, delivery, or subscription process, feel free to ask us below."];
+
+        const chatWidget = document.getElementById('dd-chat-widget');
+        const chatBox = document.getElementById('dd-chat-box');
+        const chatInput = document.getElementById('dd-chat-input');
+        const messagesContainer = document.getElementById('dd-chat-messages');
+        const openBtn = document.getElementById('dd-chat-open-btn');
+        const closeBtn = document.getElementById('dd-chat-close-btn');
+        const sendBtn = document.getElementById('dd-chat-send-btn');
+
+        function toggleDDChat(e) {
+          if (e) { e.preventDefault(); e.stopPropagation(); }
+          isDDChatOpen = !isDDChatOpen;
+          if (isDDChatOpen) {
+            chatBox.style.display = 'flex';
+            setTimeout(() => { chatBox.classList.remove('scale-0', 'opacity-0'); chatBox.classList.add('scale-100', 'opacity-100'); }, 10);
+            if (!ddMessagesLoaded) { loadDDMessages(); ddMessagesLoaded = true; }
+            setTimeout(() => chatInput.focus(), 300);
+          } else {
+            chatBox.classList.remove('scale-100', 'opacity-100');
+            chatBox.classList.add('scale-0', 'opacity-0');
+            setTimeout(() => { chatBox.style.display = 'none'; }, 400);
+          }
+        }
+
+        function loadDDMessages() {
+          let delay = 400;
+          ddGreetings.forEach((msg) => {
+            setTimeout(() => {
+              const msgDiv = document.createElement('div');
+              msgDiv.className = 'dd-chat-bubble bg-white shadow-sm border border-slate-100 text-slate-700 text-[13px] leading-relaxed p-3.5 rounded-2xl rounded-tl-none w-fit max-w-[90%] transform transition-all duration-500 translate-y-4 opacity-0 flex-shrink-0';
+              msgDiv.innerHTML = msg;
+              messagesContainer.appendChild(msgDiv);
+              requestAnimationFrame(() => {
+                msgDiv.classList.remove('translate-y-4', 'opacity-0');
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+              });
+            }, delay);
+            delay += 900;
+          });
+        }
+
+        function updateWhatsAppLink() {
+          const text = chatInput.value.trim();
+          if (!text) { sendBtn.href = "#"; return; }
+          const formalMessage = `Hello Diet Dheko Support,\n\nI have an inquiry regarding your services.\n\n*My Question:*\n"${text}"\n\nLooking forward to your response.`;
+          sendBtn.href = `https://wa.me/${ddWaNum}?text=${encodeURIComponent(formalMessage)}`;
+        }
+
+        if (openBtn) openBtn.addEventListener('click', toggleDDChat);
+        if (closeBtn) closeBtn.addEventListener('click', toggleDDChat);
+        if (chatInput) {
+          chatInput.addEventListener('input', updateWhatsAppLink);
+          chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (chatInput.value.trim()) sendBtn.click(); } });
+        }
+        if (sendBtn) {
+          sendBtn.addEventListener('click', (e) => {
+            if (sendBtn.getAttribute('href') === '#') { e.preventDefault(); chatInput.focus(); return; }
+            setTimeout(() => { chatInput.value = ''; updateWhatsAppLink(); if (isDDChatOpen) toggleDDChat(); }, 500);
+          });
+        }
+        if (chatBox) chatBox.addEventListener('click', (e) => e.stopPropagation());
+        const stopScrollHijack = (e) => { e.stopPropagation(); };
+        if (messagesContainer) { messagesContainer.addEventListener('wheel', stopScrollHijack, { passive: false }); messagesContainer.addEventListener('touchmove', stopScrollHijack, { passive: false }); }
+        if (chatInput) { chatInput.addEventListener('wheel', stopScrollHijack, { passive: false }); chatInput.addEventListener('touchmove', stopScrollHijack, { passive: false }); }
+        document.addEventListener('click', (e) => { if (isDDChatOpen && chatWidget && !chatWidget.contains(e.target)) toggleDDChat(); });
+
+        (async function fetchDynamicData() {
           try {
-            await AdminAPI.saveReview({ id: 'REV-' + Math.floor(Math.random() * 10000), name: document.getElementById('reviewer-name').value, location: 'Website User', text: document.getElementById('reviewer-text').value, rating: currentRating, featured: false, visible: true });
-            closeModal();
-          } catch (error) { alert("Failed to submit review."); } 
-          finally { submitBtn.innerHTML = originalText; submitBtn.disabled = false; }
-        });
+            if (typeof AdminAPI !== 'undefined') {
+              const config = await AdminAPI.getConfig();
+              if (config.settings) {
+                if (config.settings.waNumber) ddWaNum = (config.settings.waCountryCode || '91') + config.settings.waNumber.replace(/\D/g, '');
+                if (config.settings.waMessages && config.settings.waMessages.length > 0) ddGreetings = config.settings.waMessages;
+              }
+            }
+          } catch (e) { console.warn("Using default chat settings."); }
+        })();
       }
     });
 
-    // --- HIDDEN ADMIN TRIGGER (UNMODIFIED) ---
+    // --- HIDDEN ADMIN TRIGGER ---
     let secretWord = "adminx";
     (async () => { try { if (typeof AdminAPI !== 'undefined') secretWord = (await AdminAPI.getConfig()).security.secretWord; } catch(e){} })();
     let tapCount = 0, tapTimer, typedWord = "";

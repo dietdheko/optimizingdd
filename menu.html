@@ -318,11 +318,11 @@
             <label class="block font-jakarta text-[9px] md:text-[10px] font-bold text-[#555555] uppercase tracking-widest mb-1 md:mb-2 text-left pl-1">Meal Type <span class="text-red-500">*</span></label>
             <div class="relative flex items-center justify-between gap-1 md:gap-2 w-full bg-[#F3EEE6] p-1 md:p-1.5 rounded-xl md:rounded-2xl border border-[#1F1F1F]/10 shadow-sm" id="meal-type-track">
               <div id="meal-active-indicator" class="absolute top-0 left-0 rounded-lg md:rounded-xl bg-[#365C3D] shadow-md transition-transform duration-250 ease-[cubic-bezier(0.4,0,0.2,1)] pointer-events-none will-change-transform z-0" style="transform: translate3d(0,0,0);"></div>
-              <button type="button" class="meal-type-btn active flex-1 py-1.5 md:py-2 px-2 rounded-lg md:rounded-xl font-jakarta text-[9px] md:text-[11px] font-bold whitespace-nowrap transition-colors duration-250 text-[#555555] relative z-10" data-value="Breakfast">🍳 Breakfast</button>
+              <button type="button" class="meal-type-btn flex-1 py-1.5 md:py-2 px-2 rounded-lg md:rounded-xl font-jakarta text-[9px] md:text-[11px] font-bold whitespace-nowrap transition-colors duration-250 text-[#555555] relative z-10" data-value="Breakfast">🍳 Breakfast</button>
               <button type="button" class="meal-type-btn flex-1 py-1.5 md:py-2 px-2 rounded-lg md:rounded-xl font-jakarta text-[9px] md:text-[11px] font-bold whitespace-nowrap transition-colors duration-250 text-[#555555] hover:text-[#1F1F1F] relative z-10" data-value="Lunch">🍛 Lunch</button>
               <button type="button" class="meal-type-btn flex-1 py-1.5 md:py-2 px-2 rounded-lg md:rounded-xl font-jakarta text-[9px] md:text-[11px] font-bold whitespace-nowrap transition-colors duration-250 text-[#555555] hover:text-[#1F1F1F] relative z-10" data-value="Dinner">🍽️ Dinner</button>
             </div>
-            <input type="hidden" id="app-meal-type" value="Breakfast">
+            <input type="hidden" id="app-meal-type" value="">
           </div>
           <div class="floating-group relative"><input type="text" id="app-name" required class="floating-input" placeholder=" "><label class="floating-label">Full Name *</label></div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 md:gap-3">
@@ -382,9 +382,8 @@
   <script>
     // TOP SCOPE GLOBAL VARIABLES
     let currentPref = '';
-    let dynamicPrices = { veg: '999', nv: '1169', mus: '1349' };
-    let currentWaNum = "919876543210";
     let dynamicSettings = null;
+    let currentWaNum = "919876543210";
     let isModalOpen = false;
     let mealCount = 1;
     let selectedMeals = [];
@@ -393,34 +392,35 @@
     function updatePopupSummary() {
       const urlParams = new URLSearchParams(window.location.search);
       const rawPlan = (urlParams.get('plan') || '').toLowerCase().trim();
-      const mealsParam = (urlParams.get('meals') || '').replace(/\D/g, '');
-      const mealsNum = mealsParam || '6';
+      const mealsParam = (urlParams.get('meals') || '6').replace(/\D/g, '');
+      const mealsNum = mealsParam;
 
       let planName = 'Custom Plan';
-      let priceVal = 999;
+      let priceVal = 0;
 
-      if (rawPlan === 'veg' || rawPlan === 'egg') {
-        planName = rawPlan === 'veg' ? 'Veg Plan' : 'Egg Plan';
-        priceVal = parseInt(dynamicSettings?.[`priceVeg${mealsNum}`] || 999);
-      } else if (rawPlan === 'nonveg') {
-        planName = 'Non-Veg Meal Pack';
-        priceVal = parseInt(dynamicSettings?.[`priceNonVeg${mealsNum}`] || 1169);
-      } else if (rawPlan === 'muscle') {
-        planName = 'Muscle Gain';
-        priceVal = parseInt(dynamicSettings?.[`priceMuscle${mealsNum}`] || 1349);
-      } else {
-        if (currentPref === 'veg' || currentPref === 'egg') {
-          planName = 'Veg/Egg Plan';
-          priceVal = parseInt(dynamicSettings?.priceVeg6 || 999);
-        } else if (currentPref === 'chicken') {
+      if (dynamicSettings) {
+        if (rawPlan === 'veg' || rawPlan === 'egg') {
+          planName = rawPlan === 'veg' ? 'Veg Plan' : 'Egg Plan';
+          priceVal = parseInt(dynamicSettings[`priceVeg${mealsNum}`] || dynamicSettings.priceVeg6);
+        } else if (rawPlan === 'nonveg') {
           planName = 'Non-Veg Meal Pack';
-          priceVal = parseInt(dynamicSettings?.priceNonVeg6 || 1169);
+          priceVal = parseInt(dynamicSettings[`priceNonVeg${mealsNum}`] || dynamicSettings.priceNonVeg6);
+        } else if (rawPlan === 'muscle') {
+          planName = 'Muscle Gain';
+          priceVal = parseInt(dynamicSettings[`priceMuscle${mealsNum}`] || dynamicSettings.priceMuscle6);
         }
+      }
+      
+      if (!priceVal) { // Fallback if dynamicSettings is not ready
+          if (rawPlan.includes('veg') || rawPlan.includes('egg')) priceVal = 999;
+          else if (rawPlan.includes('nonveg')) priceVal = 1169;
+          else if (rawPlan.includes('muscle')) priceVal = 1349;
+          else priceVal = 999;
       }
 
       let mealLabel = '1 Meal a day';
-      if (mealsNum === '12' || mealsNum === '2') mealLabel = '2 Meals a day';
-      else if (mealsNum === '18' || mealsNum === '3') mealLabel = '3 Meals a day';
+      if (mealsNum === '12') mealLabel = '2 Meals a day';
+      else if (mealsNum === '18') mealLabel = '3 Meals a day';
       
       let prefLabel = currentPref.toUpperCase() || 'NOT SET';
       if (currentPref === 'veg') prefLabel = 'PURE VEG';
@@ -505,7 +505,15 @@
 
     function updateMealSelectorView() {
         mealBtns.forEach(btn => {
-            btn.classList.toggle('active', selectedMeals.includes(btn.dataset.value));
+            const isActive = selectedMeals.includes(btn.dataset.value);
+            btn.classList.toggle('active', isActive);
+            // FIX: Apply background directly to active buttons in multi-select mode
+            if (mealCount > 1) {
+                btn.classList.toggle('bg-wellness-green', isActive);
+                btn.classList.toggle('shadow-md', isActive);
+            } else {
+                btn.classList.remove('bg-wellness-green', 'shadow-md');
+            }
         });
 
         mealInput.value = selectedMeals.sort().join(', ');
@@ -538,12 +546,16 @@
             selectedMeals = [value];
         } else if (mealCount === 2) {
             if (selectedMeals.includes(value)) {
-                return; // Do not allow deselecting
+                // For 2 meals, allow deselecting if more than 1 is selected
+                if (selectedMeals.length > 1) {
+                    selectedMeals = selectedMeals.filter(m => m !== value);
+                }
+            } else {
+                if (selectedMeals.length >= 2) {
+                    selectedMeals.shift(); // Remove the oldest selection
+                }
+                selectedMeals.push(value);
             }
-            if (selectedMeals.length >= 2) {
-                selectedMeals.shift(); // Remove the oldest selection
-            }
-            selectedMeals.push(value);
         }
         
         if (typeof gsap !== 'undefined') {

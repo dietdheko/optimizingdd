@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Diet Dheko — Choose Your Meal Plan</title>
+
+  <!-- PERF: Preconnect to critical third-party origins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+  <!-- PERF: Non-blocking Google Fonts -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700;800&family=Outfit:wght@800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700;800&family=Outfit:wght@800;900&display=swap"></noscript>
+
+  <!-- PERF: Non-blocking Font Awesome -->
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'wellness-bg': '#F4F0E8',
+            'wellness-cream': '#F8F5EF',
+            'wellness-green': '#365C3D',
+            'wellness-sage': '#C86A22',
+            'wellness-sage-light': '#ECE4D8',
+            'wellness-dark': '#1F1F1F',
+          },
+          fontFamily: {
+            montserrat: ['Outfit', 'sans-serif'],
+            manrope: ['Manrope', 'sans-serif'],
+            jakarta: ['Inter', 'sans-serif'],
+          },
+          animation: {
+            'blob': 'blob 18s infinite alternate cubic-bezier(0.4, 0, 0.2, 1)',
+            'glass-shine': 'glass-shine 8s infinite linear',
+            'float-slow': 'float 10s ease-in-out infinite',
+            'float-fast': 'float 5s ease-in-out infinite',
+            'leaf-sway': 'sway 8s ease-in-out infinite alternate',
+            'float-spin': 'floatSpin 14s linear infinite',
+          },
+          keyframes: {
+            blob: { '0%': { transform: 'translate(0px, 0px) scale(1)' }, '100%': { transform: 'translate(30px, -40px) scale(1.1)' } },
+            'glass-shine': { '0%': { transform: 'translateX(-200%) rotate(45deg)' }, '100%': { transform: 'translateX(200%) rotate(45deg)' } },
+            float: { '0%, 100%': { transform: 'translateY(0) rotate(0deg)' }, '50%': { transform: 'translateY(-20px) rotate(3deg)' } },
+            sway: { '0%': { transform: 'translate(0, 0) rotate(0deg)' }, '100%': { transform: 'translate(12px, -15px) rotate(8deg)' } },
+            floatSpin: {
+              '0%': { transform: 'translateY(0) rotate(0deg)' },
+              '50%': { transform: 'translateY(-15px) rotate(180deg)' },
+              '100%': { transform: 'translateY(0) rotate(360deg)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js" defer></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="backend-api.js"></script>
+
+  <style>
+    body { background: #F4F0E8; font-family: 'Inter', sans-serif; font-weight: 500; overflow-x: hidden; color: #1F1F1F; overscroll-behavior: none; -webkit-font-smoothing: antialiased; }
+    html.lenis { height: auto; } .lenis.lenis-smooth { scroll-behavior: auto; } .lenis.lenis-stopped { overflow: hidden; }
+    .hardware-layer { will-change: transform, opacity; }
+    .font-montserrat { font-family: 'Outfit', sans-serif !important; }
+    .font-black { font-weight: 900 !important; }
+    .font-manrope { font-family: 'Manrope', sans-serif !important; }
+    .font-jakarta { font-family: 'Inter', sans-serif !important; font-weight: 500 !important; }
+    .paper-texture { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E"); }
+    .wood-grain-texture { background-image: radial-gradient(circle at 50% 50%, rgba(200, 106, 34, 0.01) 0%, transparent 60%), url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='woodNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02 0.15' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23woodNoise)' opacity='0.025'/%3E%3C/svg%3E"); }
+    .linen-texture { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpattern id='linenGrid' width='8' height='8' patternUnits='userSpaceOnUse'%3E%3Cpath d='M 8 0 L 0 0 0 8' fill='none' stroke='%23365C3D' stroke-width='0.4' opacity='0.03'/%3E%3C/pattern%3E%3Crect width='100%25' height='100%25' fill='url(%23linenGrid)'/%3E%3C/svg%3E"); }
+    .vision-glass { background: rgba(248, 245, 239, 0.92); backdrop-filter: blur(30px) saturate(160%); -webkit-backdrop-filter: blur(30px) saturate(160%); border: 1px solid rgba(31, 31, 31, 0.06); box-shadow: 0 20px 50px rgba(31, 31, 31, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.6); position: relative; overflow: hidden; }
+    .vision-glass-dark { background: #1F1F1F; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25); }
+    .ambient-fog { position: fixed; inset: 0; pointer-events: none; z-index: 1; mix-blend-mode: multiply; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; } .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    ::selection { background: #C86A22; color: #F8F5EF; }
+    .premium-btn { position: relative; overflow: hidden; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s ease; z-index: 1; display: inline-flex; align-items: center; justify-content: center; text-align: center; background-color: #C86A22; color: #F8F5EF !important; font-family: 'Manrope', sans-serif !important; font-weight: 700 !important; box-shadow: 0 10px 28px -6px rgba(200, 106, 34, 0.35); }
+    .premium-btn:hover { transform: translateY(-2px); background-color: #A95518; box-shadow: 0 14px 32px -4px rgba(200, 106, 34, 0.45); }
+    .premium-btn::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%); transform: skewX(-20deg); transition: left 0.6s cubic-bezier(0.25, 1, 0.5, 1); z-index: -1; }
+    .premium-btn:hover::after { left: 150%; }
+    .premium-btn-green { background-color: #365C3D !important; box-shadow: 0 10px 28px -6px rgba(54, 92, 61, 0.3) !important; }
+    .premium-btn-green:hover { background-color: #24422E !important; box-shadow: 0 14px 32px -4px rgba(54, 92, 61, 0.45) !important; }
+    .feature-card { border: 1px solid rgba(31, 31, 31, 0.07) !important; box-shadow: 0 12px 35px rgba(31, 31, 31, 0.03) !important; background: #F8F5EF !important; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important; cursor: pointer; position: relative; overflow: hidden; }
+    .feature-card:hover, .feature-card.highlighted { transform: translateY(-4px) !important; box-shadow: 0 22px 50px rgba(0, 0, 0, 0.08) !important; border-color: rgba(200, 106, 34, 0.35) !important; background: #F2ECE3 !important; }
+    .feature-card.highlighted .w-12, .feature-card.highlighted .w-14 { background-color: #C86A22 !important; color: #F8F5EF !important; transform: scale(1.08); }
+    .gallery-card { will-change: transform, opacity; backface-visibility: hidden; -webkit-backface-visibility: hidden; transform-style: preserve-3d; -webkit-transform-style: preserve-3d; transform: translate3d(0, 0, 0); }
+    .glass-chip { background: rgba(248, 245, 239, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(31, 31, 31, 0.1); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02); color: #555555; transition: all 0.3s ease; will-change: transform, opacity; }
+    .glass-chip:hover { background: #F8F5EF; color: #1F1F1F; transform: translateY(-2px); border-color: rgba(200, 106, 34, 0.3); }
+    .glass-chip.active { background: #C86A22; color: #F8F5EF; border-color: #C86A22; box-shadow: 0 4px 15px rgba(200, 106, 34, 0.2); }
+    .carousel-arrow { transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); backdrop-filter: blur(20px); }
+    .carousel-arrow:hover { transform: translateY(-50%) scale(1.1) rotate(5deg); box-shadow: 0 15px 30px rgba(54,92,61,0.1); background: #F8F5EF; color: #C86A22; }
+    .premium-nav-arrow { transition: all 300ms cubic-bezier(0.22, 0.61, 0.36, 1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background: rgba(248, 245, 239, 0.85); border: 1px solid rgba(54, 92, 61, 0.15); box-shadow: 0 10px 25px rgba(54, 92, 61, 0.05); }
+    .premium-nav-arrow:hover { transform: translateY(-50%) scale(1.08); background: #F8F5EF; border-color: rgba(200, 106, 34, 0.35); color: #C86A22; box-shadow: 0 15px 35px rgba(200, 106, 34, 0.12); }
+    #dd-chat-open-btn { background-color: #25D366 !important; color: #ffffff !important; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4) !important; }
+    #dd-chat-open-btn:hover { background-color: #128C7E !important; }
+    @media (max-width: 767px) {
+      html, body { touch-action: pan-y !important; -webkit-overflow-scrolling: touch !important; }
+      .vision-glass, .vision-glass-dark, .unified-nav-glass, .feature-card, .gallery-card, .glass-chip, .premium-nav-arrow { will-change: transform; contain: layout style paint; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; background-color: rgba(248, 245, 239, 0.98) !important; }
+      .vision-glass-dark { background-color: #1F1F1F !important; }
+      .glass-chip { background-color: rgba(248, 245, 239, 0.7) !important; }
+      .glass-chip.active { background-color: #C86A22 !important; }
+      .premium-btn { padding: 0.75rem 1.5rem !important; font-size: 10px !important; }
+      .ambient-fog { display: none !important; }
+      #gallery-section { min-height: 100svh !important; height: auto !important; padding-top: 6rem !important; padding-bottom: 6rem !important; }
+      .gallery-card { width: 88vw !important; }
+    }
+    .unified-nav-glass { background: rgba(248, 245, 239, 0.92); backdrop-filter: blur(30px) saturate(160%); -webkit-backdrop-filter: blur(30px) saturate(160%); border: 1px solid rgba(31, 31, 31, 0.06); box-shadow: 0 20px 40px rgba(31, 31, 31, 0.03); }
+    @keyframes unified-glass-shine { 0% { transform: translateX(-200%) rotate(45deg); } 100% { transform: translateX(200%) rotate(45deg); } }
+    .unified-nav-btn { transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s ease; }
+    .unified-nav-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(200, 106, 34, 0.4); }
+    .mobile-menu { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; transform: translateY(-10px) scale(0.98); transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); transform-origin: top center; }
+    .mobile-menu.active { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; transform: translateY(0) scale(1); }
+    .mobile-link { position: relative; display: block; padding: 0.5rem 0; }
+    .mobile-link::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background: #C86A22; transition: width 0.3s ease; }
+    .mobile-link:hover::after { width: 20px; }
+  </style>
+</head>
+<body class="antialiased selection:bg-wellness-sage selection:text-wellness-cream paper-texture flex flex-col min-h-screen">
+
+  <!-- LAYER 1: GLOBAL ATMOSPHERIC BACKDROP & SUBTLE PARTICLE GRAIN -->
+  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+    <div class="absolute top-[-10%] left-[-10%] w-[55vw] h-[55vw] bg-[#C86A22]/4 rounded-full blur-[140px] animate-blob mix-blend-multiply"></div>
+    <div class="absolute top-[35%] right-[-10%] w-[45vw] h-[45vw] bg-[#365C3D]/4 rounded-full blur-[130px] animate-blob mix-blend-multiply hardware-layer" style="animation-delay: -3s;"></div>
+    <div class="absolute bottom-[-10%] left-[15%] w-[60vw] h-[60vw] bg-[#D6A04B]/3 rounded-full blur-[150px] animate-blob mix-blend-multiply hardware-layer" style="animation-delay: -6s;"></div>
+  </div>
+  
+  <!-- LAYER 2: EDITORIAL GRAIN PAPER OVERLAY -->
+  <div class="ambient-fog"></div>
+
+  <header class="fixed top-4 md:top-6 left-0 right-0 z-50 px-4 md:px-6 flex flex-col items-center pointer-events-none transition-transform duration-500" id="header-container">
+    <div class="w-full max-w-4xl relative h-[60px] md:h-[64px] flex items-center pointer-events-auto">
+      <div class="absolute inset-0 rounded-full unified-nav-glass overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] pointer-events-none" style="background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%); transform: rotate(45deg) translateX(-100%); animation: unified-glass-shine 8s infinite;"></div>
+      </div>
+      <nav class="relative z-10 w-full px-6 flex items-center justify-between" id="navbar">
+        <a href="index.html" class="relative flex items-center h-full w-[70px] md:w-[90px] group">
+          <img src="logo.png" alt="Diet Dheko Logo" class="absolute left-[-5px] md:left-[-10px] top-1/2 -translate-y-1/2 h-[70px] md:h-[90px] w-auto max-w-none object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm" decoding="async" fetchpriority="high">
+        </a>
+        <div class="hidden md:flex items-center gap-8 font-jakarta text-[11px] font-semibold tracking-widest uppercase text-[#1F1F1F]/70 relative z-10">
+          <a href="index.html" class="hover:text-[#C86A22] transition-colors">Home</a>
+          <a href="plans.html" class="text-[#C86A22] transition-colors">Plans</a>
+          <a href="menu.html" class="hover:text-[#C86A22] transition-colors">Menu</a>
+        </div>
+        <a href="menu.html" class="hidden md:inline-flex unified-nav-btn px-5 py-2.5 rounded-full bg-[#C86A22] text-[#F8F5EF] font-manrope text-[11px] font-bold tracking-widest uppercase relative z-10 overflow-hidden group">
+          <span class="relative z-10">View Menu</span>
+          <div class="absolute top-0 left-[-100%] w-[50%] h-full skew-x-[-20deg] transition-all duration-600 group-hover:left-[150%]" style="background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%); z-index: 0;"></div>
+        </a>
+        <button id="mobile-menu-btn" class="md:hidden text-[#1F1F1F] text-xl focus:outline-none pointer-events-auto relative z-10"><i class="fa-solid fa-bars"></i></button>
+      </nav>
+    </div>
+    <div id="mobile-menu" class="mobile-menu w-full max-w-4xl mt-2 p-6 rounded-[32px] unified-nav-glass pointer-events-auto flex flex-col gap-4 md:hidden">
+      <a href="index.html" class="mobile-link font-jakarta text-sm font-bold tracking-widest uppercase text-[#1F1F1F]/90 transition-colors text-center">Home</a>
+      <a href="plans.html" class="mobile-link font-jakarta text-sm font-bold tracking-widest uppercase text-[#C86A22] transition-colors text-center">Plans</a>
+      <a href="menu.html" class="mobile-link font-jakarta text-sm font-bold tracking-widest uppercase text-[#1F1F1F]/90 transition-colors text-center">Menu</a>
+      <a href="menu.html" class="unified-nav-btn w-full py-3.5 mt-2 rounded-full bg-[#C86A22] text-[#F8F5EF] font-manrope text-xs font-bold tracking-widest uppercase transition-colors text-center relative overflow-hidden group">
+        <span class="relative z-10">View Menu</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="relative z-10 w-full overflow-hidden flex-grow">
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="relative min-h-[85vh] flex flex-col items-center justify-center px-4 md:px-6 pt-28 pb-12 md:pt-32 z-10 wood-grain-texture">
+      <div class="global-item hardware-layer absolute -top-4 -left-4 w-24 h-24 md:top-[10%] md:left-[5%] md:w-32 md:h-32 opacity-40 md:opacity-95 drop-shadow-[0_20px_35px_rgba(200,160,34,0.3)] animate-float-slow pointer-events-none z-0" data-speed="0.18" data-rotation="30">
+        <svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="46" fill="#FDE047" /><circle cx="50" cy="50" r="40" fill="#FEF08A" /><circle cx="50" cy="50" r="36" fill="#FDF08A" /><path d="M50 14 L50 86 M14 50 L86 50 M24 24 L76 76 M24 76 L76 24" stroke="#FEF9C3" stroke-width="2" /></svg>
+      </div>
+      <div class="global-item hardware-layer absolute top-10 -right-4 w-20 h-20 md:top-[12%] md:right-[10%] md:w-28 md:h-28 opacity-40 md:opacity-90 drop-shadow-[0_15px_25px_rgba(54,92,61,0.25)] animate-leaf-sway pointer-events-none z-0" data-speed="0.1">
+        <svg viewBox="0 0 100 100" class="w-full h-full"><defs><linearGradient id="mintGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#86EFAC"/><stop offset="100%" stop-color="#166534"/></linearGradient></defs><path d="M50 90 C 20 70, 10 30, 50 10 C 90 30, 80 70, 50 90 Z" fill="url(#mintGrad)" /><path d="M50 90 Q 45 50, 50 10" stroke="#DCFCE7" stroke-width="1.5" fill="none" opacity="0.7" /></svg>
+      </div>
+      <div class="global-item hardware-layer absolute bottom-10 -left-6 w-16 h-16 md:bottom-[15%] md:left-[8%] md:w-20 md:h-20 opacity-40 md:opacity-90 drop-shadow-[0_20px_35px_rgba(30,58,138,0.3)] animate-float-spin pointer-events-none z-0" data-speed="-0.12">
+        <svg viewBox="0 0 100 100" class="w-full h-full"><defs><radialGradient id="blueGrad" cx="35%" cy="35%" r="65%"><stop offset="0%" stop-color="#60A5FA"/><stop offset="70%" stop-color="#1E3A8A"/><stop offset="100%" stop-color="#172554"/></radialGradient></defs><circle cx="50" cy="50" r="45" fill="url(#blueGrad)" /><ellipse cx="50" cy="20" rx="12" ry="6" fill="#172554" /><path d="M45 18 L55 22 M45 22 L55 18" stroke="#60A5FA" stroke-width="1.5" /></svg>
+      </div>
+      <div class="global-item hardware-layer absolute bottom-20 -right-4 w-20 h-20 md:bottom-[20%] md:right-[8%] md:w-28 md:h-28 opacity-40 md:opacity-90 drop-shadow-[0_18px_30px_rgba(220,38,38,0.2)] animate-float-fast pointer-events-none z-0" data-speed="-0.08">
+        <svg viewBox="0 0 100 100" class="w-full h-full"><path d="M10 50 C 10 20, 90 20, 90 50 C 90 80, 10 80, 10 50 Z" fill="#DC2626" /><path d="M15 50 C 15 25, 85 25, 85 50 C 85 75, 15 75, 15 50 Z" fill="#FEF3C7" /><circle cx="45" cy="50" r="3" fill="#451A03" /><circle cx="55" cy="50" r="3" fill="#451A03" /></svg>
+      </div>
+      <div class="global-item hardware-layer absolute top-[48%] -left-6 md:left-[2%] w-14 h-14 md:w-18 md:h-18 opacity-40 md:opacity-85 animate-float-fast pointer-events-none z-0" data-speed="0.05">
+        <svg viewBox="0 0 100 100" class="w-full h-full"><defs><linearGradient id="pecanGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#B45309"/><stop offset="100%" stop-color="#78350F"/></linearGradient></defs><path d="M50 10 C 20 10, 10 40, 30 80 C 40 95, 60 95, 70 80 C 90 40, 80 10, 50 10 Z" fill="url(#pecanGrad)" /><path d="M30 30 Q 50 50, 30 70 M70 30 Q 50 50, 70 70" stroke="#78350F" stroke-width="2" fill="none" /></svg>
+      </div>
+      <div class="global-item hardware-layer absolute bottom-[32%] right-[3%] w-14 h-14 opacity-80 animate-leaf-sway pointer-events-none z-0">
+        <svg viewBox="0 0 100 100" class="w-full h-full stroke-[#D6A04B] stroke-2 fill-[#D6A04B]"><path d="M50 90 L50 10 M50 30 Q40 20, 30 35 M50 50 Q60 40, 70 55" /></svg>
+      </div>
+      <div class="global-item hardware-layer absolute top-[20%] -right-8 md:top-[38%] md:right-[16%] w-20 h-20 md:w-24 md:h-24 opacity-30 md:opacity-85 animate-float-slow pointer-events-none z-0">
+        <svg viewBox="0 0 100 100" class="w-full h-full"><path d="M10 50 A 40 40 0 0 0 90 50 Z" fill="#166534" /><path d="M15 50 A 35 35 0 0 0 85 50 Z" fill="#DCFCE7" /><path d="M20 50 A 30 30 0 0 0 80 50 Z" fill="#EF4444" /><circle cx="40" cy="65" r="2" fill="#171717" /><circle cx="60" cy="65" r="2" fill="#171717" /><circle cx="50" cy="75" r="2" fill="#171717" /></svg>
+      </div>
+      <div class="global-item hardware-layer absolute bottom-[30%] -left-6 md:bottom-[38%] md:left-[18%] w-16 h-16 md:w-12 md:h-12 opacity-20 md:opacity-30 animate-float-slow pointer-events-none z-0">
+        <svg viewBox="0 0 100 100" class="w-full h-full fill-none stroke-[#C86A22]" stroke-width="1.2"><path d="M30 20 L50 10 L70 20 L70 40 L50 50 Z" /></svg>
+      </div>
+      <div class="absolute top-[62%] left-[12%] w-32 h-10 border border-[#365C3D]/10 rounded-b-full pointer-events-none z-0"></div>
+      <div class="absolute top-[26%] right-[25%] w-48 h-16 border border-[#1F1F1F]/5 rounded-b-full pointer-events-none z-0"></div>
+      <div class="absolute top-[20%] left-[32%] w-2.5 h-2.5 bg-[#C86A22] rounded-full opacity-50 animate-float-slow pointer-events-none z-0"></div>
+      <div class="absolute bottom-[22%] right-[28%] w-3 h-3 bg-[#365C3D] rounded-full opacity-50 animate-float-fast pointer-events-none z-0"></div>
+      <div class="relative z-20 text-center max-w-4xl mx-auto w-full">
+        <h1 id="hero-title" class="font-montserrat font-black text-[clamp(2.5rem,5.5vw,5.8rem)] leading-[1.1] tracking-tighter text-[#1F1F1F] mb-6 reveal-text drop-shadow-sm">CHOOSE YOUR<br><span class="text-[#365C3D]">MEAL</span> <span class="text-[#C86A22]">PLAN</span></h1>
+        <p id="hero-desc" class="font-jakarta text-sm md:text-lg text-[#555555] max-w-2xl mx-auto font-medium leading-relaxed reveal-text mb-10 px-2">Healthy plans designed for every lifestyle and fitness goal. Whether you're starting your weight loss journey, maintaining a healthy lifestyle, or building muscle, Diet Dheko has a meal plan tailored for you.</p>
+        <div id="trust-badges" class="flex flex-wrap justify-center gap-3 md:gap-4 mt-8 w-full reveal-text">
+          <div class="vision-glass px-5 py-3 rounded-full text-[#1F1F1F] font-jakarta text-[10px] md:text-xs font-bold tracking-wide uppercase flex items-center gap-2"><i class="fa-solid fa-leaf text-[#365C3D]"></i> Fresh Daily</div>
+          <div class="vision-glass px-5 py-3 rounded-full text-[#1F1F1F] font-jakarta text-[10px] md:text-xs font-bold tracking-wide uppercase flex items-center gap-2"><i class="fa-solid fa-user-doctor text-[#C86A22]"></i> Nutritionist Curated</div>
+          <div class="vision-glass px-5 py-3 rounded-full text-[#1F1F1F] font-jakarta text-[10px] md:text-xs font-bold tracking-wide uppercase flex items-center gap-2"><i class="fa-solid fa-truck-fast text-[#365C3D]"></i> Doorstep Delivery</div>
+          <div class="vision-glass px-5 py-3 rounded-full text-[#1F1F1F] font-jakarta text-[10px] md:text-xs font-bold tracking-wide uppercase flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-[#C86A22]"></i> Calorie Controlled</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SPOTLIGHT GALLERY (MANUAL CAROUSEL) -->
+    <section id="gallery-section" class="relative w-full min-h-screen flex items-center justify-center overflow-hidden py-20 linen-texture">
+      <div class="global-item hardware-layer absolute top-[15%] left-[10%] w-16 h-16 opacity-60 animate-float-slow pointer-events-none z-0">
+        <svg viewBox="0 0 100 100" class="w-full h-full fill-[#365C3D]"><path d="M10 50 Q50 20, 90 50 Q50 80, 10 50 Z" /></svg>
+      </div>
+      <div class="global-item hardware-layer absolute bottom-[15%] right-[10%] w-20 h-20 opacity-50 animate-float-spin pointer-events-none z-0">
+        <svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="40" fill="#FDE047" /><circle cx="50" cy="50" r="32" fill="#F8F5EF" opacity="0.6" /></svg>
+      </div>
+      <div class="relative w-full max-w-[100vw] mx-auto [perspective:1200px] grid place-items-center z-10">
+        <button id="plan-prev" class="premium-nav-arrow absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full flex items-center justify-center text-wellness-dark/70 z-30 focus:outline-none hidden md:flex cursor-pointer"><i class="fa-solid fa-chevron-left"></i></button>
+        <button id="plan-next" class="premium-nav-arrow absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full flex items-center justify-center text-wellness-dark/70 z-30 focus:outline-none hidden md:flex cursor-pointer"><i class="fa-solid fa-chevron-right"></i></button>
+        <div id="card-1" class="gallery-card relative col-start-1 row-start-1 w-[92vw] md:w-[75vw] lg:w-[60vw] max-w-4xl">
+          <div class="vision-glass p-6 md:p-10 rounded-[40px] flex flex-col md:flex-row gap-6 md:gap-10 items-center md:items-stretch h-full group border border-[#365C3D]/20 hover:border-[#365C3D]/50 transition-colors duration-500">
+            <div class="flex-shrink-0 flex flex-col md:w-[45%] justify-center text-center md:text-left">
+              <div class="w-16 h-16 md:w-20 md:h-20 mx-auto md:mx-0 rounded-full bg-[#365C3D]/10 flex items-center justify-center mb-4 md:mb-6 text-2xl md:text-3xl text-[#365C3D]"><i class="fa-solid fa-leaf"></i></div>
+              <h2 class="font-montserrat font-black text-3xl md:text-4xl lg:text-5xl text-[#1F1F1F] mb-2 md:mb-4 tracking-tight">Veg / Egg</h2>
+              <p class="font-jakarta text-xs md:text-base text-[#555555] leading-relaxed mb-3 md:mb-0 font-medium">A balanced meal plan packed with essential nutrition, perfect for weight management and healthy everyday eating.</p>
+            </div>
+            <div class="hidden md:block w-px bg-gradient-to-b from-transparent via-[#1F1F1F]/10 to-transparent"></div>
+            <div class="block md:hidden h-px w-full bg-gradient-to-r from-transparent via-[#1F1F1F]/10 to-transparent my-1.5"></div>
+            <div class="flex-grow flex flex-col w-full justify-center">
+              <div class="mb-4 md:mb-6">
+                <span class="block font-jakarta text-[10px] font-bold tracking-widest uppercase text-[#555555] mb-2 text-center md:text-left">Best For</span>
+                <div class="flex flex-wrap justify-center md:justify-start gap-2">
+                  <span class="px-3 py-1.5 rounded-full bg-[#365C3D]/10 text-[#365C3D] text-[11px] font-bold">Weight Loss</span>
+                  <span class="px-3 py-1.5 rounded-full bg-[#365C3D]/10 text-[#365C3D] text-[11px] font-bold">Healthy Lifestyle</span>
+                </div>
+              </div>
+              <div class="mb-6 md:mb-8">
+                <span class="block font-jakarta text-[10px] font-bold tracking-widest uppercase text-[#555555] mb-2 text-center md:text-left">Available Plans</span>
+                <div class="flex flex-wrap justify-center md:justify-start gap-2">
+                  <button class="glass-chip active px-4 py-2 rounded-full text-xs font-bold font-jakarta">1 Meal a Day</button>
+                  <button class="glass-chip px-4 py-2 rounded-full text-xs font-bold font-jakarta">2 Meals a Day</button>
+                  <button class="glass-chip px-4 py-2 rounded-full text-xs font-bold font-jakarta">3 Meals a Day</button>
+                </div>
+              </div>
+              <div class="mt-auto flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 pt-4 md:pt-6 border-t border-[#1F1F1F]/10">
+                <div class="text-center sm:text-left w-full sm:w-auto min-w-0">
+                  <span class="block font-jakarta text-[10px] font-bold tracking-widest uppercase text-[#555555] mb-1">Starting from</span>
+                  <div class="font-montserrat font-black text-2xl sm:text-3xl md:text-4xl text-[#1F1F1F] flex items-baseline justify-center sm:justify-start gap-1.5 flex-wrap sm:flex-nowrap whitespace-nowrap" id="price-veg" data-base-price="999">₹999 <span class="text-xs md:text-sm font-jakarta font-medium text-[#555555] opacity-80 whitespace-nowrap">/ per week</span></div>
+                </div>
+                <a href="menu.html?plan=veg" class="premium-btn premium-btn-green w-full sm:w-auto px-6 sm:px-8 py-3.5 md:py-4 rounded-full font-manrope text-xs font-bold tracking-widest uppercase flex items-center justify-center gap-2 whitespace-nowrap shrink-0">
+                  <span class="whitespace-nowrap">Choose Plan</span><i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="card-2" class="gallery-card relative col-start-1 row-start-1 w-[92vw] md:w-[75vw] lg:w-[60vw] max-w-4xl">
+          <div class="vision-glass p-6 md:p-10 rounded-[40px] flex flex-col md:flex-row gap-6 md:gap-10 items-center md:items-stretch h-full group border border-[#C86A22]/20 hover:border-[#C86A22]/50 transition-colors duration-500">
+            <div class="flex-shrink-0 flex flex-col md:w-[45%] justify-center text-center md:text-left">
+              <div class="w-16 h-16 md:w-20 md:h-20 mx-auto md:mx-0 rounded-full bg-[#C86A22]/10 flex items-center justify-center mb-4 md:mb-6 text-2xl md:text-3xl text-[#C86A22]"><i class="fa-solid fa-drumstick-bite"></i></div>
+              <h2 class="font-montserrat font-black text-3xl md:text-4xl lg:text-5xl text-[#1F1F1F] mb-2 md:mb-4 tracking-tight">Non-Veg</h2>
+              <p class="font-jakarta text-xs md:text-base text-[#555555] leading-relaxed mb-3 md:mb-0 font-medium">High-quality protein meals with fresh chicken and eggs, designed to support fat loss while keeping you full and energized.</p>
+            </div>
+            <div class="hidden md:block w-px bg-gradient-to-b from-transparent via-[#1F1F1F]/10 to-transparent"></div>
+            <div class="block md:hidden h-px w-full bg-gradient-to-r from-transparent via-[#1F1F1F]/10 to-transparent my-1.5"></div>
+            <div class="flex-grow flex flex-col w-full justify-center">
+              <div class="mb-4 md:mb-6">
+                <span class="block font-jakarta text-[10px] font-bold tracking-widest uppercase text-[#555555] mb-2 text-center md:text-left">Best For</span>
+                <div class="flex flex-wrap justify-center md:justify-start gap-2">
+                  <span class="px-3 py-1.5 rounded-full bg-[#C86A22]/10 text-[#C86A22] text-[11px] font-bold">Weight Loss</span>
+                  <span class="px-3 py-1.5 rounded-full bg-[#C86A22]/10 text-[#C86A22] text-[11px] font-bold">High Protein</span>
+                </div>
+              </div>
+              <div class="mb-6 md:mb-8">
+                <span class="block font-jakarta text-[10px] font-bold tracking-widest uppercase text-[#555555] mb-2 text-center md:text-left">Available Plans</span>
+                <div class="flex flex-wrap justify-center md:justify-start gap-2">
+                  <button class="glass-chip active px-4 py-2 rounded-full text-xs font-bold font-jakarta">1 Meal a Day</button>
+                  <button class="glass-chip px-4 py-2 rounded-full text-xs font-bold font-jakarta">2 Meals a Day</button>
+                  <button class="glass-chip px-4 py-2 rounded-full text-xs font-bold font-jakarta">3 Meals a Day</button>
+                </div>
+              </div>
+              <div class="mt-auto flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 pt-4 md:pt-6 border-t border-[#1F1F1F]/10">
+                <div class="text-center sm:text-left w-full sm:w-auto min-w-0">
+                  <span class="block font-jakarta text-[10px] font-bold tracking-widest uppercase text-[#555555] mb-1">Starting from</span>
+                  <div class="font-montserrat font-black text-2xl sm:text-3xl md:text-4xl text-[#1F1F1F] flex items-baseline justify-center sm:justify-start gap-1.5 flex-wrap sm:flex-nowrap whitespace-nowrap" id="price-nv" data-base-price="1169">₹1,169 <span class="text-xs md:text-sm font-jakarta font-medium text-[#555555] opacity-80 whitespace-nowrap">/ per week</span></div>
+                </div>
+                <a href="menu.html?plan=nonveg" class="premium-btn w-full sm:w-auto px-6 sm:px-8 py-3.5 md:py-4 rounded-full font-manrope text-xs font-bold tracking-widest uppercase flex items-center justify-center gap-2 whitespace-nowrap shrink-0">
+                  <span class="whitespace-nowrap">Choose Plan</span><i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="card-3" class="gallery-card relative col-start-1 row-start-1 w-[92vw] md:w-[75vw] lg:w-[60vw] max-w-4xl">
+          <div class="vision-glass p-6 md:p-10 rounded-[40px] flex flex-col md:flex-row gap-6 md:gap-10 items-center md:items-stretch h-full group border border-[#1F1F1F]/20 hover:border-[#1F1F1F]/50 transition-colors duration-500">
+            <div class="flex-shrink-0 flex flex-col md:w-[45%] justify-center text-center md:text-left">
+              <div class="w-16 h-16 md:w-20 md:h-20 mx-auto md:mx-0 rounded-full bg-[#1F1F1F]/10 flex items-center justify-center mb-4 md:mb-6 text-2xl md:text-3xl text-[#1F1F1F]"><i class="fa-solid fa-dumbbell"></i></div>
+              <h2 class="font-montserrat font-black text-3xl md:text-4xl lg:text-5xl text-[#1F1F1F] mb-2 md:mb-4 tracking-tight">Muscle Gain</h2>
+              <p class="font-jakarta text-xs md:text-base text-[#555555] leading-relaxed mb-3 md:mb-0 font-medium">Protein-rich meals with higher calories and balanced macros to support strength, recovery, and lean muscle growth.</p>
+            </div>
+            <div class="hidden md:block w-px bg-gradient-to-b from-transparent via-[#1F1F1F]/10 to-transparent"></div>
+            <div class="block md:hidden h-px w-full bg-gradient-to-r from-transparent via-[#1F1F1F]/10 to-transparent my-1.5"></div>
+            <div class="flex-grow flex flex-col w-full justify-center">
+              <div class="mb-4 md:mb-6">
+                <span class="block font-jakarta text-[10px] font-bold tracking-widest uppercase text-[#555555] mb-2 text-center md:text-left">Best For</span>
+                <div class="flex flex-wrap justify-center md:justify-start gap-2">
+                  <span class="px-3 py-1.5 rounded-full bg-[#1F1F1F]/10 text-[#1F1F1F] text-[11px] font-bold">Muscle Gain</span>
+                  <span class="px-3 py-1.5 rounded-full bg-[#1F1F1F]/10 text-[#1F1F1F] text-[11px] font-bold">Gym Training</span>
+                </div>
+              </div>
+              <div class="mb-6 md:mb-8">
+                <span class="block font-jakarta text-[10px] font-bold tracking-widest uppercase text-[#555555] mb-2 text-center md:text-left">Available Plans</span>
+                <div class="flex flex-wrap justify-center md:justify-start gap-2">
+                  <button class="glass-chip active px-4 py-2 rounded-full text-xs font-bold font-jakarta">1 Meal a Day</button>
+                  <button class="glass-chip px-4 py-2 rounded-full text-xs font-bold font-jakarta">2 Meals a Day</button>
+                  <button class="glass-chip px-4 py-2 rounded-full text-xs font-bold font-jakarta">3 Meals a Day</button>
+                </div>
+              </div>
+              <div class="mt-auto flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 pt-4 md:pt-6 border-t border-[#1F1F1F]/10">
+                <div class="text-center sm:text-left w-full sm:w-auto min-w-0">
+                  <span class="block font-jakarta text-[10px] font-bold tracking-widest uppercase text-[#555555] mb-1">Starting from</span>
+                  <div class="font-montserrat font-black text-2xl sm:text-3xl md:text-4xl text-[#1F1F1F] flex items-baseline justify-center sm:justify-start gap-1.5 flex-wrap sm:flex-nowrap whitespace-nowrap" id="price-mus" data-base-price="1349">₹1,349 <span class="text-xs md:text-sm font-jakarta font-medium text-[#555555] opacity-80 whitespace-nowrap">/ per week</span></div>
+                </div>
+                <a href="menu.html?plan=muscle" class="premium-btn w-full sm:w-auto px-6 sm:px-8 py-3.5 md:py-4 rounded-full font-manrope text-xs font-bold tracking-widest uppercase flex items-center justify-center gap-2 whitespace-nowrap shrink-0" style="background-color: #1F1F1F; box-shadow: 0 10px 28px -6px rgba(31,31,31,0.35);">
+                  <span class="whitespace-nowrap">Choose Plan</span><i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY OUR PLANS -->
+    <section class="relative w-full py-24 px-6 wood-grain-texture">
+      <div class="max-w-6xl mx-auto relative z-10">
+        <div class="text-center mb-16 reveal-text">
+          <h3 class="font-manrope font-extrabold text-[clamp(1.8rem,4vw,3.5rem)] text-[#1F1F1F] tracking-tighter mb-4">The Diet Dheko Standard</h3>
+          <p class="font-jakarta text-sm md:text-lg text-[#555555] font-medium max-w-xl mx-auto">Every meal plan is crafted with precision, care, and the highest quality ingredients.</p>
+          <div class="w-12 h-[2px] bg-[#C86A22]/30 mx-auto mt-4"></div>
+        </div>
+        <div id="features-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="vision-glass feature-card p-6 md:p-8 rounded-[32px] flex flex-col items-center text-center hardware-layer reveal-text">
+            <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-wellness-green/10 flex items-center justify-center text-wellness-green text-lg md:text-xl mb-4 md:mb-6"><i class="fa-solid fa-user-doctor"></i></div>
+            <h4 class="font-jakarta text-sm md:text-base text-[#1F1F1F] font-bold leading-snug mb-2">Nutritionist Curated</h4>
+            <p class="font-jakarta text-[12px] md:text-[13px] text-[#555555] leading-relaxed">Expertly designed to meet your exact macro and micro nutritional needs.</p>
+          </div>
+          <div class="vision-glass feature-card p-6 md:p-8 rounded-[32px] flex flex-col items-center text-center hardware-layer reveal-text">
+            <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#F47B20]/10 flex items-center justify-center text-[#F47B20] text-lg md:text-xl mb-4 md:mb-6"><i class="fa-solid fa-scale-balanced"></i></div>
+            <h4 class="font-jakarta text-sm md:text-base text-[#1F1F1F] font-bold leading-snug mb-2">Calorie Controlled</h4>
+            <p class="font-jakarta text-[12px] md:text-[13px] text-[#555555] leading-relaxed">Portioned perfectly to ensure you hit your fitness goals without the guesswork.</p>
+          </div>
+          <div class="vision-glass feature-card p-6 md:p-8 rounded-[32px] flex flex-col items-center text-center hardware-layer reveal-text">
+            <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-wellness-green/10 flex items-center justify-center text-wellness-green text-lg md:text-xl mb-4 md:mb-6"><i class="fa-solid fa-calendar-days"></i></div>
+            <h4 class="font-jakarta text-sm md:text-base text-[#1F1F1F] font-bold leading-snug mb-2">Weekly Rotating Menus</h4>
+            <p class="font-jakarta text-[12px] md:text-[13px] text-[#555555] leading-relaxed">Never get bored. Enjoy a diverse range of delicious meals every single week.</p>
+          </div>
+          <div class="vision-glass feature-card p-6 md:p-8 rounded-[32px] flex flex-col items-center text-center hardware-layer reveal-text">
+            <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#F47B20]/10 flex items-center justify-center text-[#F47B20] text-lg md:text-xl mb-4 md:mb-6"><i class="fa-solid fa-fire-burner"></i></div>
+            <h4 class="font-jakarta text-sm md:text-base text-[#1F1F1F] font-bold leading-snug mb-2">Freshly Prepared Daily</h4>
+            <p class="font-jakarta text-[12px] md:text-[13px] text-[#555555] leading-relaxed">Cooked fresh every morning using premium, locally sourced ingredients.</p>
+          </div>
+          <div class="vision-glass feature-card p-6 md:p-8 rounded-[32px] flex flex-col items-center text-center hardware-layer reveal-text">
+            <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-wellness-green/10 flex items-center justify-center text-wellness-green text-lg md:text-xl mb-4 md:mb-6"><i class="fa-solid fa-box-open"></i></div>
+            <h4 class="font-jakarta text-sm md:text-base text-[#1F1F1F] font-bold leading-snug mb-2">Hygienically Packed</h4>
+            <p class="font-jakarta text-[12px] md:text-[13px] text-[#555555] leading-relaxed">Sealed in food-grade, eco-friendly containers to maintain ultimate freshness.</p>
+          </div>
+          <div class="vision-glass feature-card p-6 md:p-8 rounded-[32px] flex flex-col items-center text-center hardware-layer reveal-text">
+            <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#F47B20]/10 flex items-center justify-center text-[#F47B20] text-lg md:text-xl mb-4 md:mb-6"><i class="fa-solid fa-truck-fast"></i></div>
+            <h4 class="font-jakarta text-sm md:text-base text-[#1F1F1F] font-bold leading-snug mb-2">Doorstep Delivery</h4>
+            <p class="font-jakarta text-[12px] md:text-[13px] text-[#555555] leading-relaxed">Delivered straight to your home or office, right when you need it.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL MESSAGE / CTA -->
+    <section id="cta" class="relative z-20 min-h-[80svh] px-4 md:px-6 flex flex-col justify-center py-20">
+      <div class="absolute inset-0 pointer-events-none z-0 opacity-[0.03] flex items-center justify-center">
+        <svg class="w-full h-full stroke-[#C86A22]" viewBox="0 0 100 100" stroke-width="0.3">
+          <pattern id="ctaGrid" width="15" height="15" patternUnits="userSpaceOnUse">
+            <circle cx="5" cy="5" r="1" fill="#C86A22" opacity="0.15" />
+          </pattern>
+          <rect width="100%" height="100%" fill="url(#ctaGrid)" />
+        </svg>
+      </div>
+      <div class="max-w-5xl mx-auto rounded-[32px] md:rounded-[40px] overflow-hidden relative h-[400px] md:h-[450px] w-full flex items-center justify-center shadow-2xl img-container hardware-layer">
+        <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=2000&auto=format&fit=crop" class="absolute inset-0 w-full h-[130%] object-cover top-[-15%]" alt="CTA Background">
+        <div class="absolute inset-0 bg-black/50"></div>
+        <div class="relative z-10 vision-glass-dark p-8 md:py-12 md:px-16 rounded-[32px] text-center max-w-[calc(100%-2rem)] md:max-w-fit mx-auto backdrop-blur-2xl border-white/20">
+          <h2 class="font-montserrat font-black text-[clamp(1.8rem,4vw,3.5rem)] text-white tracking-tighter mb-4 leading-tight whitespace-normal md:whitespace-nowrap">Ready to Choose?</h2>
+          <p class="font-jakarta text-sm md:text-base text-wellness-cream/90 mb-8 font-light leading-relaxed px-2 whitespace-normal md:whitespace-nowrap">Explore our weekly menu and discover freshly prepared meals.</p>
+          <a href="menu.html" class="premium-btn px-8 py-4 rounded-full font-manrope font-bold text-xs tracking-widest uppercase text-[#F8F5EF] shadow-2xl">Explore Menu</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER WITH BRAND LOGO IMAGE AND TEXTURED SURFACE -->
+  <footer class="relative z-20 w-full border-t border-[#C86A22]/30 bg-gradient-to-b from-[#EBE4D8] to-[#DFD6C5] h-auto md:h-[54px] flex items-center text-[#1F1F1F] mt-auto shadow-[0_50px_0_0_#DFD6C5] py-6 md:py-0">
+    <div class="absolute inset-0 pointer-events-none opacity-40 linen-texture mix-blend-multiply"></div>
+    <div class="relative z-10 w-full max-w-6xl mx-auto px-4 md:px-6 flex flex-col md:flex-row items-center justify-between h-full gap-3 md:gap-0">
+      <div class="flex flex-col md:flex-row items-center gap-1 md:gap-4 h-full justify-center md:justify-start w-full md:w-auto">
+        <a href="#hero" class="relative flex items-center justify-center w-[70px] md:w-[90px] h-full -mb-3 md:mb-0">
+          <img src="logo.png" alt="Diet Dheko Logo" class="relative md:absolute md:top-[68%] md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 h-[70px] md:h-[90px] w-auto max-w-none object-contain drop-shadow-sm">
+        </a>
+        <p class="font-jakarta text-[9.5px] sm:text-[11px] text-[#1F1F1F]/90 font-bold tracking-wide z-10 relative leading-none translate-y-[3px] whitespace-nowrap text-center md:text-left">Cherry Road, Hastampatti, Salem &bull; 88834 82728</p>
+      </div>
+      <div class="flex items-center justify-center md:justify-end h-full w-full md:w-auto mt-1 md:mt-0">
+        <p class="font-jakarta text-[8.5px] sm:text-[10px] text-[#1F1F1F]/60 font-bold tracking-wider uppercase text-center md:text-right leading-none translate-y-[3px] whitespace-nowrap hidden sm:block">&copy; 2026 Diet Dheko. Premium Nutrition Showroom.</p>
+        <p class="font-jakarta text-[8.5px] sm:text-[10px] text-[#1F1F1F]/60 font-bold tracking-wider uppercase text-center md:text-right leading-none translate-y-[3px] whitespace-nowrap sm:hidden">&copy; 2026 Diet Dheko.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+      const isMobile = window.innerWidth < 768;
+      ScrollTrigger.config({ ignoreMobileResize: true, limitCallbacks: true, syncInterval: isMobile ? 250 : 16 });
+      const lenis = new Lenis({ duration: isMobile ? 1.0 : 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true, mouseMultiplier: 1, smoothTouch: false, touchMultiplier: 1.2 });
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+      gsap.ticker.lagSmoothing(1000, 16);
+      gsap.fromTo("main, footer", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", clearProps: "all" });
+
+      const globalItems = gsap.utils.toArray('.global-item');
+      globalItems.forEach(item => {
+        const speed = parseFloat(item.getAttribute('data-speed')) * (isMobile ? 0.3 : 1);
+        const rotation = parseFloat(item.getAttribute('data-rotation')) || 180;
+        gsap.to(item, { yPercent: 200 * speed, rotation: rotation, ease: "none", scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: isMobile ? 0.5 : true } });
+      });
+      if (!window.matchMedia("(pointer: coarse)").matches) {
+        let ticking = false;
+        window.addEventListener('mousemove', (e) => {
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+              const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+              globalItems.forEach(item => {
+                const speed = parseFloat(item.getAttribute('data-speed')) * 50;
+                gsap.to(item, { x: mouseX * speed, y: mouseY * speed, duration: 2, ease: "power2.out", overwrite: "auto" });
+              });
+              ticking = false;
+            });
+            ticking = true;
+          }
+        });
+      }
+      const heroTl = gsap.timeline();
+      heroTl.fromTo("#hero-bg-text", { opacity: 0, scale: 0.95 }, { opacity: 0.025, scale: 1, duration: 2, ease: "power3.out" });
+      gsap.utils.toArray('.reveal-text').forEach(text => {
+        gsap.fromTo(text, { opacity: 0, y: isMobile ? 20 : 30 }, { opacity: 1, y: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: text, start: "top 90%", toggleActions: "play none none reverse" } });
+      });
+      gsap.utils.toArray('.img-container').forEach(container => {
+        const img = container.querySelector('img');
+        gsap.fromTo(img, { yPercent: -10 }, { yPercent: 10, ease: "none", scrollTrigger: { trigger: container, start: "top bottom", end: "bottom top", scrub: isMobile ? 0.5 : true } });
+      });
+      let lastScrollY = window.scrollY;
+      const headerContainer = document.getElementById('header-container');
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      let isMenuOpen = false;
+      mobileMenuBtn.addEventListener('click', () => {
+        isMenuOpen = !isMenuOpen;
+        if (isMenuOpen) { mobileMenu.classList.add('active'); mobileMenuBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>'; } 
+        else { mobileMenu.classList.remove('active'); mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>'; }
+      });
+      document.querySelectorAll('.mobile-link').forEach(link => {
+        link.addEventListener('click', () => { isMenuOpen = false; mobileMenu.classList.remove('active'); mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>'; });
+      });
+      lenis.on('scroll', (e) => {
+        if (isMenuOpen) return;
+        const currentScrollY = e.animatedScroll;
+        if (currentScrollY > 100) { headerContainer.style.transform = currentScrollY > lastScrollY ? 'translateY(-150%)' : 'translateY(0)'; } 
+        else { headerContainer.style.transform = 'translateY(0)'; }
+        lastScrollY = currentScrollY;
+      });
+      const power3InOut = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      document.querySelectorAll('a').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          const target = this.getAttribute('href');
+          if (!target || target === '#') return;
+          if (target.startsWith('#')) {
+            e.preventDefault();
+            if (isMenuOpen) { isMenuOpen = false; mobileMenu.classList.remove('active'); mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>'; }
+            lenis.scrollTo(target, { duration: 1.5, easing: power3InOut });
+          } else if (target.includes('.html')) {
+            const currentPath = window.location.pathname;
+            if (target === 'plans.html' && (currentPath.endsWith('plans.html'))) {
+              e.preventDefault();
+              lenis.scrollTo(0, { duration: 1.5, easing: power3InOut });
+              if (isMenuOpen) { isMenuOpen = false; mobileMenu.classList.remove('active'); mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>'; }
+              return;
+            }
+            e.preventDefault();
+            gsap.to("main, footer", { opacity: 0, y: -20, duration: 0.5, ease: "power2.inOut", onComplete: () => window.location.href = this.href });
+          }
+        });
+      });
+      let fetchedSettings = null;
+      try {
+        const config = await AdminAPI.getConfig();
+        if (config.settings) {
+          fetchedSettings = config.settings;
+          const vegPrice = config.settings.priceVeg6 || config.settings.priceVeg;
+          const nvPrice = config.settings.priceNonVeg6 || config.settings.priceNonVeg;
+          const musPrice = config.settings.priceMuscle6 || config.settings.priceMuscle;
+          if (vegPrice) {
+            const el = document.getElementById('price-veg');
+            if (el) { el.innerHTML = `₹${parseInt(vegPrice).toLocaleString('en-IN')} <span class="text-xs md:text-sm font-jakarta font-medium text-[#555555] opacity-80 whitespace-nowrap">/ per week</span>`; el.setAttribute('data-base-price', vegPrice); }
+          }
+          if (nvPrice) {
+            const el = document.getElementById('price-nv');
+            if (el) { el.innerHTML = `₹${parseInt(nvPrice).toLocaleString('en-IN')} <span class="text-xs md:text-sm font-jakarta font-medium text-[#555555] opacity-80 whitespace-nowrap">/ per week</span>`; el.setAttribute('data-base-price', nvPrice); }
+          }
+          if (musPrice) {
+            const el = document.getElementById('price-mus');
+            if (el) { el.innerHTML = `₹${parseInt(musPrice).toLocaleString('en-IN')} <span class="text-xs md:text-sm font-jakarta font-medium text-[#555555] opacity-80 whitespace-nowrap">/ per week</span>`; el.setAttribute('data-base-price', musPrice); }
+          }
+        }
+      } catch (e) { console.error("Could not fetch prices", e); }
+      const pillGroups = document.querySelectorAll('.flex-wrap');
+      pillGroups.forEach(group => {
+        const pills = group.querySelectorAll('button.glass-chip');
+        if(pills.length === 0) return; 
+        const priceDisplay = group.closest('.flex-grow').querySelector('[id^="price-"]');
+        pills.forEach(pill => {
+          pill.addEventListener('click', () => {
+            pills.forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            gsap.fromTo(pill, { scale: 0.95 }, { scale: 1, duration: 0.4, ease: "back.out(2)" });
+            if(priceDisplay) {
+              const pillNum = parseInt(pill.innerText); 
+              let meals = 6;
+              if (pillNum === 1) meals = 6;
+              else if (pillNum === 2) meals = 12;
+              else if (pillNum === 3) meals = 18;
+              else meals = pillNum || 6;
+              const planId = priceDisplay.id; 
+              let newPrice = null;
+              if (fetchedSettings) {
+                if (planId === 'price-veg' && fetchedSettings[`priceVeg${meals}`]) { newPrice = parseInt(fetchedSettings[`priceVeg${meals}`]); }
+                else if (planId === 'price-nv' && fetchedSettings[`priceNonVeg${meals}`]) { newPrice = parseInt(fetchedSettings[`priceNonVeg${meals}`]); }
+                else if (planId === 'price-mus' && fetchedSettings[`priceMuscle${meals}`]) { newPrice = parseInt(fetchedSettings[`priceMuscle${meals}`]); }
+              }
+              if (!newPrice) {
+                const storedBase = parseInt(priceDisplay.getAttribute('data-base-price'));
+                if(!isNaN(storedBase) && !isNaN(meals)) { newPrice = Math.round(storedBase * (meals / 6)); if (newPrice % 10 === 8) newPrice += 1; }
+              }
+              if (newPrice) {
+                gsap.to(priceDisplay, { opacity: 0, y: -10, duration: 0.2, onComplete: () => {
+                  priceDisplay.innerHTML = `₹${newPrice.toLocaleString('en-IN')} <span class="text-xs md:text-sm font-jakarta font-medium text-[#555555] opacity-80 whitespace-nowrap">/ per week</span>`;
+                  gsap.to(priceDisplay, { opacity: 1, y: 0, duration: 0.2 });
+                }});
+              }
+            }
+          });
+        });
+      });
+      let currentCardIndex = 0;
+      const totalCards = 3;
+      function updateGallery(index) {
+          const rot = window.innerWidth >= 1024 ? 4 : 0;
+          const setCardState = (id, xPercent, scale, opacity, zIndex, rotationY, pointerEvents) => { gsap.to(id, { xPercent, scale, opacity, zIndex, rotationY, pointerEvents, duration: 0.8, ease: "power3.out" }); };
+          if (index === 0) { setCardState("#card-1", 0, 1, 1, 3, 0, "auto"); setCardState("#card-2", 90, 0.8, 0.4, 2, -rot, "none"); setCardState("#card-3", 180, 0.6, 0, 1, -rot*2, "none"); }
+          else if (index === 1) { setCardState("#card-1", -90, 0.8, 0.4, 2, rot, "none"); setCardState("#card-2", 0, 1, 1, 3, 0, "auto"); setCardState("#card-3", 90, 0.8, 0.4, 2, -rot, "none"); }
+          else if (index === 2) { setCardState("#card-1", -180, 0.6, 0, 1, rot*2, "none"); setCardState("#card-2", -90, 0.8, 0.4, 2, rot, "none"); setCardState("#card-3", 0, 1, 1, 3, 0, "auto"); }
+      }
+      updateGallery(0);
+      const prevBtn = document.getElementById('plan-prev');
+      const nextBtn = document.getElementById('plan-next');
+      if (prevBtn) { prevBtn.addEventListener('click', () => { if (currentCardIndex > 0) { currentCardIndex--; updateGallery(currentCardIndex); } }); }
+      if (nextBtn) { nextBtn.addEventListener('click', () => { if (currentCardIndex < totalCards - 1) { currentCardIndex++; updateGallery(currentCardIndex); } }); }
+      let touchStartX = 0; let touchEndX = 0;
+      const gallerySection = document.getElementById('gallery-section');
+      gallerySection.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
+      gallerySection.addEventListener('touchend', e => { touchEndX = e.changedTouches[0].screenX; handleSwipe(); }, {passive: true});
+      function handleSwipe() {
+          const swipeThreshold = 50;
+          if (touchEndX < touchStartX - swipeThreshold) { if (currentCardIndex < totalCards - 1) { currentCardIndex++; updateGallery(currentCardIndex); } }
+          if (touchEndX > touchStartX + swipeThreshold) { if (currentCardIndex > 0) { currentCardIndex--; updateGallery(currentCardIndex); } }
+      }
+      document.querySelectorAll('a[href^="menu.html?plan="]').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          const card = this.closest('.gallery-card');
+          const activePill = card.querySelector('.glass-chip.active');
+          let meals = '6';
+          if (activePill) {
+            const num = parseInt(activePill.innerText);
+            if (num === 1) meals = '6'; else if (num === 2) meals = '12'; else if (num === 3) meals = '18';
+            else meals = activePill.innerText.split(' ')[0];
+          }
+          const baseUrl = this.getAttribute('href');
+          gsap.to("main, footer", { opacity: 0, y: -20, duration: 0.5, ease: "power2.inOut", onComplete: () => { window.location.href = `${baseUrl}&meals=${meals}`; }});
+        });
+      });
+    });
+  </script>
+
+  <!-- ==========================================
+       WHATSAPP CHAT WIDGET (MOBILE OPTIMIZED)
+       ========================================== -->
+  <style>
+    #dd-chat-messages { overflow-y: auto !important; overscroll-behavior: contain !important; -webkit-overflow-scrolling: touch !important; pointer-events: auto !important; }
+    #dd-chat-messages::-webkit-scrollbar { width: 5px; } #dd-chat-messages::-webkit-scrollbar-track { background: transparent; } #dd-chat-messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; } #dd-chat-messages::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    @media (max-width: 767px) {
+      #dd-chat-box { width: 85vw !important; max-width: 320px !important; bottom: 70px !important; right: 0 !important; }
+      #dd-chat-messages { height: 260px !important; padding: 12px !important; gap: 8px !important; }
+      .dd-chat-bubble { font-size: 12px !important; padding: 10px 12px !important; }
+      #dd-chat-input { font-size: 12px !important; padding: 10px 12px !important; }
+      #dd-chat-send-btn { padding: 10px !important; font-size: 12px !important; }
+    }
+  </style>
+
+  <div id="dd-chat-widget" class="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[9999] font-jakarta flex flex-col items-end pointer-events-none">
+    <div id="dd-chat-box" class="mb-4 w-[90vw] max-w-[360px] bg-white/95 backdrop-blur-3xl border border-white/60 shadow-[0_30px_60px_rgba(0,0,0,0.2)] rounded-3xl overflow-hidden transition-all duration-400 origin-bottom-right scale-0 opacity-0 hidden flex-col pointer-events-auto">
+      <div class="bg-gradient-to-r from-[#25D366] to-[#128C7E] p-3 md:p-4 flex items-center justify-between text-white shadow-md relative z-10">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 md:w-10 md:h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30"><i class="fa-brands fa-whatsapp text-xl md:text-2xl"></i></div>
+          <div><h3 class="font-montserrat font-bold text-xs md:text-sm tracking-wide">Diet Dheko Support</h3><div class="flex items-center gap-1.5 mt-0.5"><span class="w-1.5 h-1.5 md:w-2 md:h-2 bg-white rounded-full animate-pulse"></span><span class="text-[9px] md:text-[10px] font-medium opacity-90 uppercase tracking-wider">Online</span></div></div>
+        </div>
+        <button id="dd-chat-close-btn" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/20 transition-colors focus:outline-none cursor-pointer"><i class="fa-solid fa-xmark text-base md:text-lg pointer-events-none"></i></button>
+      </div>
+      <div id="dd-chat-messages" data-lenis-prevent class="p-5 h-[320px] flex flex-col gap-3 bg-slate-50/80"></div>
+      <div class="p-3 md:p-4 bg-white border-t border-slate-100 flex flex-col gap-2 md:gap-3">
+        <textarea id="dd-chat-input" data-lenis-prevent rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 focus:outline-none focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 resize-none transition-all placeholder:text-slate-400 overscroll-contain" placeholder="Type your inquiry here..."></textarea>
+        <a id="dd-chat-send-btn" href="#" target="_blank" class="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white py-3 rounded-xl font-jakarta font-bold text-sm tracking-wide flex items-center justify-center gap-2 transition-all shadow-lg shadow-[#25D366]/30 hover:shadow-[#25D366]/50 hover:-translate-y-0.5 cursor-pointer">Send on WhatsApp <i class="fa-solid fa-paper-plane pointer-events-none"></i></a>
+      </div>
+    </div>
+    <button id="dd-chat-open-btn" class="relative w-14 h-14 md:w-16 md:h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center text-2xl md:text-3xl shadow-[0_10px_25px_rgba(37,211,102,0.5)] hover:scale-105 hover:-translate-y-1 transition-all duration-300 focus:outline-none group z-20 cursor-pointer pointer-events-auto">
+      <div class="absolute inset-0 rounded-full border-2 border-[#25D366] animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite] opacity-40"></div>
+      <i class="fa-brands fa-whatsapp transform group-hover:rotate-12 transition-transform duration-300 pointer-events-none"></i>
+    </button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let isDDChatOpen = false; let ddMessagesLoaded = false; let ddWaNum = "919876543210";
+      let ddGreetings = ["👋 Hey, Hii!", "Welcome to Diet Dheko.", "We provide freshly prepared meal plans for weight loss, healthy lifestyle, and muscle gain goals.", "If you have any doubts about our plans, menu, delivery, or subscription process, feel free to ask us below."];
+      const chatWidget = document.getElementById('dd-chat-widget'); const chatBox = document.getElementById('dd-chat-box'); const chatInput = document.getElementById('dd-chat-input'); const messagesContainer = document.getElementById('dd-chat-messages'); const openBtn = document.getElementById('dd-chat-open-btn'); const closeBtn = document.getElementById('dd-chat-close-btn'); const sendBtn = document.getElementById('dd-chat-send-btn');
+      function toggleDDChat(e) {
+        if (e) { e.preventDefault(); e.stopPropagation(); }
+        isDDChatOpen = !isDDChatOpen;
+        if (isDDChatOpen) {
+          chatBox.style.display = 'flex'; setTimeout(() => { chatBox.classList.remove('scale-0', 'opacity-0'); chatBox.classList.add('scale-100', 'opacity-100'); }, 10);
+          if (!ddMessagesLoaded) { loadDDMessages(); ddMessagesLoaded = true; }
+          setTimeout(() => chatInput.focus(), 300);
+        } else {
+          chatBox.classList.remove('scale-100', 'opacity-100'); chatBox.classList.add('scale-0', 'opacity-0'); setTimeout(() => { chatBox.style.display = 'none'; }, 400);
+        }
+      }
+      function loadDDMessages() {
+        let delay = 400;
+        ddGreetings.forEach((msg) => {
+          setTimeout(() => {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'dd-chat-bubble bg-white shadow-sm border border-slate-100 text-slate-700 text-[13px] leading-relaxed p-3.5 rounded-2xl rounded-tl-none w-fit max-w-[90%] transform transition-all duration-500 translate-y-4 opacity-0 flex-shrink-0';
+            msgDiv.innerHTML = msg; messagesContainer.appendChild(msgDiv);
+            requestAnimationFrame(() => { msgDiv.classList.remove('translate-y-4', 'opacity-0'); messagesContainer.scrollTop = messagesContainer.scrollHeight; });
+          }, delay); delay += 900; 
+        });
+      }
+      function updateWhatsAppLink() {
+        const text = chatInput.value.trim(); if (!text) { sendBtn.href = "#"; return; }
+        const formalMessage = `Hello Diet Dheko Support,\n\nI have an inquiry regarding your services.\n\n*My Question:*\n"${text}"\n\nLooking forward to your response.`;
+        sendBtn.href = `https://wa.me/${ddWaNum}?text=${encodeURIComponent(formalMessage)}`;
+      }
+      if (openBtn) openBtn.addEventListener('click', toggleDDChat);
+      if (closeBtn) closeBtn.addEventListener('click', toggleDDChat);
+      if (chatInput) {
+        chatInput.addEventListener('input', updateWhatsAppLink);
+        chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (chatInput.value.trim()) sendBtn.click(); } });
+      }
+      if (sendBtn) { sendBtn.addEventListener('click', (e) => { if (sendBtn.getAttribute('href') === '#') { e.preventDefault(); chatInput.focus(); return; } setTimeout(() => { chatInput.value = ''; updateWhatsAppLink(); if (isDDChatOpen) toggleDDChat(); }, 500); }); }
+      if (chatBox) chatBox.addEventListener('click', (e) => e.stopPropagation());
+      const stopScrollHijack = (e) => { e.stopPropagation(); };
+      if (messagesContainer) { messagesContainer.addEventListener('wheel', stopScrollHijack, { passive: false }); messagesContainer.addEventListener('touchmove', stopScrollHijack, { passive: false }); }
+      if (chatInput) { chatInput.addEventListener('wheel', stopScrollHijack, { passive: false }); chatInput.addEventListener('touchmove', stopScrollHijack, { passive: false }); }
+      document.addEventListener('click', (e) => { if (isDDChatOpen && chatWidget && !chatWidget.contains(e.target)) toggleDDChat(); });
+      (async function fetchDynamicData() {
+        try { 
+          if (typeof AdminAPI !== 'undefined') {
+            const config = await AdminAPI.getConfig();
+            if (config.settings) {
+              if (config.settings.waNumber) ddWaNum = (config.settings.waCountryCode || '91') + config.settings.waNumber.replace(/\D/g, '');
+              if (config.settings.waMessages && config.settings.waMessages.length > 0) ddGreetings = config.settings.waMessages; 
+            }
+          }
+        } catch(e) { console.warn("Using default chat settings."); }
+      })();
+    });
+    let secretWord = "adminx";
+    (async () => { try { if (typeof AdminAPI !== 'undefined') secretWord = (await AdminAPI.getConfig()).security.secretWord; } catch(e){} })();
+    let tapCount = 0; let tapTimer;
+    const logo = document.querySelector('header a[href="index.html"]');
+    if (logo) {
+      logo.addEventListener('click', (e) => {
+        e.preventDefault(); tapCount++; clearTimeout(tapTimer);
+        if (tapCount >= 3) { window.location.href = 'admin-login.html'; tapCount = 0; } 
+        else { tapTimer = setTimeout(() => { if (tapCount < 3) window.location.href = 'index.html'; tapCount = 0; }, 400); }
+      });
+    }
+    let typedWord = "";
+    document.addEventListener('keydown', (e) => {
+      if (e.key.length === 1) {
+        typedWord += e.key.toLowerCase();
+        if (typedWord.length > secretWord.length) typedWord = typedWord.slice(-secretWord.length);
+        if (typedWord === secretWord) window.location.href = 'admin-login.html';
+      }
+    });
+  </script>
+</body>
+</html>
